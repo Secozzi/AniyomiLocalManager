@@ -50,22 +50,22 @@ jobs:
         run: |
           set -e
 
-          cp app/build/outputs/apk/release/app-release-unsigned-signed.apk progres-${{ env.VERSION_TAG }}.apk
-          sha=$(sha256sum progres-${{ env.VERSION_TAG }}.apk | awk '\''{ print $1 }'\'')
+          cp app/build/outputs/apk/release/app-release-unsigned-signed.apk alm-${{ env.VERSION_TAG }}.apk
+          sha=`sha256sum alm-${{ env.VERSION_TAG }}.apk | awk '{ print $1 }'`
           echo "apk-sha256=$sha" >> $GITHUB_ENV'
 
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ env.VERSION_TAG }}
-          name: Progres ${{ env.VERSION_TAG }}
+          name: Aniyomi Local Manager ${{ env.VERSION_TAG }}
           body: |
             ---
 
             APK checksum: ${{ env.apk-sha256 }}
 
           files: |
-            progres-${{ env.VERSION_TAG }}.apk
+            alm-${{ env.VERSION_TAG }}.apk
           prerelease: false
           draft: true
         env:
