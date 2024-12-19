@@ -4,6 +4,7 @@ import kotlinx.serialization.decodeFromString
 import nl.adaptivity.xmlutil.serialization.XML
 import okhttp3.CacheControl
 import okhttp3.OkHttpClient
+import okhttp3.Response
 import xyz.secozzi.aniyomilocalmanager.data.anidb.episode.dto.AniDBAnimeDto
 import xyz.secozzi.aniyomilocalmanager.data.anidb.episode.dto.EpisodeModel
 import xyz.secozzi.aniyomilocalmanager.data.anidb.episode.dto.toEpisodeModel
@@ -24,7 +25,7 @@ class EpisodeRepository(
 
             val response = chain.proceed(cachedRequest)
 
-            if (response.code == 504) {
+            if (response.code == 504 || isResponseTooOld(response)) {
                 response.close()
 
                 val cache = CacheControl.Builder()
@@ -41,6 +42,13 @@ class EpisodeRepository(
             response
         }
         .build()
+
+    private fun isResponseTooOld(response: Response): Boolean {
+        val responseTime = response.receivedResponseAtMillis
+        val currentTime = System.currentTimeMillis()
+        val age = (currentTime - responseTime) / 1000
+        return age >= 60 * 60 * 24  // 1 dau
+    }
 
     fun getEpisodes(anidbId: Long): List<EpisodeModel> {
         val resp = anidbClient.newCall(
