@@ -46,6 +46,8 @@ import xyz.secozzi.aniyomilocalmanager.R
 import xyz.secozzi.aniyomilocalmanager.data.anidb.episode.EpisodeRepository
 import xyz.secozzi.aniyomilocalmanager.data.anidb.search.dto.ADBAnime
 import xyz.secozzi.aniyomilocalmanager.data.search.SearchRepositoryManager
+import xyz.secozzi.aniyomilocalmanager.database.ALMDatabase
+import xyz.secozzi.aniyomilocalmanager.domain.trackerid.TrackerIdRepository
 import xyz.secozzi.aniyomilocalmanager.preferences.AniDBPreferences
 import xyz.secozzi.aniyomilocalmanager.presentation.Screen
 import xyz.secozzi.aniyomilocalmanager.presentation.compontents.ErrorContent
@@ -62,7 +64,7 @@ import xyz.secozzi.aniyomilocalmanager.ui.preferences.AniDBPreferencesScreen
 import xyz.secozzi.aniyomilocalmanager.ui.theme.spacing
 import xyz.secozzi.aniyomilocalmanager.utils.getDirectoryName
 
-class EpisodeScreen(val path: String) : Screen() {
+class EpisodeScreen(val path: String, val aniDBId: Long?) : Screen() {
     @Composable
     override fun Content() {
         val context = LocalContext.current
@@ -71,13 +73,14 @@ class EpisodeScreen(val path: String) : Screen() {
 
         val episodeRepo = koinInject<EpisodeRepository>()
         val fileManager = koinInject<FileManager>()
+        val trackerIdRepository = koinInject<TrackerIdRepository>()
         val preferences = koinInject<AniDBPreferences>()
 
         val screenModel = rememberScreenModel {
-            EpisodeScreenModel(path, episodeRepo, fileManager, preferences)
+            EpisodeScreenModel(path, aniDBId, episodeRepo, fileManager, trackerIdRepository, preferences)
         }
 
-        val episodes by screenModel.episodes.collectAsState()
+        val state by screenModel.state.collectAsState()
         val availableTypes by screenModel.availableTypes.collectAsState()
         val offset by screenModel.offset.collectAsState()
         val start by screenModel.start.collectAsState()
@@ -89,12 +92,13 @@ class EpisodeScreen(val path: String) : Screen() {
 
         val result = getResult().value as? ADBAnime
         if (result != null) {
-            screenModel.onSearched(result)
+            screenModel.updateAniDB(result.remoteId)
+            screenModel.getEpisodes(result.remoteId)
             navigator.clearResults()
         }
 
         LaunchedEffect(Unit) {
-            if (episodes.isSuccess()) {
+            if (state.isSuccess()) {
                 screenModel.updateStartPreview()
                 screenModel.updateEndPreview()
             }
@@ -132,7 +136,7 @@ class EpisodeScreen(val path: String) : Screen() {
                 )
             },
             bottomBar = {
-                if (episodes is RequestState.Success) {
+                if (state is RequestState.Success) {
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smaller),
                         modifier = Modifier.windowInsetsPadding(NavigationBarDefaults.windowInsets)
@@ -181,20 +185,24 @@ class EpisodeScreen(val path: String) : Screen() {
         ) { paddingValues ->
             val paddingModifier = Modifier.padding(paddingValues)
 
-            episodes.DisplayResult(
+            state.DisplayResult(
                 onIdle = {
-                    NotSearchedContent(
-                        title = stringResource(R.string.episode_not_searched),
-                        modifier = paddingModifier,
-                        onSearch = {
-                            navigator.push(
-                                SearchScreen(
-                                    searchQuery = path.getDirectoryName(),
-                                    searchRepositoryId = SearchRepositoryManager.ANIDB,
+                    if (aniDBId == null) {
+                        NotSearchedContent(
+                            title = stringResource(R.string.episode_not_searched),
+                            modifier = paddingModifier,
+                            onSearch = {
+                                navigator.push(
+                                    SearchScreen(
+                                        searchQuery = path.getDirectoryName(),
+                                        searchRepositoryId = SearchRepositoryManager.ANIDB,
+                                    )
                                 )
-                            )
-                        }
-                    )
+                            }
+                        )
+                    } else {
+                        ProgressContent(modifier = paddingModifier)
+                    }
                 },
                 onLoading = { ProgressContent(modifier = paddingModifier) },
                 onError = { ErrorContent(it, modifier = paddingModifier) },

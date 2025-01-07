@@ -2,6 +2,7 @@ package xyz.secozzi.aniyomilocalmanager.ui.entry
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -37,7 +38,7 @@ fun DetailsScreenContent(
     onSettings: () -> Unit,
     onGenerate: () -> Unit,
     onCopy: () -> Unit,
-    content: @Composable () -> Unit,
+    content: @Composable (PaddingValues) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -93,18 +94,6 @@ fun DetailsScreenContent(
             }
         }
     ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(paddingValues)
-                .verticalScroll(rememberScrollState())
-                .padding(
-                    start = MaterialTheme.spacing.medium,
-                    end = MaterialTheme.spacing.medium,
-                ),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smaller)
-        ) {
-            content()
-        }
+        content(paddingValues)
     }
 }

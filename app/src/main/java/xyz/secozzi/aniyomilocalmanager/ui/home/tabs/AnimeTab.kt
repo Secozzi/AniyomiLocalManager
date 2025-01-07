@@ -37,8 +37,6 @@ import xyz.secozzi.aniyomilocalmanager.ui.preferences.PreferencesScreen
 object AnimeTab : Tab {
     private fun readResolve(): Any = AnimeTab
 
-    private const val DIRECTORY_NAME = "localanime"
-
     override val options: TabOptions
         @Composable
         get() {
@@ -82,7 +80,7 @@ object AnimeTab : Tab {
             if (storageLocation.isBlank()) {
                 SelectStorage(
                     label = stringResource(R.string.select_localanime_directory),
-                    validateName = { it.equals(DIRECTORY_NAME, true) },
+                    validateName = { it.equals(ANIME_DIRECTORY_NAME, true) },
                     onInvalid = {
                         val message = context.resources.getString(R.string.select_invalid_location)
                         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
@@ -99,7 +97,7 @@ object AnimeTab : Tab {
                     onError = {
                         SelectStorage(
                             label = stringResource(R.string.select_localanime_directory),
-                            validateName = { it.equals(DIRECTORY_NAME, true) },
+                            validateName = { it.equals(ANIME_DIRECTORY_NAME, true) },
                             onInvalid = {
                                 val message = context.resources.getString(R.string.select_invalid_location)
                                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
@@ -113,3 +111,5 @@ object AnimeTab : Tab {
         }
     }
 }
+
+const val ANIME_DIRECTORY_NAME = "localanime"

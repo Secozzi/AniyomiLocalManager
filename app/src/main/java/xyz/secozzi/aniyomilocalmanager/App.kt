@@ -3,6 +3,7 @@ package xyz.secozzi.aniyomilocalmanager
 import android.app.Application
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
+import xyz.secozzi.aniyomilocalmanager.di.DatabaseModule
 import xyz.secozzi.aniyomilocalmanager.di.FileManagerModule
 import xyz.secozzi.aniyomilocalmanager.di.NetworkModule
 import xyz.secozzi.aniyomilocalmanager.di.PreferencesModule
@@ -27,6 +28,7 @@ class App : Application() {
                 PreferencesModule,
                 RepositoryModule,
                 SerializationModule,
+                DatabaseModule,
             )
         }
     }
