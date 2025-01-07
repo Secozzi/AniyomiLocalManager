@@ -57,13 +57,11 @@ object AnimeTab : Tab {
 
         val screenModel = rememberScreenModel { AnimeTabScreenModel(preferences) }
 
-        val storageLocation by screenModel.storageLocation.collectAsState()
-
         Scaffold(
             topBar = {
                 TopAppBar(
                     title = {
-                        PathText(storageLocation)
+                        PathText(screenModel.storageLocation)
                     },
                     actions = {
                         IconButton(onClick = {
@@ -77,7 +75,7 @@ object AnimeTab : Tab {
         ) { paddingValues ->
             val paddingModifier = Modifier.padding(paddingValues)
 
-            if (storageLocation.isBlank()) {
+            if (screenModel.storageLocation.isBlank()) {
                 SelectStorage(
                     label = stringResource(R.string.select_localanime_directory),
                     validateName = { it.equals(ANIME_DIRECTORY_NAME, true) },
@@ -90,7 +88,7 @@ object AnimeTab : Tab {
                 )
             } else {
                 DirectoryList(
-                    storagePath = storageLocation,
+                    storagePath = screenModel.storageLocation,
                     isAnime = true,
                     modifier = paddingModifier,
                     onClick = { navigator.push(AnimeEntryScreen(it)) },

@@ -60,6 +60,13 @@ object PreferencesScreen : Screen() {
                         onClick = { navigator.push(AppearancePreferencesScreen) }
                     )
                     preference(
+                        key = "data",
+                        title = { Text(text = stringResource(R.string.pref_data_title)) },
+                        summary = { Text(text = stringResource(R.string.pref_data_summary)) },
+                        icon = { Icon(ImageVector.vectorResource(R.drawable.database_24px), null) },
+                        onClick = { navigator.push(DataScreen) },
+                    )
+                    preference(
                         key = "anilist",
                         title = { Text(text = stringResource(R.string.pref_anilist_title)) },
                         summary = { Text(text = stringResource(R.string.pref_anilist_summary)) },
