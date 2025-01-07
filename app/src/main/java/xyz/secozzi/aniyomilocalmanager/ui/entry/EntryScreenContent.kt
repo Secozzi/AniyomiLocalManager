@@ -6,6 +6,7 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,7 +25,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import xyz.secozzi.aniyomilocalmanager.R
 import xyz.secozzi.aniyomilocalmanager.ui.theme.MissingColor
@@ -36,7 +40,7 @@ import xyz.secozzi.aniyomilocalmanager.utils.getDirectoryName
 fun EntryScreenContent(
     path: String,
     onBack: () -> Unit,
-    content: @Composable () -> Unit,
+    content: @Composable (ColumnScope.() -> Unit),
 ) {
     val directoryName = path.getDirectoryName()
 
@@ -64,7 +68,7 @@ fun EntryScreenContent(
                 .padding(paddingValues),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
         ) {
-            content()
+            content.invoke(this)
         }
     }
 }
@@ -109,6 +113,70 @@ fun SelectItem(
                     style = MaterialTheme.typography.bodySmall,
                     color = if (present) PresentColor else MissingColor,
                 )
+            }
+        }
+
+        Icon(
+            imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+            contentDescription = null,
+            modifier = Modifier.align(Alignment.CenterEnd),
+            tint = MaterialTheme.colorScheme.outline,
+        )
+    }
+}
+
+@Composable
+fun TrackerIdItem(
+    title: String,
+    trackerId: Long?,
+    icon: @Composable (() -> Unit),
+    onClick: () -> Unit,
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = MaterialTheme.spacing.small)
+            .clip(RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.surfaceContainerLow)
+            .combinedClickable(
+                onClick = onClick,
+            )
+            .padding(MaterialTheme.spacing.medium)
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            icon()
+            Column {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleMedium,
+                )
+                Row {
+                    Text(
+                        text = stringResource(R.string.entry_item_tracker_id),
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                    Text(
+                        text = " ",
+                        style = MaterialTheme.typography.bodySmall
+                    )
+
+                    if (trackerId == null) {
+                        Text(
+                            text = stringResource(R.string.entry_item_tracker_na),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MissingColor,
+                        )
+                    } else {
+                        Text(
+                            text = trackerId.toString(),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.primary,
+                        )
+                    }
+                }
             }
         }
 

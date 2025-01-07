@@ -14,6 +14,10 @@
     <string name="entry_item_status">Status: </string>
     <string name="entry_item_present">Present</string>
     <string name="entry_item_missing">Missing</string>
+    <string name="entry_item_tracker_anilist">AniList ID</string>
+    <string name="entry_item_tracker_anidb">AniDB ID</string>
+    <string name="entry_item_tracker_id">ID: </string>
+    <string name="entry_item_tracker_na">N/A</string>
     <string name="entry_create_cover">Create cover</string>
     <string name="entry_create_details">Create details.json</string>
     <string name="entry_create_comicinfo">Create ComicInfo.xml</string>

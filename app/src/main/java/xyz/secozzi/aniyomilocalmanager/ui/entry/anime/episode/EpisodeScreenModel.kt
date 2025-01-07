@@ -2,6 +2,7 @@ package xyz.secozzi.aniyomilocalmanager.ui.entry.anime.episode
 
 import android.net.Uri
 import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.github.k1rakishou.fsaf.FileManager
 import com.github.k1rakishou.fsaf.file.FileDescriptorMode
@@ -19,9 +20,13 @@ import kotlinx.serialization.json.put
 import xyz.secozzi.aniyomilocalmanager.data.anidb.episode.EpisodeRepository
 import xyz.secozzi.aniyomilocalmanager.data.anidb.episode.dto.EpisodeModel
 import xyz.secozzi.aniyomilocalmanager.data.anidb.search.dto.ADBAnime
+import xyz.secozzi.aniyomilocalmanager.database.ALMDatabase
 import xyz.secozzi.aniyomilocalmanager.domain.model.EpisodeType
+import xyz.secozzi.aniyomilocalmanager.domain.trackerid.TrackerIdRepository
 import xyz.secozzi.aniyomilocalmanager.preferences.AniDBPreferences
 import xyz.secozzi.aniyomilocalmanager.presentation.util.RequestState
+import xyz.secozzi.aniyomilocalmanager.ui.home.tabs.ANIME_DIRECTORY_NAME
+import xyz.secozzi.aniyomilocalmanager.utils.getDirectoryName
 import java.io.FileWriter
 
 @Serializable
@@ -36,35 +41,42 @@ data class EpisodeInfo(
 
 class EpisodeScreenModel(
     private val path: String,
+    private val aniDBId: Long?,
     private val episodeRepo: EpisodeRepository,
     private val fileManager: FileManager,
+    private val trackerIdRepository: TrackerIdRepository,
     private val preferences: AniDBPreferences,
-) : ScreenModel {
+) : StateScreenModel<RequestState<Map<Int, List<EpisodeModel>>>>(RequestState.Idle) {
     private val prettyJson = Json {
         prettyPrint = true
         prettyPrintIndent = "    "
     }
 
-    var anidbId = MutableStateFlow(0L)
+    init {
+        if (aniDBId != null) {
+            getEpisodes(aniDBId)
+        }
+    }
+
+    fun updateAniDB(aniDBId: Long) {
+        screenModelScope.launch(Dispatchers.IO) {
+            trackerIdRepository.updateAniDBId(
+                path = "$ANIME_DIRECTORY_NAME/${path.getDirectoryName()}",
+                aniDBId = aniDBId,
+            )
+        }
+    }
 
     var offset = MutableStateFlow(0)
     var start = MutableStateFlow(1)
     var end = MutableStateFlow(1)
     var isValid = MutableStateFlow(true)
 
-    private val _episodes = MutableStateFlow<RequestState<Map<Int, List<EpisodeModel>>>>(RequestState.Idle)
-    val episodes = _episodes.asStateFlow()
-
     var availableTypes = MutableStateFlow<List<EpisodeType>>(emptyList())
     var selectedType = MutableStateFlow<EpisodeType>(EpisodeType.Regular(extraData = 1))
 
     var startPreview = MutableStateFlow<EpisodeInfo?>(null)
     var endPreview = MutableStateFlow<EpisodeInfo?>(null)
-
-    fun onSearched(item: ADBAnime) {
-        anidbId.update { _ -> item.remoteId }
-        getEpisodes(item.remoteId)
-    }
 
     fun onSelectedType(input: EpisodeType?) {
         input?.let {
@@ -103,7 +115,7 @@ class EpisodeScreenModel(
     }
 
     fun updateStartPreview() {
-        val startEpisode = episodes.value.getSuccessData()[selectedType.value.id]!![start.value - 1].copy(
+        val startEpisode = mutableState.value.getSuccessData()[selectedType.value.id]!![start.value - 1].copy(
             episodeNumber = start.value + offset.value
         )
         startPreview.update { _ ->
@@ -117,7 +129,7 @@ class EpisodeScreenModel(
     }
 
     fun updateEndPreview() {
-        val endEpisode = episodes.value.getSuccessData()[selectedType.value.id]!![end.value - 1].copy(
+        val endEpisode = mutableState.value.getSuccessData()[selectedType.value.id]!![end.value - 1].copy(
             episodeNumber = end.value + offset.value
         )
         endPreview.update { _ ->
@@ -130,10 +142,10 @@ class EpisodeScreenModel(
         }
     }
 
-    private fun getEpisodes(anidbId: Long) {
-        _episodes.update { _ -> RequestState.Loading }
+    fun getEpisodes(anidbId: Long) {
+        mutableState.update { _ -> RequestState.Loading }
         screenModelScope.launch(Dispatchers.IO) {
-            _episodes.update { _ ->
+            mutableState.update { _ ->
                 try {
                     val episodes = episodeRepo.getEpisodes(anidbId)
                         .groupBy { it.episodeType.id }
@@ -164,7 +176,7 @@ class EpisodeScreenModel(
                 }
             }
 
-            if (_episodes.value is RequestState.Success) {
+            if (mutableState.value is RequestState.Success) {
                 updateStartPreview()
                 updateEndPreview()
             }
@@ -173,7 +185,7 @@ class EpisodeScreenModel(
 
     fun generateJsonString(): String {
         return prettyJson.encodeToString(
-            episodes.value.getSuccessData()[selectedType.value.id]!!.subList(start.value - 1, end.value).map { ep ->
+            mutableState.value.getSuccessData()[selectedType.value.id]!!.subList(start.value - 1, end.value).map { ep ->
                 val name = getFormattedString(preferences.nameFormat.get(), ep).takeIf { it.isNotBlank() }
                 val scanlator = getFormattedString(preferences.scanlatorFormat.get(), ep).takeIf { it.isNotBlank() }
 

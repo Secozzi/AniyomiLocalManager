@@ -1,5 +1,6 @@
 package xyz.secozzi.aniyomilocalmanager.ui.entry.anime.cover
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -18,6 +19,8 @@ import xyz.secozzi.aniyomilocalmanager.R
 import xyz.secozzi.aniyomilocalmanager.data.anilist.dto.ALAnime
 import xyz.secozzi.aniyomilocalmanager.data.cover.CoverRepository
 import xyz.secozzi.aniyomilocalmanager.data.search.SearchRepositoryManager
+import xyz.secozzi.aniyomilocalmanager.database.ALMDatabase
+import xyz.secozzi.aniyomilocalmanager.domain.trackerid.TrackerIdRepository
 import xyz.secozzi.aniyomilocalmanager.preferences.CoverPreferences
 import xyz.secozzi.aniyomilocalmanager.preferences.preference.collectAsState
 import xyz.secozzi.aniyomilocalmanager.presentation.Screen
@@ -32,7 +35,7 @@ import xyz.secozzi.aniyomilocalmanager.ui.entry.CoverScreenContent
 import xyz.secozzi.aniyomilocalmanager.ui.preferences.CoverPreferencesScreen
 import xyz.secozzi.aniyomilocalmanager.utils.getDirectoryName
 
-class AnimeCoverScreen(val path: String) : Screen() {
+class AnimeCoverScreen(val path: String, val anilistId: Long?) : Screen() {
     @Composable
     override fun Content() {
         val context = LocalContext.current
@@ -42,18 +45,20 @@ class AnimeCoverScreen(val path: String) : Screen() {
         val fileManager = koinInject<FileManager>()
         val client = koinInject<OkHttpClient>()
         val preferences = koinInject<CoverPreferences>()
+        val trackerIdRepository = koinInject<TrackerIdRepository>()
 
         val screenModel = rememberScreenModel {
-            AnimeCoverScreenModel(path, coverRepo, fileManager, client)
+            AnimeCoverScreenModel(path, anilistId, coverRepo, fileManager, client, trackerIdRepository)
         }
 
         val gridSize by preferences.gridSize.collectAsState()
         val selectedCover by screenModel.selectedCover.collectAsState()
-        val covers by screenModel.covers.collectAsState()
+        val state by screenModel.state.collectAsState()
 
         val result = getResult().value as? ALAnime
         if (result != null) {
-            screenModel.onSearched(result)
+            screenModel.updateAniList(result.remoteId)
+            screenModel.getCovers(result.remoteId)
             navigator.clearResults()
         }
 
@@ -83,20 +88,24 @@ class AnimeCoverScreen(val path: String) : Screen() {
         ) { paddingValues ->
             val paddingModifier = Modifier.padding(paddingValues)
 
-            covers.DisplayResult(
+            state.DisplayResult(
                 onIdle = {
-                    NotSearchedContent(
-                        title = stringResource(R.string.cover_not_searched),
-                        modifier = paddingModifier,
-                        onSearch = {
-                            navigator.push(
-                                SearchScreen(
-                                    searchQuery = path.getDirectoryName(),
-                                    searchRepositoryId = SearchRepositoryManager.ANILIST_ANIME,
+                    if (anilistId == null) {
+                        NotSearchedContent(
+                            title = stringResource(R.string.cover_not_searched),
+                            modifier = paddingModifier,
+                            onSearch = {
+                                navigator.push(
+                                    SearchScreen(
+                                        searchQuery = path.getDirectoryName(),
+                                        searchRepositoryId = SearchRepositoryManager.ANILIST_ANIME,
+                                    )
                                 )
-                            )
-                        }
-                    )
+                            }
+                        )
+                    } else {
+                        ProgressContent(modifier = paddingModifier)
+                    }
                 },
                 onLoading = { ProgressContent(modifier = paddingModifier) },
                 onError = { ErrorContent(it, modifier = paddingModifier) },
