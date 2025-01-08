@@ -12,14 +12,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.tooling.preview.Preview
 import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import me.zhanghai.compose.preference.ListPreference
 import me.zhanghai.compose.preference.ProvidePreferenceLocals
@@ -57,7 +53,7 @@ object AniListPreferencesScreen : Screen() {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(paddingValues)
+                        .padding(paddingValues),
                 ) {
                     val titlePref by preferences.titleLang.collectAsState()
                     ListPreference(
@@ -66,7 +62,7 @@ object AniListPreferencesScreen : Screen() {
                         values = TitleLangs.entries,
                         valueToText = { AnnotatedString((it.name)) },
                         title = { Text(text = stringResource(R.string.pref_anilist_pref_title)) },
-                        summary = { Text(text = titlePref.name) }
+                        summary = { Text(text = titlePref.name) },
                     )
 
                     val studioCount by preferences.studioCount.collectAsState()

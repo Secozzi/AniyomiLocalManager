@@ -16,7 +16,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         Thread.setDefaultUncaughtExceptionHandler(
-            GlobalExceptionHandler(applicationContext, CrashActivity::class.java)
+            GlobalExceptionHandler(applicationContext, CrashActivity::class.java),
         )
 
         startKoin {

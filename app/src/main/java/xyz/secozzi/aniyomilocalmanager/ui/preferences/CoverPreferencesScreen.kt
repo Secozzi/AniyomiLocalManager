@@ -63,21 +63,21 @@ object CoverPreferencesScreen : Screen() {
                     SwitchPreference(
                         value = animeAnilist,
                         onValueChange = { preferences.animeCoverAnilist.set(it) },
-                        title = { Text(text = stringResource(R.string.pref_cover_anilist)) }
+                        title = { Text(text = stringResource(R.string.pref_cover_anilist)) },
                     )
 
                     val animeMAL by preferences.animeCoverMAL.collectAsState()
                     SwitchPreference(
                         value = animeMAL,
                         onValueChange = { preferences.animeCoverMAL.set(it) },
-                        title = { Text(text = stringResource(R.string.pref_cover_mal)) }
+                        title = { Text(text = stringResource(R.string.pref_cover_mal)) },
                     )
 
                     val animeFanart by preferences.animeCoverFanart.collectAsState()
                     SwitchPreference(
                         value = animeFanart,
                         onValueChange = { preferences.animeCoverFanart.set(it) },
-                        title = { Text(text = stringResource(R.string.pref_cover_fanart)) }
+                        title = { Text(text = stringResource(R.string.pref_cover_fanart)) },
                     )
 
                     PreferenceCategory(
@@ -88,21 +88,21 @@ object CoverPreferencesScreen : Screen() {
                     SwitchPreference(
                         value = mangaAnilist,
                         onValueChange = { preferences.mangaCoverAnilist.set(it) },
-                        title = { Text(text = stringResource(R.string.pref_cover_anilist)) }
+                        title = { Text(text = stringResource(R.string.pref_cover_anilist)) },
                     )
 
                     val mangaMAL by preferences.mangaCoverMAL.collectAsState()
                     SwitchPreference(
                         value = mangaMAL,
                         onValueChange = { preferences.mangaCoverMAL.set(it) },
-                        title = { Text(text = stringResource(R.string.pref_cover_mal)) }
+                        title = { Text(text = stringResource(R.string.pref_cover_mal)) },
                     )
 
                     val mangaMD by preferences.mangaCoverMD.collectAsState()
                     SwitchPreference(
                         value = mangaMD,
                         onValueChange = { preferences.mangaCoverMD.set(it) },
-                        title = { Text(text = stringResource(R.string.pref_cover_md)) }
+                        title = { Text(text = stringResource(R.string.pref_cover_md)) },
                     )
 
                     PreferenceCategory(

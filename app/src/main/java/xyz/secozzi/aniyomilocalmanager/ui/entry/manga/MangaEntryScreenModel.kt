@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import xyz.secozzi.aniyomilocalmanager.database.ALMDatabase
 import xyz.secozzi.aniyomilocalmanager.database.entities.TrackerIdEntity
 import xyz.secozzi.aniyomilocalmanager.domain.trackerid.TrackerIdRepository
 import xyz.secozzi.aniyomilocalmanager.ui.home.tabs.MANGA_DIRECTORY_NAME
@@ -49,7 +48,7 @@ class MangaEntryScreenModel(
                 TrackerIdEntity(
                     path = "$MANGA_DIRECTORY_NAME/${path.getDirectoryName()}",
                     anilistId = anilistId,
-                )
+                ),
             )
         }
     }

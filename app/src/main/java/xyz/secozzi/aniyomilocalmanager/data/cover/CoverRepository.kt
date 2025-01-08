@@ -32,7 +32,7 @@ class CoverRepository(
                 CoverData(
                     origin = context.getString(R.string.pref_cover_anilist),
                     coverUrl = aniListData.coverImage,
-                )
+                ),
             )
         }
 
@@ -42,7 +42,7 @@ class CoverRepository(
                     malId = aniListData.malId,
                     type = MALType.Manga,
                     origin = context.getString(R.string.pref_cover_mal),
-                )
+                ),
             )
         }
 
@@ -52,7 +52,7 @@ class CoverRepository(
                     title = aniListData.title,
                     year = aniListData.publishingYear,
                     origin = context.getString(R.string.pref_cover_md),
-                )
+                ),
             )
         }
 
@@ -68,7 +68,7 @@ class CoverRepository(
                 CoverData(
                     origin = context.getString(R.string.pref_cover_anilist),
                     coverUrl = aniListData.coverImage,
-                )
+                ),
             )
         }
 
@@ -78,7 +78,7 @@ class CoverRepository(
                     malId = aniListData.malId,
                     type = MALType.Anime,
                     origin = context.getString(R.string.pref_cover_mal),
-                )
+                ),
             )
         }
 
@@ -88,7 +88,7 @@ class CoverRepository(
                     anilistId = anilistId,
                     type = if (aniListData.format == "MOVIE") "movies" else "tv",
                     origin = context.getString(R.string.pref_cover_fanart),
-                )
+                ),
             )
         }
 

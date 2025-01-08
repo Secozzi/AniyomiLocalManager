@@ -1,6 +1,7 @@
 package xyz.secozzi.aniyomilocalmanager.ui.entry.anime.episode
 
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,6 +10,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.ContentCopy
@@ -16,6 +20,7 @@ import androidx.compose.material.icons.filled.FileDownload
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Numbers
+import androidx.compose.material.icons.outlined.RemoveRedEye
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.HorizontalDivider
@@ -32,6 +37,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -46,7 +52,7 @@ import xyz.secozzi.aniyomilocalmanager.R
 import xyz.secozzi.aniyomilocalmanager.data.anidb.episode.EpisodeRepository
 import xyz.secozzi.aniyomilocalmanager.data.anidb.search.dto.ADBAnime
 import xyz.secozzi.aniyomilocalmanager.data.search.SearchRepositoryManager
-import xyz.secozzi.aniyomilocalmanager.database.ALMDatabase
+import xyz.secozzi.aniyomilocalmanager.domain.model.EpisodeType
 import xyz.secozzi.aniyomilocalmanager.domain.trackerid.TrackerIdRepository
 import xyz.secozzi.aniyomilocalmanager.preferences.AniDBPreferences
 import xyz.secozzi.aniyomilocalmanager.presentation.Screen
@@ -58,8 +64,10 @@ import xyz.secozzi.aniyomilocalmanager.presentation.search.SearchScreen
 import xyz.secozzi.aniyomilocalmanager.presentation.util.RequestState
 import xyz.secozzi.aniyomilocalmanager.presentation.util.clearResults
 import xyz.secozzi.aniyomilocalmanager.presentation.util.getResult
+import xyz.secozzi.aniyomilocalmanager.presentation.util.setScreenResult
 import xyz.secozzi.aniyomilocalmanager.ui.entry.anime.episode.components.OutlinedNumericChooser
 import xyz.secozzi.aniyomilocalmanager.ui.entry.anime.episode.components.PreviewEpisodeCard
+import xyz.secozzi.aniyomilocalmanager.ui.entry.anime.episode.preview.PreviewEpisodeScreen
 import xyz.secozzi.aniyomilocalmanager.ui.preferences.AniDBPreferencesScreen
 import xyz.secozzi.aniyomilocalmanager.ui.theme.spacing
 import xyz.secozzi.aniyomilocalmanager.utils.getDirectoryName
@@ -122,17 +130,32 @@ class EpisodeScreen(val path: String, val aniDBId: Long?) : Screen() {
 
                         IconButton(
                             onClick = {
+                                navigator.setScreenResult(TYPES_KEY, availableTypes)
+                                navigator.setScreenResult(
+                                    EPISODES_KEY,
+                                    state.getSuccessData().mapValues { (_, values) ->
+                                        values.map { screenModel.toEpisodeInfo(it) }
+                                    },
+                                )
+                                navigator.push(PreviewEpisodeScreen(path, aniDBId))
+                            },
+                            enabled = state.isSuccess(),
+                        ) {
+                            Icon(Icons.Outlined.RemoveRedEye, null)
+                        }
+                        IconButton(
+                            onClick = {
                                 navigator.push(
                                     SearchScreen(
                                         searchQuery = path.getDirectoryName(),
                                         searchRepositoryId = SearchRepositoryManager.ANIDB,
-                                    )
+                                    ),
                                 )
-                            }
+                            },
                         ) {
                             Icon(Icons.Default.Search, null)
                         }
-                    }
+                    },
                 )
             },
             bottomBar = {
@@ -144,7 +167,7 @@ class EpisodeScreen(val path: String, val aniDBId: Long?) : Screen() {
                                 start = MaterialTheme.spacing.medium,
                                 end = MaterialTheme.spacing.medium,
                                 bottom = MaterialTheme.spacing.smaller,
-                            )
+                            ),
                     ) {
                         Button(
                             onClick = {
@@ -181,7 +204,7 @@ class EpisodeScreen(val path: String, val aniDBId: Long?) : Screen() {
                         }
                     }
                 }
-            }
+            },
         ) { paddingValues ->
             val paddingModifier = Modifier.padding(paddingValues)
 
@@ -196,9 +219,9 @@ class EpisodeScreen(val path: String, val aniDBId: Long?) : Screen() {
                                     SearchScreen(
                                         searchQuery = path.getDirectoryName(),
                                         searchRepositoryId = SearchRepositoryManager.ANIDB,
-                                    )
+                                    ),
                                 )
-                            }
+                            },
                         )
                     } else {
                         ProgressContent(modifier = paddingModifier)
@@ -209,6 +232,7 @@ class EpisodeScreen(val path: String, val aniDBId: Long?) : Screen() {
                 onSuccess = { values ->
                     Column(
                         modifier = paddingModifier
+                            .verticalScroll(rememberScrollState())
                             .padding(
                                 start = MaterialTheme.spacing.medium,
                                 end = MaterialTheme.spacing.medium,
@@ -241,7 +265,7 @@ class EpisodeScreen(val path: String, val aniDBId: Long?) : Screen() {
                             min = 1,
                             label = { Text(text = stringResource(R.string.episode_end_label)) },
                             isStart = false,
-                            isCrossing = start > end
+                            isCrossing = start > end,
                         )
 
                         OutlinedNumericChooser(
@@ -254,16 +278,15 @@ class EpisodeScreen(val path: String, val aniDBId: Long?) : Screen() {
                         )
 
                         Column(
-                            verticalArrangement = Arrangement.spacedBy(
-                                MaterialTheme.spacing.small
-                            )
+                            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
                         ) {
                             HorizontalDivider()
 
                             Row {
                                 Icon(
-                                    Icons.Outlined.Numbers, null,
-                                    modifier = Modifier.padding(start = 14.dp)
+                                    Icons.Outlined.Numbers,
+                                    null,
+                                    modifier = Modifier.padding(start = 14.dp),
                                 )
                                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.smaller))
                                 Text(text = "Video count")
@@ -271,9 +294,15 @@ class EpisodeScreen(val path: String, val aniDBId: Long?) : Screen() {
                                 Text(
                                     text = screenModel.getVideoCount().toString(),
                                     style = MaterialTheme.typography.titleMedium,
-                                    modifier = Modifier.padding(end = 14.dp)
+                                    modifier = Modifier.padding(end = 14.dp),
                                 )
                             }
+
+                            val previewModifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(16.dp))
+                                .background(MaterialTheme.colorScheme.surfaceContainerLow)
+                                .padding(MaterialTheme.spacing.medium)
 
                             if (startPreview != null) {
                                 PreviewEpisodeCard(
@@ -283,7 +312,8 @@ class EpisodeScreen(val path: String, val aniDBId: Long?) : Screen() {
                                     extraInfo = listOf(
                                         startPreview!!.date ?: "",
                                         startPreview!!.scanlator ?: "",
-                                    )
+                                    ),
+                                    modifier = previewModifier,
                                 )
                             }
 
@@ -295,13 +325,19 @@ class EpisodeScreen(val path: String, val aniDBId: Long?) : Screen() {
                                     extraInfo = listOf(
                                         endPreview!!.date ?: "",
                                         endPreview!!.scanlator ?: "",
-                                    )
+                                    ),
+                                    modifier = previewModifier,
                                 )
                             }
                         }
                     }
-                }
+                },
             )
         }
     }
 }
+
+const val TYPES_KEY = "available_types"
+typealias TYPES_RESULT = List<EpisodeType>
+const val EPISODES_KEY = "episode_list"
+typealias EPISODES_RESULT = Map<Int, List<EpisodeInfo>>

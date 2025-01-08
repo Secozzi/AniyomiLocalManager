@@ -82,7 +82,7 @@ fun DirectoryListing(
                     1 -> "1 item"
                     else -> "${data.size} items"
                 }
-                
+
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
 
                 Text(
@@ -97,22 +97,25 @@ fun DirectoryListing(
                 val missingColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
 
                 Icon(
-                    Icons.Rounded.Image, null,
+                    Icons.Rounded.Image,
+                    null,
                     tint = if (data.hasInfo[0]) presentColor else missingColor,
-                    modifier = Modifier.size(22.dp)
+                    modifier = Modifier.size(22.dp),
                 )
 
                 Icon(
-                    painterResource(R.drawable.ic_quick_reference), null,
+                    painterResource(R.drawable.ic_quick_reference),
+                    null,
                     tint = if (data.hasInfo[1]) presentColor else missingColor,
-                    modifier = Modifier.size(22.dp)
+                    modifier = Modifier.size(22.dp),
                 )
 
                 if (data.hasInfo.size == 3) {
                     Icon(
-                        painterResource(R.drawable.ic_playlist_play), null,
+                        painterResource(R.drawable.ic_playlist_play),
+                        null,
                         tint = if (data.hasInfo[2]) presentColor else missingColor,
-                        modifier = Modifier.size(22.dp)
+                        modifier = Modifier.size(22.dp),
                     )
                 }
             }
@@ -127,7 +130,7 @@ fun DirectoryListingPreview() {
         name = "Berserk",
         lastModified = 1728772881000L,
         size = 4,
-        hasInfo = listOf(false, true, true)
+        hasInfo = listOf(false, true, true),
     )
 
     DirectoryListing(data, onClick = {})

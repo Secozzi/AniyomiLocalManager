@@ -18,7 +18,6 @@ import xyz.secozzi.aniyomilocalmanager.R
 import xyz.secozzi.aniyomilocalmanager.data.anilist.dto.ALManga
 import xyz.secozzi.aniyomilocalmanager.data.cover.CoverRepository
 import xyz.secozzi.aniyomilocalmanager.data.search.SearchRepositoryManager
-import xyz.secozzi.aniyomilocalmanager.database.ALMDatabase
 import xyz.secozzi.aniyomilocalmanager.domain.trackerid.TrackerIdRepository
 import xyz.secozzi.aniyomilocalmanager.preferences.CoverPreferences
 import xyz.secozzi.aniyomilocalmanager.preferences.preference.collectAsState
@@ -70,7 +69,7 @@ class MangaCoverScreen(val path: String, val anilistId: Long?) : Screen() {
                     SearchScreen(
                         searchQuery = path.getDirectoryName(),
                         searchRepositoryId = SearchRepositoryManager.ANILIST_MANGA,
-                    )
+                    ),
                 )
             },
             onSettings = { navigator.push(CoverPreferencesScreen) },
@@ -100,9 +99,9 @@ class MangaCoverScreen(val path: String, val anilistId: Long?) : Screen() {
                                     SearchScreen(
                                         searchQuery = path.getDirectoryName(),
                                         searchRepositoryId = SearchRepositoryManager.ANILIST_MANGA,
-                                    )
+                                    ),
                                 )
-                            }
+                            },
                         )
                     } else {
                         ProgressContent(modifier = paddingModifier)
@@ -118,7 +117,7 @@ class MangaCoverScreen(val path: String, val anilistId: Long?) : Screen() {
                         gridSize = gridSize,
                         onItemClick = screenModel::updateSelected,
                     )
-                }
+                },
             )
         }
     }

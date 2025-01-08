@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
             enableEdgeToEdge(
                 SystemBarStyle.auto(
                     lightScrim = Color.White.toArgb(),
-                    darkScrim = Color.White.toArgb()
+                    darkScrim = Color.White.toArgb(),
                 ) { dark == DarkMode.Dark || (dark == DarkMode.System && isSystemInDarkTheme) },
             )
 

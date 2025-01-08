@@ -1,6 +1,5 @@
 package xyz.secozzi.aniyomilocalmanager.ui.home.tabs
 
-import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -11,7 +10,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
@@ -54,25 +52,23 @@ object MangaTab : Tab {
 
         val screenModel = rememberScreenModel { MangaTabScreenModel(preferences) }
 
-        val storageLocation by screenModel.storageLocation.collectAsState()
-
         Scaffold(
             topBar = {
                 TopAppBar(
                     title = {
-                        PathText(storageLocation)
+                        PathText(screenModel.storageLocation)
                     },
                     actions = {
                         IconButton(onClick = { navigator.push(PreferencesScreen) }) {
                             Icon(Icons.Default.Settings, null)
                         }
-                    }
+                    },
                 )
-            }
+            },
         ) { paddingValues ->
             val paddingModifier = Modifier.padding(paddingValues)
 
-            if (storageLocation.isBlank()) {
+            if (screenModel.storageLocation.isBlank()) {
                 SelectStorage(
                     label = stringResource(R.string.select_local_directory),
                     validateName = { it.equals(MANGA_DIRECTORY_NAME, true) },
@@ -85,7 +81,7 @@ object MangaTab : Tab {
                 )
             } else {
                 DirectoryList(
-                    storagePath = storageLocation,
+                    storagePath = screenModel.storageLocation,
                     isAnime = false,
                     modifier = paddingModifier,
                     onClick = { navigator.push(MangaEntryScreen(it)) },

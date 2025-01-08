@@ -1,20 +1,16 @@
 package xyz.secozzi.aniyomilocalmanager.ui.entry.anime.cover
 
 import android.net.Uri
-import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.github.k1rakishou.fsaf.FileManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import xyz.secozzi.aniyomilocalmanager.data.cover.CoverData
 import xyz.secozzi.aniyomilocalmanager.data.cover.CoverRepository
-import xyz.secozzi.aniyomilocalmanager.database.ALMDatabase
-import xyz.secozzi.aniyomilocalmanager.database.entities.TrackerIdEntity
 import xyz.secozzi.aniyomilocalmanager.domain.trackerid.TrackerIdRepository
 import xyz.secozzi.aniyomilocalmanager.presentation.util.RequestState
 import xyz.secozzi.aniyomilocalmanager.ui.home.tabs.ANIME_DIRECTORY_NAME
@@ -72,7 +68,7 @@ class AnimeCoverScreenModel(
         screenModelScope.launch(Dispatchers.IO) {
             fileManager.getOutputStream(cover).use {
                 val resp = client.newCall(
-                    GET(selectedCover.value!!.coverUrl)
+                    GET(selectedCover.value!!.coverUrl),
                 ).execute()
 
                 it?.write(resp.body.bytes())

@@ -16,7 +16,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.tooling.preview.Preview
 import xyz.secozzi.aniyomilocalmanager.ui.theme.spacing
 import xyz.secozzi.aniyomilocalmanager.utils.Constants.disabledAlpha
 
@@ -27,7 +26,7 @@ interface DropdownItem {
 }
 
 @Composable
-fun <T: DropdownItem>SimpleDropdown(
+fun <T : DropdownItem> SimpleDropdown(
     label: String,
     selectedItem: T?,
     items: List<T>,
@@ -66,7 +65,7 @@ fun <T: DropdownItem>SimpleDropdown(
                 DropdownMenuItem(
                     text = {
                         Row(
-                            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smaller)
+                            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smaller),
                         ) {
                             Text(text = item.displayName)
                             if (item.extraData != null) {
@@ -80,7 +79,7 @@ fun <T: DropdownItem>SimpleDropdown(
                     onClick = {
                         onSelected(item)
                         expanded = false
-                    }
+                    },
                 )
             }
         }

@@ -14,7 +14,7 @@ class FanartCoverProvider(
     val mapping by lazy {
         with(json) {
             client.newCall(
-                GET(mappingUrl)
+                GET(mappingUrl),
             ).execute().parseAs<List<Mapping>>()
         }
     }

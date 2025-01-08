@@ -1,6 +1,5 @@
 package xyz.secozzi.aniyomilocalmanager.ui.theme
 
-
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
@@ -16,7 +15,7 @@ data class Spacing(
     val large: Dp = 24.dp,
     val larger: Dp = 32.dp,
     val extraLarge: Dp = 48.dp,
-    val largest: Dp = 64.dp
+    val largest: Dp = 64.dp,
 )
 
 @Suppress("CompositionLocalAllowlist")

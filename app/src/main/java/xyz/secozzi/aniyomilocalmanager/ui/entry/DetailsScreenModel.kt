@@ -1,9 +1,6 @@
 package xyz.secozzi.aniyomilocalmanager.ui.entry
 
-
 import android.net.Uri
-import android.util.Log
-import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.github.k1rakishou.fsaf.FileManager
@@ -23,8 +20,6 @@ import xyz.secozzi.aniyomilocalmanager.data.anilist.AnilistSearch
 import xyz.secozzi.aniyomilocalmanager.data.anilist.AnilistSearchType
 import xyz.secozzi.aniyomilocalmanager.data.anilist.dto.ALAnime
 import xyz.secozzi.aniyomilocalmanager.data.anilist.dto.ALManga
-import xyz.secozzi.aniyomilocalmanager.database.ALMDatabase
-import xyz.secozzi.aniyomilocalmanager.database.entities.TrackerIdEntity
 import xyz.secozzi.aniyomilocalmanager.domain.model.ComicInfo
 import xyz.secozzi.aniyomilocalmanager.domain.model.Status
 import xyz.secozzi.aniyomilocalmanager.domain.trackerid.TrackerIdRepository
@@ -59,12 +54,12 @@ class DetailsScreenModel(
                         data.toALAnime(
                             titlePreference = aniListPreferences.titleLang.get(),
                             studioCountPreference = aniListPreferences.studioCount.get(),
-                        )
+                        ),
                     )
                     AnilistSearchType.MANGA -> updateManga(
                         data.toALManga(
                             titlePreference = aniListPreferences.titleLang.get(),
-                        )
+                        ),
                     )
                 }
                 mutableState.update { _ -> State.Finished }
@@ -155,8 +150,8 @@ class DetailsScreenModel(
                 ComicInfo.Genre(it)
             },
             publishingStatus = ComicInfo.PublishingStatusTachiyomi(
-                status.value?.displayName ?: Status.Unknown.displayName
-            )
+                status.value?.displayName ?: Status.Unknown.displayName,
+            ),
         )
 
         return xml.encodeToString(ComicInfo.serializer(), comicInfo)
@@ -188,7 +183,7 @@ class DetailsScreenModel(
                     addAll(genre.value.split(","))
                 }
                 put("status", status.value?.id ?: 0)
-            }
+            },
         )
     }
 

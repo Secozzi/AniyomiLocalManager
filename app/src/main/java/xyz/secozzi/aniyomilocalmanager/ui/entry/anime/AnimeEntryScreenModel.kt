@@ -1,7 +1,6 @@
 package xyz.secozzi.aniyomilocalmanager.ui.entry.anime
 
 import android.net.Uri
-import android.util.Log
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.github.k1rakishou.fsaf.FileManager
@@ -10,8 +9,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import xyz.secozzi.aniyomilocalmanager.database.ALMDatabase
-import xyz.secozzi.aniyomilocalmanager.database.entities.TrackerIdEntity
 import xyz.secozzi.aniyomilocalmanager.domain.trackerid.TrackerIdRepository
 import xyz.secozzi.aniyomilocalmanager.ui.home.tabs.ANIME_DIRECTORY_NAME
 import xyz.secozzi.aniyomilocalmanager.utils.getDirectoryName

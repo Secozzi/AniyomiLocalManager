@@ -1,6 +1,5 @@
 package xyz.secozzi.aniyomilocalmanager.presentation.search.components
 
-
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.BasicTextField
@@ -9,7 +8,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Close
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -120,12 +118,12 @@ fun SearchTopBar(
         actions = {
             if (searchText.isNotEmpty()) {
                 IconButton(
-                    onClick = { searchText = "" }
+                    onClick = { searchText = "" },
                 ) {
                     Icon(Icons.Outlined.Close, null)
                 }
             }
-        }
+        },
     )
 }
 
@@ -147,18 +145,19 @@ fun BasicTextFieldWithCursorAtEnd(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     cursorBrush: Brush = SolidColor(Color.Black),
     decorationBox: @Composable (innerTextField: @Composable () -> Unit) -> Unit =
-        @Composable { innerTextField -> innerTextField() }
+        @Composable { innerTextField -> innerTextField() },
 ) {
     // Holds the latest internal TextFieldValue state. We need to keep it to have the correct value
     // of the composition.
     var textFieldValueState by remember {
         mutableStateOf(
             TextFieldValue(
-                text = value, selection = when {
+                text = value,
+                selection = when {
                     value.isEmpty() -> TextRange.Zero
                     else -> TextRange(value.length, value.length)
-                }
-            )
+                },
+            ),
         )
     }
 

@@ -1,6 +1,5 @@
 package xyz.secozzi.aniyomilocalmanager.data.anidb.episode.dto
 
-
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName

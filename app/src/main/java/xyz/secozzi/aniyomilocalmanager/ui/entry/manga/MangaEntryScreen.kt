@@ -19,7 +19,6 @@ import org.koin.compose.koinInject
 import xyz.secozzi.aniyomilocalmanager.R
 import xyz.secozzi.aniyomilocalmanager.data.anilist.dto.ALManga
 import xyz.secozzi.aniyomilocalmanager.data.search.SearchRepositoryManager
-import xyz.secozzi.aniyomilocalmanager.database.ALMDatabase
 import xyz.secozzi.aniyomilocalmanager.domain.trackerid.TrackerIdRepository
 import xyz.secozzi.aniyomilocalmanager.presentation.Screen
 import xyz.secozzi.aniyomilocalmanager.presentation.search.SearchScreen
@@ -52,7 +51,7 @@ class MangaEntryScreen(val path: String) : Screen() {
 
         EntryScreenContent(
             path = path,
-            onBack = { navigator.pop() }
+            onBack = { navigator.pop() },
         ) {
             SelectItem(
                 title = stringResource(R.string.entry_create_cover),
@@ -71,13 +70,13 @@ class MangaEntryScreen(val path: String) : Screen() {
             TrackerIdItem(
                 title = stringResource(R.string.entry_item_tracker_anilist),
                 trackerId = anilistId,
-                icon = { Icon(ImageVector.vectorResource(R.drawable.anilist_icon), null ) },
+                icon = { Icon(ImageVector.vectorResource(R.drawable.anilist_icon), null) },
                 onClick = {
                     navigator.push(
                         SearchScreen(
                             searchQuery = path.getDirectoryName(),
                             searchRepositoryId = SearchRepositoryManager.ANILIST_MANGA,
-                        )
+                        ),
                     )
                 },
             )

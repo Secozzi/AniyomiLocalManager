@@ -11,7 +11,7 @@ val NetworkModule = module {
     single { getOkHttpClient(get()) }
 }
 
-fun getOkHttpClient(context: Context) : OkHttpClient {
+fun getOkHttpClient(context: Context): OkHttpClient {
     return OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)

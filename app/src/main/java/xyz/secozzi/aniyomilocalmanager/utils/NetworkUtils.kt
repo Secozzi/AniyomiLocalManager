@@ -1,3 +1,5 @@
+@file:Suppress("FunctionName")
+
 package xyz.secozzi.aniyomilocalmanager.utils
 
 import okhttp3.CacheControl

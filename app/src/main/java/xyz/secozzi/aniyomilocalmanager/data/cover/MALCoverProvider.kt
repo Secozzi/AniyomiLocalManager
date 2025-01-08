@@ -1,7 +1,7 @@
 package xyz.secozzi.aniyomilocalmanager.data.cover
 
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import xyz.secozzi.aniyomilocalmanager.utils.GET
