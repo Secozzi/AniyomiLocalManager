@@ -16,7 +16,6 @@ class AnimeTabScreenModel(
         .asState(screenModelScope)
 
     fun updateStorageLocation(newLocation: String) {
-        preferences.animeStorageLocation.set(newLocation)
         storageLocation = newLocation
     }
 }

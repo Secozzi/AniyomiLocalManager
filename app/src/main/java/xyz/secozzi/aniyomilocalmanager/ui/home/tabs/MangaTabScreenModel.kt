@@ -16,7 +16,6 @@ class MangaTabScreenModel(
         .asState(screenModelScope)
 
     fun updateStorageLocation(newLocation: String) {
-        preferences.mangaStorageLocation.set(newLocation)
         storageLocation = newLocation
     }
 }
