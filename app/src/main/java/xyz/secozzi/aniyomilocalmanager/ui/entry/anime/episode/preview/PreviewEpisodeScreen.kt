@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -61,6 +62,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import org.koin.compose.koinInject
 import xyz.secozzi.aniyomilocalmanager.R
+import xyz.secozzi.aniyomilocalmanager.domain.model.EpisodeType
 import xyz.secozzi.aniyomilocalmanager.presentation.Screen
 import xyz.secozzi.aniyomilocalmanager.presentation.search.SearchScreen
 import xyz.secozzi.aniyomilocalmanager.presentation.util.getScreenResult
@@ -101,7 +103,7 @@ class PreviewEpisodeScreen(
                 )
             }
         ) { paddingValues ->
-            val collapsedState = remember(availableTypes) { availableTypes.map { true }.toMutableStateList() }
+            val expandedState = remember(availableTypes) { availableTypes.map { false }.toMutableStateList() }
 
             Column(
                 modifier = Modifier
@@ -110,67 +112,91 @@ class PreviewEpisodeScreen(
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
             ) {
                 availableTypes.forEachIndexed { i, episodeType ->
-                    val collapsed = collapsedState[i]
+                    val expanded = expandedState[i]
+                    EpisodeTypeCard(
+                        episodeType = episodeType,
+                        episodes = episodeList[episodeType.id]!!.toImmutableList(),
+                        expanded = expanded,
+                        onExpand = { expandedState[i] = !expanded }
+                    )
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun EpisodeTypeCard(
+        episodeType: EpisodeType,
+        episodes: ImmutableList<EpisodeInfo>,
+        expanded: Boolean,
+        onExpand: () -> Unit,
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .animateContentSize()
+                .padding(horizontal = MaterialTheme.spacing.small)
+                .clip(RoundedCornerShape(16.dp))
+                .background(color = episodeType.id.getColor())
+                .padding(MaterialTheme.spacing.medium)
+        ) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smaller),
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smaller),
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.combinedClickable(onClick = onExpand),
+                ) {
+                    Text(
+                        text = episodeType.displayName,
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+
+                    episodeType.extraData?.let {
+                        Text(
+                            text = "($it)",
+                            style = MaterialTheme.typography.titleMedium,
+                            modifier = Modifier.alpha(disabledAlpha),
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    if (expanded) {
+                        Icon(Icons.Default.KeyboardArrowUp, null)
+                    } else {
+                        Icon(Icons.Default.KeyboardArrowDown, null)
+                    }
+                }
+
+
+                if (expanded) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .animateContentSize()
-                            .padding(horizontal = MaterialTheme.spacing.small)
-                            .clip(RoundedCornerShape(16.dp))
-                            .background(color = episodeType.id.getColor())
-                            .padding(MaterialTheme.spacing.medium)
+                            .heightIn(max = 600.dp)
                     ) {
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smaller)
+                        LazyColumn(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smaller),
                         ) {
-                            Row(
-                                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smaller),
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier
-                                    .combinedClickable(
-                                        onClick = { collapsedState[i] = !collapsed },
-                                    )
-                            ) {
-                                Text(
-                                    text = episodeType.displayName,
-                                    style = MaterialTheme.typography.titleMedium,
+                            items(episodes) { ep ->
+                                PreviewEpisodeCard(
+                                    title = ep.name,
+                                    episodeNumber = ep.episodeNumber,
+                                    extraInfo = listOf(
+                                        ep.date ?: "",
+                                        ep.scanlator ?: "",
+                                    ),
+                                    modifier = Modifier
+                                        .border(
+                                            width = 2.dp,
+                                            color = episodeType.id.getColor(),
+                                            shape = RoundedCornerShape(16.dp),
+                                        )
+                                        .padding(MaterialTheme.spacing.small),
                                 )
-
-                                episodeType.extraData?.let {
-                                    Text(
-                                        text = "($it)",
-                                        style = MaterialTheme.typography.titleMedium,
-                                        modifier = Modifier.alpha(disabledAlpha),
-                                    )
-                                }
-
-                                Spacer(modifier = Modifier.weight(1f))
-
-                                if (collapsed) {
-                                    Icon(Icons.Default.KeyboardArrowDown, null)
-                                } else {
-                                    Icon(Icons.Default.KeyboardArrowUp, null)
-                                }
-                            }
-
-                            if (!collapsed) {
-                                episodeList[episodeType.id]!!.forEach { ep ->
-                                    PreviewEpisodeCard(
-                                        title = ep.name,
-                                        episodeNumber = ep.episodeNumber,
-                                        extraInfo = listOf(
-                                            ep.date ?: "",
-                                            ep.scanlator ?: "",
-                                        ),
-                                        modifier = Modifier
-                                            .border(
-                                                width = 2.dp,
-                                                color = episodeType.id.getColor(),
-                                                shape = RoundedCornerShape(16.dp),
-                                            )
-                                            .padding(MaterialTheme.spacing.small),
-                                    )
-                                }
                             }
                         }
                     }
