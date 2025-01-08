@@ -27,7 +27,7 @@ fun ConfirmDialog(
 ) {
     BasicAlertDialog(
         onCancel,
-        modifier = modifier
+        modifier = modifier,
     ) {
         Surface(
             shape = AlertDialogDefaults.shape,
@@ -36,7 +36,7 @@ fun ConfirmDialog(
         ) {
             Column(
                 modifier = Modifier.padding(MaterialTheme.spacing.medium),
-                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
             ) {
                 Text(
                     title,
@@ -45,11 +45,11 @@ fun ConfirmDialog(
                 )
                 Text(
                     subtitle,
-                    color = AlertDialogDefaults.textContentColor
+                    color = AlertDialogDefaults.textContentColor,
                 )
                 Row(
                     Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
+                    horizontalArrangement = Arrangement.End,
                 ) {
                     TextButton(onCancel) {
                         Text(stringResource(R.string.generic_cancel))

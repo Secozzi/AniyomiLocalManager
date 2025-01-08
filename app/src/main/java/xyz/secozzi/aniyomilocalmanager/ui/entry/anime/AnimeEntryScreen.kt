@@ -1,8 +1,6 @@
 package xyz.secozzi.aniyomilocalmanager.ui.entry.anime
 
-import android.util.Log
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -23,7 +21,6 @@ import xyz.secozzi.aniyomilocalmanager.data.anidb.search.dto.ADBAnime
 import xyz.secozzi.aniyomilocalmanager.data.anilist.dto.ALAnime
 import xyz.secozzi.aniyomilocalmanager.data.search.SearchDataItem
 import xyz.secozzi.aniyomilocalmanager.data.search.SearchRepositoryManager
-import xyz.secozzi.aniyomilocalmanager.database.ALMDatabase
 import xyz.secozzi.aniyomilocalmanager.domain.trackerid.TrackerIdRepository
 import xyz.secozzi.aniyomilocalmanager.presentation.Screen
 import xyz.secozzi.aniyomilocalmanager.presentation.search.SearchScreen
@@ -61,7 +58,7 @@ class AnimeEntryScreen(val path: String) : Screen() {
 
         EntryScreenContent(
             path = path,
-            onBack = { navigator.pop() }
+            onBack = { navigator.pop() },
         ) {
             SelectItem(
                 title = stringResource(R.string.entry_create_cover),
@@ -86,13 +83,13 @@ class AnimeEntryScreen(val path: String) : Screen() {
             TrackerIdItem(
                 title = stringResource(R.string.entry_item_tracker_anilist),
                 trackerId = anilistId,
-                icon = { Icon(ImageVector.vectorResource(R.drawable.anilist_icon), null ) },
+                icon = { Icon(ImageVector.vectorResource(R.drawable.anilist_icon), null) },
                 onClick = {
                     navigator.push(
                         SearchScreen(
                             searchQuery = path.getDirectoryName(),
                             searchRepositoryId = SearchRepositoryManager.ANILIST_ANIME,
-                        )
+                        ),
                     )
                 },
             )
@@ -100,13 +97,13 @@ class AnimeEntryScreen(val path: String) : Screen() {
             TrackerIdItem(
                 title = stringResource(R.string.entry_item_tracker_anidb),
                 trackerId = aniDBId,
-                icon = { Icon(ImageVector.vectorResource(R.drawable.anidb_icon), null ) },
+                icon = { Icon(ImageVector.vectorResource(R.drawable.anidb_icon), null) },
                 onClick = {
                     navigator.push(
                         SearchScreen(
                             searchQuery = path.getDirectoryName(),
                             searchRepositoryId = SearchRepositoryManager.ANIDB,
-                        )
+                        ),
                     )
                 },
             )

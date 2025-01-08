@@ -22,7 +22,7 @@ data class AniListCoverData(
     val title: String?,
 
     // For fanart
-    val format: String?
+    val format: String?,
 )
 
 class AniListCoverProvider(
@@ -30,7 +30,7 @@ class AniListCoverProvider(
     private val json: Json,
 ) {
     fun getCoverData(anilistId: Long, type: AnilistSearchType): AniListCoverData {
-        val QUERY = """
+        val graphqlQuery = """
             |query (%id: Int, %type: MediaType, ) {
             |	Media (id: %id, type: %type) {
             |		coverImage {
@@ -51,7 +51,7 @@ class AniListCoverProvider(
         """.trimMargin().replace("%", "${'$'}")
 
         val payload = buildJsonObject {
-            put("query", QUERY)
+            put("query", graphqlQuery)
             putJsonObject("variables") {
                 put("id", anilistId)
                 put("type", type.name)
@@ -60,7 +60,7 @@ class AniListCoverProvider(
 
         val data = with(json) {
             client.newCall(
-                POST(API_URL, body = payload.toString().toRequestBody(jsonMime))
+                POST(API_URL, body = payload.toString().toRequestBody(jsonMime)),
             ).execute().parseAs<ALResponseDto>()
                 .data.media
         }

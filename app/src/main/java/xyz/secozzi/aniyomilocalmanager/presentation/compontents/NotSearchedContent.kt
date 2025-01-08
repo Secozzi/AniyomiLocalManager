@@ -42,7 +42,7 @@ fun NotSearchedContent(
                 .padding(
                     start = MaterialTheme.spacing.large,
                     end = MaterialTheme.spacing.large,
-                )
+                ),
         ) {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smaller),

@@ -2,9 +2,7 @@ package xyz.secozzi.aniyomilocalmanager.ui.entry.anime.episode
 
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,7 +14,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.FileDownload
@@ -46,7 +43,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.model.rememberNavigatorScreenModel
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -54,10 +50,8 @@ import com.github.k1rakishou.fsaf.FileManager
 import org.koin.compose.koinInject
 import xyz.secozzi.aniyomilocalmanager.R
 import xyz.secozzi.aniyomilocalmanager.data.anidb.episode.EpisodeRepository
-import xyz.secozzi.aniyomilocalmanager.data.anidb.episode.dto.EpisodeModel
 import xyz.secozzi.aniyomilocalmanager.data.anidb.search.dto.ADBAnime
 import xyz.secozzi.aniyomilocalmanager.data.search.SearchRepositoryManager
-import xyz.secozzi.aniyomilocalmanager.database.ALMDatabase
 import xyz.secozzi.aniyomilocalmanager.domain.model.EpisodeType
 import xyz.secozzi.aniyomilocalmanager.domain.trackerid.TrackerIdRepository
 import xyz.secozzi.aniyomilocalmanager.preferences.AniDBPreferences
@@ -137,9 +131,12 @@ class EpisodeScreen(val path: String, val aniDBId: Long?) : Screen() {
                         IconButton(
                             onClick = {
                                 navigator.setScreenResult(TYPES_KEY, availableTypes)
-                                navigator.setScreenResult(EPISODES_KEY, state.getSuccessData().mapValues { (_, values) ->
-                                    values.map { screenModel.toEpisodeInfo(it) }
-                                })
+                                navigator.setScreenResult(
+                                    EPISODES_KEY,
+                                    state.getSuccessData().mapValues { (_, values) ->
+                                        values.map { screenModel.toEpisodeInfo(it) }
+                                    },
+                                )
                                 navigator.push(PreviewEpisodeScreen(path, aniDBId))
                             },
                             enabled = state.isSuccess(),
@@ -152,13 +149,13 @@ class EpisodeScreen(val path: String, val aniDBId: Long?) : Screen() {
                                     SearchScreen(
                                         searchQuery = path.getDirectoryName(),
                                         searchRepositoryId = SearchRepositoryManager.ANIDB,
-                                    )
+                                    ),
                                 )
-                            }
+                            },
                         ) {
                             Icon(Icons.Default.Search, null)
                         }
-                    }
+                    },
                 )
             },
             bottomBar = {
@@ -170,7 +167,7 @@ class EpisodeScreen(val path: String, val aniDBId: Long?) : Screen() {
                                 start = MaterialTheme.spacing.medium,
                                 end = MaterialTheme.spacing.medium,
                                 bottom = MaterialTheme.spacing.smaller,
-                            )
+                            ),
                     ) {
                         Button(
                             onClick = {
@@ -207,7 +204,7 @@ class EpisodeScreen(val path: String, val aniDBId: Long?) : Screen() {
                         }
                     }
                 }
-            }
+            },
         ) { paddingValues ->
             val paddingModifier = Modifier.padding(paddingValues)
 
@@ -222,9 +219,9 @@ class EpisodeScreen(val path: String, val aniDBId: Long?) : Screen() {
                                     SearchScreen(
                                         searchQuery = path.getDirectoryName(),
                                         searchRepositoryId = SearchRepositoryManager.ANIDB,
-                                    )
+                                    ),
                                 )
-                            }
+                            },
                         )
                     } else {
                         ProgressContent(modifier = paddingModifier)
@@ -268,7 +265,7 @@ class EpisodeScreen(val path: String, val aniDBId: Long?) : Screen() {
                             min = 1,
                             label = { Text(text = stringResource(R.string.episode_end_label)) },
                             isStart = false,
-                            isCrossing = start > end
+                            isCrossing = start > end,
                         )
 
                         OutlinedNumericChooser(
@@ -287,8 +284,9 @@ class EpisodeScreen(val path: String, val aniDBId: Long?) : Screen() {
 
                             Row {
                                 Icon(
-                                    Icons.Outlined.Numbers, null,
-                                    modifier = Modifier.padding(start = 14.dp)
+                                    Icons.Outlined.Numbers,
+                                    null,
+                                    modifier = Modifier.padding(start = 14.dp),
                                 )
                                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.smaller))
                                 Text(text = "Video count")
@@ -296,7 +294,7 @@ class EpisodeScreen(val path: String, val aniDBId: Long?) : Screen() {
                                 Text(
                                     text = screenModel.getVideoCount().toString(),
                                     style = MaterialTheme.typography.titleMedium,
-                                    modifier = Modifier.padding(end = 14.dp)
+                                    modifier = Modifier.padding(end = 14.dp),
                                 )
                             }
 
@@ -333,7 +331,7 @@ class EpisodeScreen(val path: String, val aniDBId: Long?) : Screen() {
                             }
                         }
                     }
-                }
+                },
             )
         }
     }

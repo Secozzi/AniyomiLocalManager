@@ -54,7 +54,7 @@ fun CoverScreenContent(
                     IconButton(onClick = { onSearch() }) {
                         Icon(Icons.Default.Search, null)
                     }
-                }
+                },
             )
         },
         bottomBar = {
@@ -79,7 +79,7 @@ fun CoverScreenContent(
                     }
                 }
             }
-        }
+        },
     ) { paddingValues ->
         content(paddingValues)
     }

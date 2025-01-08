@@ -55,8 +55,8 @@ import kotlinx.coroutines.withContext
 import xyz.secozzi.aniyomilocalmanager.BuildConfig
 import xyz.secozzi.aniyomilocalmanager.MainActivity
 import xyz.secozzi.aniyomilocalmanager.R
-import xyz.secozzi.aniyomilocalmanager.ui.theme.spacing
 import xyz.secozzi.aniyomilocalmanager.ui.theme.AniyomiLocalManagerTheme
+import xyz.secozzi.aniyomilocalmanager.ui.theme.spacing
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
@@ -96,13 +96,13 @@ class CrashActivity : ComponentActivity() {
     ): String {
         return """
       $deviceInfo
-      
+
       Exception:
       $crashLogs
-      
+
       Logcat:
       $logcat
-    """.trimIndent()
+        """.trimIndent()
     }
 
     private suspend fun dumpLogs(
@@ -254,5 +254,5 @@ fun collectDeviceInfo(): String {
     Device brand: ${Build.BRAND}
     Device manufacturer: ${Build.MANUFACTURER}
     Device model: ${Build.MODEL} (${Build.DEVICE})
-  """.trimIndent()
+    """.trimIndent()
 }

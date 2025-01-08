@@ -1,14 +1,10 @@
 package xyz.secozzi.aniyomilocalmanager.ui.entry
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.ContentCopy
@@ -59,7 +55,7 @@ fun DetailsScreenContent(
                     IconButton(onClick = { onSearch() }) {
                         Icon(Icons.Default.Search, null)
                     }
-                }
+                },
             )
         },
         bottomBar = {
@@ -70,7 +66,7 @@ fun DetailsScreenContent(
                         start = MaterialTheme.spacing.medium,
                         end = MaterialTheme.spacing.medium,
                         bottom = MaterialTheme.spacing.smaller,
-                    )
+                    ),
             ) {
                 Button(
                     onClick = { onGenerate() },
@@ -92,7 +88,7 @@ fun DetailsScreenContent(
                     Icon(Icons.Default.ContentCopy, null)
                 }
             }
-        }
+        },
     ) { paddingValues ->
         content(paddingValues)
     }

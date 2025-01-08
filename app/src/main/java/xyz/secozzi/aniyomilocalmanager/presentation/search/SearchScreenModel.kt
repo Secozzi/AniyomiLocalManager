@@ -11,7 +11,7 @@ import xyz.secozzi.aniyomilocalmanager.data.search.SearchDataItem
 import xyz.secozzi.aniyomilocalmanager.data.search.SearchRepository
 import xyz.secozzi.aniyomilocalmanager.presentation.util.RequestState
 
-class SearchSreeenModel(private val searchRepo: SearchRepository) :
+class SearchScreenModel(private val searchRepo: SearchRepository) :
     ScreenModel {
     var selectedItem = MutableStateFlow<SearchDataItem?>(null)
 

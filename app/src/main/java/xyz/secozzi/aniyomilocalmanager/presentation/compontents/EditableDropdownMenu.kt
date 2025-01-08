@@ -42,18 +42,20 @@ fun EditableDropdown(
             modifier = Modifier
                 .fillMaxWidth()
                 .onGloballyPositioned { coordinates ->
-                    //This value is used to assign to the DropDown the same width
+                    // This value is used to assign to the DropDown the same width
                     textfieldSize = coordinates.size.toSize()
                 },
             singleLine = true,
             label = { Text(text = label) },
             trailingIcon = {
                 if (values.size > 1) {
-                    Icon(icon,"contentDescription",
-                        Modifier.clickable { expanded = !expanded }
+                    Icon(
+                        icon,
+                        "contentDescription",
+                        Modifier.clickable { expanded = !expanded },
                     )
                 }
-            }
+            },
         )
 
         DropdownMenu(
@@ -63,8 +65,8 @@ fun EditableDropdown(
                 .width(
                     with(LocalDensity.current) {
                         textfieldSize.width.toDp()
-                    }
-                )
+                    },
+                ),
         ) {
             values.forEach { label ->
                 DropdownMenuItem(
@@ -72,7 +74,7 @@ fun EditableDropdown(
                     onClick = {
                         onValueChange(label)
                         expanded = false
-                    }
+                    },
                 )
             }
         }

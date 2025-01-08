@@ -1,7 +1,6 @@
 package xyz.secozzi.aniyomilocalmanager.ui.entry.anime.episode
 
 import android.net.Uri
-import android.util.Log
 import androidx.compose.runtime.getValue
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
@@ -127,7 +126,7 @@ class EpisodeScreenModel(
 
     fun updateStartPreview() {
         val startEpisode = mutableState.value.getSuccessData()[selectedType.value.id]!![start.value - 1].copy(
-            episodeNumber = start.value + offset.value
+            episodeNumber = start.value + offset.value,
         )
         startPreview.update { _ ->
             EpisodeInfo(
@@ -141,7 +140,7 @@ class EpisodeScreenModel(
 
     fun updateEndPreview() {
         val endEpisode = mutableState.value.getSuccessData()[selectedType.value.id]!![end.value - 1].copy(
-            episodeNumber = end.value + offset.value
+            episodeNumber = end.value + offset.value,
         )
         endPreview.update { _ ->
             EpisodeInfo(
@@ -176,8 +175,8 @@ class EpisodeScreenModel(
                         }
                     }
 
-                    selectedType.update {
-                        _ -> availableTypes.value.first()
+                    selectedType.update { _ ->
+                        availableTypes.value.first()
                     }
 
                     start.update { _ -> 1 }
@@ -214,7 +213,7 @@ class EpisodeScreenModel(
                         put("date_upload", "${it}T00:00:00")
                     }
                 }
-            }
+            },
         )
     }
 

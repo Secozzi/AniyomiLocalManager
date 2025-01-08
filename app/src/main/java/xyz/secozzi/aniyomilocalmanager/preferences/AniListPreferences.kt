@@ -11,5 +11,5 @@ class AniListPreferences(preferenceStore: PreferenceStore) {
 enum class TitleLangs(name: String) {
     English("english"),
     Romaji("romaji"),
-    Native("native")
+    Native("native"),
 }

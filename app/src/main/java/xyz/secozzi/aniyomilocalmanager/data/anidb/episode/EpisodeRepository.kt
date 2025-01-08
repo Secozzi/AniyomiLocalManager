@@ -47,12 +47,12 @@ class EpisodeRepository(
         val responseTime = response.receivedResponseAtMillis
         val currentTime = System.currentTimeMillis()
         val age = (currentTime - responseTime) / 1000
-        return age >= 60 * 60 * 24  // 1 dau
+        return age >= 60 * 60 * 24 // 1 dau
     }
 
     fun getEpisodes(anidbId: Long): List<EpisodeModel> {
         val resp = anidbClient.newCall(
-            GET(URL + anidbId)
+            GET(URL + anidbId),
         ).execute()
 
         return xml.decodeFromString<AniDBAnimeDto>(resp.body.string()).episodes.episode.map {

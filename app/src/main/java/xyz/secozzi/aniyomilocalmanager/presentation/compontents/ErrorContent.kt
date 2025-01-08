@@ -39,7 +39,7 @@ fun ErrorContent(
         Row(
             horizontalArrangement = Arrangement.spacedBy(4.dp),
         ) {
-            Icon( Icons.Outlined.BugReport, null, modifier = Modifier.size(96.dp))
+            Icon(Icons.Outlined.BugReport, null, modifier = Modifier.size(96.dp))
         }
         Text(text = "Something went wrong")
         Text(text = throwable.message!!)

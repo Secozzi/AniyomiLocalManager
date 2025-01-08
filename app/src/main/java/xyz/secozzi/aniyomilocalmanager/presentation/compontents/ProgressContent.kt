@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 
 @Composable
 fun ProgressContent(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier

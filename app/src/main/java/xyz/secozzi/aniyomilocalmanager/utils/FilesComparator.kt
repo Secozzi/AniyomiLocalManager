@@ -8,7 +8,7 @@ import com.github.k1rakishou.fsaf.file.AbstractFile
  * credit goes to mpv-android
  */
 class FilesComparator(
-    private val fileManager: FileManager
+    private val fileManager: FileManager,
 ) : Comparator<AbstractFile> {
     override fun compare(o1: AbstractFile?, o2: AbstractFile?): Int {
         val iso1ADirectory = fileManager.isDirectory(o1!!)

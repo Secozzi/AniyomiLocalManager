@@ -10,9 +10,9 @@ import xyz.secozzi.aniyomilocalmanager.data.anilist.dto.ALMedia
 import xyz.secozzi.aniyomilocalmanager.data.anilist.dto.ALSearchItem
 import xyz.secozzi.aniyomilocalmanager.data.anilist.dto.ALSearchPage
 import xyz.secozzi.aniyomilocalmanager.data.anilist.dto.ALSearchResult
+import xyz.secozzi.aniyomilocalmanager.utils.POST
 import xyz.secozzi.aniyomilocalmanager.utils.jsonMime
 import xyz.secozzi.aniyomilocalmanager.utils.parseAs
-import xyz.secozzi.aniyomilocalmanager.utils.POST
 
 enum class AnilistSearchType {
     ANIME,
@@ -24,7 +24,7 @@ class AnilistSearch(
     private val json: Json,
 ) {
     suspend fun search(query: String, type: AnilistSearchType): List<ALSearchItem> {
-        val QUERY = """
+        val graphqlQuery = """
             |query Search(%query: String, %type: MediaType) {
             |    Page (perPage: 50) {
             |        media(search: %query, type: %type) {
@@ -70,7 +70,7 @@ class AnilistSearch(
         """.trimMargin().replace("%", "${'$'}")
 
         val payload = buildJsonObject {
-            put("query", QUERY)
+            put("query", graphqlQuery)
             putJsonObject("variables") {
                 put("query", query)
                 put("type", type.name)
@@ -79,7 +79,7 @@ class AnilistSearch(
 
         val data = with(json) {
             client.newCall(
-                POST(API_URL, body = payload.toString().toRequestBody(jsonMime))
+                POST(API_URL, body = payload.toString().toRequestBody(jsonMime)),
             ).execute().parseAs<ALSearchResult<ALSearchPage>>()
                 .data.page.media
         }
@@ -88,7 +88,7 @@ class AnilistSearch(
     }
 
     suspend fun searchFromId(id: Long, type: AnilistSearchType): ALSearchItem {
-        val QUERY = """
+        val graphqlQuery = """
             |query media(%id: Int, %type: MediaType) {
             |    Media(id: %id, type: %type) {
             |        id
@@ -132,7 +132,7 @@ class AnilistSearch(
         """.trimMargin().replace("%", "${'$'}")
 
         val payload = buildJsonObject {
-            put("query", QUERY)
+            put("query", graphqlQuery)
             putJsonObject("variables") {
                 put("id", id)
                 put("type", type.name)
@@ -141,7 +141,7 @@ class AnilistSearch(
 
         val data = with(json) {
             client.newCall(
-                POST(API_URL, body = payload.toString().toRequestBody(jsonMime))
+                POST(API_URL, body = payload.toString().toRequestBody(jsonMime)),
             ).execute().parseAs<ALSearchResult<ALMedia>>()
                 .data.media
         }

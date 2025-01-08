@@ -29,7 +29,6 @@ data class ComicInfo(
     @XmlSerialName("Series", "", "")
     data class Series(@XmlValue(true) val value: String = "")
 
-
     @Serializable
     @XmlSerialName("Summary", "", "")
     data class Summary(@XmlValue(true) val value: String = "")

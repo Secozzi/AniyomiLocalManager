@@ -1,29 +1,18 @@
 package xyz.secozzi.aniyomilocalmanager.ui.entry.anime.episode.components
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import xyz.secozzi.aniyomilocalmanager.R
-import xyz.secozzi.aniyomilocalmanager.ui.theme.spacing
 import xyz.secozzi.aniyomilocalmanager.utils.Constants.disabledAlpha
-
 
 @Composable
 fun PreviewEpisodeCard(
@@ -34,11 +23,11 @@ fun PreviewEpisodeCard(
     modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier
+        modifier = modifier,
     ) {
         Row {
             Column(
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             ) {
                 Text(
                     text = title,
@@ -64,7 +53,7 @@ fun PreviewEpisodeCard(
             originalEpisodeNumber?.let {
                 Text(
                     text = "($it)",
-                    modifier = Modifier.alpha(disabledAlpha)
+                    modifier = Modifier.alpha(disabledAlpha),
                 )
             }
         }

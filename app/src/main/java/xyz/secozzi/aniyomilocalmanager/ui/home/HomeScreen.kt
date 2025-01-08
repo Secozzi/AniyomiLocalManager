@@ -1,19 +1,12 @@
 package xyz.secozzi.aniyomilocalmanager.ui.home
 
-import android.content.Intent
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -21,31 +14,23 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.util.fastForEach
-import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabNavigator
-import com.github.k1rakishou.fsaf.FileManager
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import soup.compose.material.motion.animation.materialFadeThroughIn
 import soup.compose.material.motion.animation.materialFadeThroughOut
-import xyz.secozzi.aniyomilocalmanager.R
 import xyz.secozzi.aniyomilocalmanager.preferences.AppearancePreferences
 import xyz.secozzi.aniyomilocalmanager.presentation.Screen
 import xyz.secozzi.aniyomilocalmanager.presentation.util.Tab
@@ -101,7 +86,7 @@ object HomeScreen : Screen() {
                                     initialScale = 1f,
                                     durationMillis = TAB_FADE_DURATION,
                                 ) togetherWith
-                                        materialFadeThroughOut(durationMillis = TAB_FADE_DURATION)
+                                    materialFadeThroughOut(durationMillis = TAB_FADE_DURATION)
                             },
                             label = "tabContent",
                         ) {

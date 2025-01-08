@@ -69,7 +69,7 @@ object DataScreen : Screen() {
 
                     Preference(
                         title = { Text(text = stringResource(R.string.pref_data_tracker_ids)) },
-                        onClick = { isConfirmDialogShown = true }
+                        onClick = { isConfirmDialogShown = true },
                     )
                     if (isConfirmDialogShown) {
                         ConfirmDialog(
@@ -97,7 +97,7 @@ object DataScreen : Screen() {
                                 context.getString(R.string.pref_data_localanime_cleared),
                                 Toast.LENGTH_SHORT,
                             ).show()
-                        }
+                        },
                     )
 
                     Preference(
@@ -109,7 +109,7 @@ object DataScreen : Screen() {
                                 context.getString(R.string.pref_data_localmanga_cleared),
                                 Toast.LENGTH_SHORT,
                             ).show()
-                        }
+                        },
                     )
                 }
             }

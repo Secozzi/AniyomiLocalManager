@@ -13,7 +13,7 @@ import xyz.secozzi.aniyomilocalmanager.preferences.preference.PreferenceStore
 val RepositoryModule = module {
     single { AndroidPreferenceStore(androidContext()) }.bind(PreferenceStore::class)
 
-    single { AnilistSearch(get(), get() ) }
+    single { AnilistSearch(get(), get()) }
     single { SearchRepositoryManager(get(), get(), get()) }
 
     single { CoverRepository(get(), get(), get(), get()) }

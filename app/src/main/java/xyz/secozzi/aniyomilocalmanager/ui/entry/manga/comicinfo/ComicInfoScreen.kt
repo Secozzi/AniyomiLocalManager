@@ -29,7 +29,6 @@ import xyz.secozzi.aniyomilocalmanager.data.anilist.AnilistSearch
 import xyz.secozzi.aniyomilocalmanager.data.anilist.AnilistSearchType
 import xyz.secozzi.aniyomilocalmanager.data.anilist.dto.ALManga
 import xyz.secozzi.aniyomilocalmanager.data.search.SearchRepositoryManager
-import xyz.secozzi.aniyomilocalmanager.database.ALMDatabase
 import xyz.secozzi.aniyomilocalmanager.domain.model.Status
 import xyz.secozzi.aniyomilocalmanager.domain.trackerid.TrackerIdRepository
 import xyz.secozzi.aniyomilocalmanager.preferences.AniListPreferences
@@ -90,9 +89,9 @@ class ComicInfoScreen(val path: String, val anilistId: Long?) : Screen() {
                     SearchScreen(
                         searchQuery = path.getDirectoryName(),
                         searchRepositoryId = SearchRepositoryManager.ANILIST_MANGA,
-                    )
+                    ),
                 )
-           },
+            },
             onSettings = { navigator.push(AniListPreferencesScreen) },
             onGenerate = {
                 val generateResult = screenModel.generateComicInfoXml()
@@ -123,9 +122,8 @@ class ComicInfoScreen(val path: String, val anilistId: Long?) : Screen() {
                                 start = MaterialTheme.spacing.medium,
                                 end = MaterialTheme.spacing.medium,
                             ),
-                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smaller)
+                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smaller),
                     ) {
-
                         val maxWidth = Modifier.fillMaxWidth()
 
                         EditableDropdown(

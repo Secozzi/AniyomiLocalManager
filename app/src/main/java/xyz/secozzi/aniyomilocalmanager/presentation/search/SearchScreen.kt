@@ -46,7 +46,7 @@ class SearchScreen(
 
         val searchRepositoryManager = koinInject<SearchRepositoryManager>()
         val searchRepo = searchRepositoryManager.getRepo(searchRepositoryId)
-        val screenModel = rememberScreenModel { SearchSreeenModel(searchRepo) }
+        val screenModel = rememberScreenModel { SearchScreenModel(searchRepo) }
 
         val focusRequester = remember { FocusRequester() }
 
@@ -73,7 +73,7 @@ class SearchScreen(
                     Button(
                         onClick = {
                             navigator.popWithResult(
-                                selectedItem!!
+                                selectedItem!!,
                             )
                         },
                         modifier = Modifier
@@ -88,7 +88,7 @@ class SearchScreen(
                         Text(text = stringResource(R.string.select_action))
                     }
                 }
-            }
+            },
         ) { paddingValues ->
             val paddingModifier = Modifier.padding(paddingValues)
 
@@ -101,9 +101,9 @@ class SearchScreen(
                         values = values,
                         selectedItem = selectedItem,
                         paddingValues = paddingValues,
-                        onItemClick = { screenModel.updateSelected(it) }
+                        onItemClick = { screenModel.updateSelected(it) },
                     )
-                }
+                },
             )
         }
     }
@@ -118,16 +118,16 @@ fun SearchResultsList(
 ) {
     LazyColumn(
         contentPadding = paddingValues + PaddingValues(vertical = MaterialTheme.spacing.medium),
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
     ) {
         items(
             items = values,
-            key = { it.hashCode() }
+            key = { it.hashCode() },
         ) { searchItem ->
             SearchResultItem(
                 searchItem = searchItem.toSearchItem(),
                 selected = selectedItem == searchItem,
-                onClick = { onItemClick(searchItem) }
+                onClick = { onItemClick(searchItem) },
             )
         }
     }

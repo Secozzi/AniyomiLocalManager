@@ -59,7 +59,7 @@ fun SelectStorage(
                 style = MaterialTheme.typography.headlineSmall,
             )
             Button(
-                onClick = { locationPicker.launch(null) }
+                onClick = { locationPicker.launch(null) },
             ) {
                 Text(text = stringResource(R.string.select_action))
             }

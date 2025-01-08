@@ -2,7 +2,6 @@ package xyz.secozzi.aniyomilocalmanager.presentation.directorylist
 
 import android.net.Uri
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.MaterialTheme

@@ -1,6 +1,5 @@
 package xyz.secozzi.aniyomilocalmanager.ui.preferences
 
-
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -49,15 +48,15 @@ object AniDBPreferencesScreen : Screen() {
                         IconButton(onClick = { navigator.pop() }) {
                             Icon(Icons.AutoMirrored.Default.ArrowBack, null)
                         }
-                    }
+                    },
                 )
-            }
+            },
         ) { paddingValues ->
             ProvidePreferenceLocals {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(paddingValues)
+                        .padding(paddingValues),
                 ) {
                     var nameFormat by remember {
                         mutableStateOf(preferences.nameFormat.get())
@@ -69,7 +68,7 @@ object AniDBPreferencesScreen : Screen() {
                         textToValue = {
                             preferences.nameFormat.set(it)
                             it
-                        }
+                        },
                     )
 
                     var scanlatorFormat by remember {
@@ -82,7 +81,7 @@ object AniDBPreferencesScreen : Screen() {
                         textToValue = {
                             preferences.scanlatorFormat.set(it)
                             it
-                        }
+                        },
                     )
                 }
             }
@@ -104,7 +103,7 @@ fun <T> ReplacingTextFieldPreference(
         summary = { Text(text = value.toString()) },
         textField = { value, onValueChange, onOk ->
             Column(
-                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
             ) {
                 val desc = buildString {
                     append(stringResource(R.string.pref_replacements))

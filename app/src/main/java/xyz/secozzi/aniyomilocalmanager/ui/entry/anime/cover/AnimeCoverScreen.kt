@@ -1,6 +1,5 @@
 package xyz.secozzi.aniyomilocalmanager.ui.entry.anime.cover
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -19,7 +18,6 @@ import xyz.secozzi.aniyomilocalmanager.R
 import xyz.secozzi.aniyomilocalmanager.data.anilist.dto.ALAnime
 import xyz.secozzi.aniyomilocalmanager.data.cover.CoverRepository
 import xyz.secozzi.aniyomilocalmanager.data.search.SearchRepositoryManager
-import xyz.secozzi.aniyomilocalmanager.database.ALMDatabase
 import xyz.secozzi.aniyomilocalmanager.domain.trackerid.TrackerIdRepository
 import xyz.secozzi.aniyomilocalmanager.preferences.CoverPreferences
 import xyz.secozzi.aniyomilocalmanager.preferences.preference.collectAsState
@@ -69,7 +67,7 @@ class AnimeCoverScreen(val path: String, val anilistId: Long?) : Screen() {
                     SearchScreen(
                         searchQuery = path.getDirectoryName(),
                         searchRepositoryId = SearchRepositoryManager.ANILIST_ANIME,
-                    )
+                    ),
                 )
             },
             onSettings = { navigator.push(CoverPreferencesScreen) },
@@ -99,9 +97,9 @@ class AnimeCoverScreen(val path: String, val anilistId: Long?) : Screen() {
                                     SearchScreen(
                                         searchQuery = path.getDirectoryName(),
                                         searchRepositoryId = SearchRepositoryManager.ANILIST_ANIME,
-                                    )
+                                    ),
                                 )
-                            }
+                            },
                         )
                     } else {
                         ProgressContent(modifier = paddingModifier)
@@ -117,7 +115,7 @@ class AnimeCoverScreen(val path: String, val anilistId: Long?) : Screen() {
                         gridSize = gridSize,
                         onItemClick = screenModel::updateSelected,
                     )
-                }
+                },
             )
         }
     }

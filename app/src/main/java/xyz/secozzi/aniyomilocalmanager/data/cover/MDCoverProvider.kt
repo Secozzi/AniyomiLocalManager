@@ -27,7 +27,7 @@ class MDCoverProvider(
 
         val data = with(json) {
             client.newCall(
-                GET(searchUrl, headers = Headers.headersOf("User-Agent", userAgent))
+                GET(searchUrl, headers = Headers.headersOf("User-Agent", userAgent)),
             ).execute().parseAs<MDResultDto<MDSearchResultDto>>()
         }
 
@@ -35,7 +35,7 @@ class MDCoverProvider(
     }
 
     fun getCovers(title: String, year: Int?, origin: String): List<CoverData> {
-         val mangaId = getMDId(title, year) ?: return emptyList()
+        val mangaId = getMDId(title, year) ?: return emptyList()
 
         val coversUrl = API_URL.toHttpUrl().newBuilder().apply {
             addPathSegment("cover")
@@ -46,7 +46,7 @@ class MDCoverProvider(
 
         val data = with(json) {
             client.newCall(
-                GET(coversUrl, headers = Headers.headersOf("User-Agent", userAgent))
+                GET(coversUrl, headers = Headers.headersOf("User-Agent", userAgent)),
             ).execute().parseAs<MDResultDto<MDCoverResultDto>>()
         }
 
@@ -59,14 +59,14 @@ class MDCoverProvider(
                     append(mangaId)
                     append("/")
                     append(coverId.attributes.fileName)
-                }
+                },
             )
         }
     }
 
     @Serializable
     data class MDResultDto<T>(
-        val data: List<T>
+        val data: List<T>,
     )
 
     @Serializable

@@ -1,15 +1,12 @@
 package xyz.secozzi.aniyomilocalmanager.ui.preferences
 
-
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Image
-import androidx.compose.material.icons.outlined.ImageSearch
 import androidx.compose.material.icons.outlined.Palette
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -42,22 +39,22 @@ object PreferencesScreen : Screen() {
                         IconButton(onClick = { navigator.pop() }) {
                             Icon(Icons.AutoMirrored.Outlined.ArrowBack, null)
                         }
-                    }
+                    },
                 )
-            }
+            },
         ) { paddingValues ->
             ProvidePreferenceLocals {
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(paddingValues)
+                        .padding(paddingValues),
                 ) {
                     preference(
                         key = "appearance",
                         title = { Text(text = stringResource(R.string.pref_appearance_title)) },
                         summary = { Text(text = stringResource(R.string.pref_appearance_summary)) },
                         icon = { Icon(Icons.Outlined.Palette, null) },
-                        onClick = { navigator.push(AppearancePreferencesScreen) }
+                        onClick = { navigator.push(AppearancePreferencesScreen) },
                     )
                     preference(
                         key = "data",
@@ -70,14 +67,14 @@ object PreferencesScreen : Screen() {
                         key = "anilist",
                         title = { Text(text = stringResource(R.string.pref_anilist_title)) },
                         summary = { Text(text = stringResource(R.string.pref_anilist_summary)) },
-                        icon = { Icon(ImageVector.vectorResource(R.drawable.anilist_icon), null ) },
+                        icon = { Icon(ImageVector.vectorResource(R.drawable.anilist_icon), null) },
                         onClick = { navigator.push(AniListPreferencesScreen) },
                     )
                     preference(
                         key = "anidb",
                         title = { Text(text = stringResource(R.string.pref_anidb_title)) },
                         summary = { Text(text = stringResource(R.string.pref_anidb_summary)) },
-                        icon = { Icon(ImageVector.vectorResource(R.drawable.anidb_icon), null ) },
+                        icon = { Icon(ImageVector.vectorResource(R.drawable.anidb_icon), null) },
                         onClick = { navigator.push(AniDBPreferencesScreen) },
                     )
                     preference(
@@ -85,7 +82,7 @@ object PreferencesScreen : Screen() {
                         title = { Text(text = stringResource(R.string.pref_cover_title)) },
                         summary = { Text(text = stringResource(R.string.pref_cover_summary)) },
                         icon = { Icon(Icons.Outlined.Image, null) },
-                        onClick = { navigator.push(CoverPreferencesScreen) }
+                        onClick = { navigator.push(CoverPreferencesScreen) },
                     )
                 }
             }

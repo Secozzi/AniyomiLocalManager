@@ -25,10 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import xyz.secozzi.aniyomilocalmanager.R
 import xyz.secozzi.aniyomilocalmanager.ui.theme.MissingColor
@@ -51,16 +48,16 @@ fun EntryScreenContent(
                     Text(
                         directoryName,
                         modifier = Modifier.basicMarquee(),
-                        maxLines = 1
+                        maxLines = 1,
                     )
                 },
                 navigationIcon = {
                     IconButton(onClick = { onBack() }) {
                         Icon(Icons.AutoMirrored.Outlined.ArrowBack, null)
                     }
-                }
+                },
             )
-        }
+        },
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -88,7 +85,7 @@ fun SelectItem(
             .combinedClickable(
                 onClick = onClick,
             )
-            .padding(MaterialTheme.spacing.medium)
+            .padding(MaterialTheme.spacing.medium),
     ) {
         Column {
             Text(
@@ -98,14 +95,14 @@ fun SelectItem(
             Row {
                 Text(
                     text = stringResource(R.string.entry_item_status),
-                    style = MaterialTheme.typography.bodySmall
+                    style = MaterialTheme.typography.bodySmall,
                 )
                 Text(
                     text = " ",
-                    style = MaterialTheme.typography.bodySmall
+                    style = MaterialTheme.typography.bodySmall,
                 )
                 Text(
-                    text =  if (present) {
+                    text = if (present) {
                         stringResource(R.string.entry_item_present)
                     } else {
                         stringResource(R.string.entry_item_missing)
@@ -141,7 +138,7 @@ fun TrackerIdItem(
             .combinedClickable(
                 onClick = onClick,
             )
-            .padding(MaterialTheme.spacing.medium)
+            .padding(MaterialTheme.spacing.medium),
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
@@ -160,7 +157,7 @@ fun TrackerIdItem(
                     )
                     Text(
                         text = " ",
-                        style = MaterialTheme.typography.bodySmall
+                        style = MaterialTheme.typography.bodySmall,
                     )
 
                     if (trackerId == null) {

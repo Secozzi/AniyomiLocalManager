@@ -30,7 +30,7 @@ fun CoverResultList(
     ) {
         items(
             items = values,
-            key = { it.hashCode() }
+            key = { it.hashCode() },
         ) { cover ->
             CoverResultItem(
                 coverData = cover,

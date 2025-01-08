@@ -1,13 +1,11 @@
 package xyz.secozzi.aniyomilocalmanager.ui.entry.manga.cover
 
 import android.net.Uri
-import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.github.k1rakishou.fsaf.FileManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
@@ -63,7 +61,7 @@ class MangaCoverScreenModel(
         screenModelScope.launch(Dispatchers.IO) {
             fileManager.getOutputStream(cover).use {
                 val resp = client.newCall(
-                    GET(selectedCover.value!!.coverUrl)
+                    GET(selectedCover.value!!.coverUrl),
                 ).execute()
 
                 it?.write(resp.body.bytes())

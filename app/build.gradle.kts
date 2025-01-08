@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.serialization)
     alias(libs.plugins.room)
+    alias(libs.plugins.spotless.gradle)
 }
 
 android {
@@ -29,7 +30,7 @@ android {
             isShrinkResources = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -87,6 +88,31 @@ dependencies {
     implementation(libs.room.runtime)
     ksp(libs.room.compiler)
     implementation(libs.room.ktx)
+}
+
+spotless {
+    kotlin {
+        target("**/*.kt", "**/*.kts")
+        targetExclude("**/build/**/*.kt")
+        ktlint(libs.ktlint.core.get().version)
+            .editorConfigOverride(
+                mapOf(
+                    "ktlint_function_naming_ignore_when_annotated_with" to "Composable",
+                    "ktlint_standard_class-signature" to "disabled",
+                    "ktlint_standard_discouraged-comment-location" to "disabled",
+                    "ktlint_standard_function-expression-body" to "disabled",
+                    "ktlint_standard_function-signature" to "disabled",
+                ),
+            )
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+    format("xml") {
+        target("**/*.xml")
+        targetExclude("**/build/**/*.xml")
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
 }
 
 tasks {

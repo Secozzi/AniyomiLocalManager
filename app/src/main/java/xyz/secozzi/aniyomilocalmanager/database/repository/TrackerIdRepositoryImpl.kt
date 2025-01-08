@@ -28,7 +28,7 @@ class TrackerIdRepositoryImpl(
                 TrackerIdEntity(
                     path = path,
                     anilistId = anilistId,
-                )
+                ),
             )
         }
     }
@@ -41,7 +41,7 @@ class TrackerIdRepositoryImpl(
                 TrackerIdEntity(
                     path = path,
                     aniDBId = aniDBId,
-                )
+                ),
             )
         }
     }
