@@ -29,16 +29,12 @@ import xyz.secozzi.aniyomilocalmanager.utils.Constants.disabledAlpha
 fun PreviewEpisodeCard(
     title: String,
     episodeNumber: Int,
-    originalEpisodeNumber: Int,
+    originalEpisodeNumber: Int? = null,
     extraInfo: List<String>,
+    modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            //.padding(horizontal = MaterialTheme.spacing.small)
-            .clip(RoundedCornerShape(16.dp))
-            .background(MaterialTheme.colorScheme.surfaceContainerLow)
-            .padding(MaterialTheme.spacing.medium)
+        modifier = modifier
     ) {
         Row {
             Column(
@@ -65,10 +61,12 @@ fun PreviewEpisodeCard(
                 }
             }
 
-            Text(
-                text = "($originalEpisodeNumber)",
-                modifier = Modifier.alpha(disabledAlpha)
-            )
+            originalEpisodeNumber?.let {
+                Text(
+                    text = "($it)",
+                    modifier = Modifier.alpha(disabledAlpha)
+                )
+            }
         }
     }
 }
@@ -80,6 +78,7 @@ fun PreviewEpisodeCardPreview() {
         title = "Ep. 28 It Would Be Embarrassing When We Met Again",
         episodeNumber = 28,
         originalEpisodeNumber = 28,
-        extraInfo = listOf("Episode 28", "2024-03-22")
+        extraInfo = listOf("Episode 28", "2024-03-22"),
+        modifier = Modifier,
     )
 }

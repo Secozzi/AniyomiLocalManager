@@ -1,14 +1,14 @@
 package xyz.secozzi.aniyomilocalmanager.ui.entry.anime.episode
 
 import android.net.Uri
-import cafe.adriel.voyager.core.model.ScreenModel
+import android.util.Log
+import androidx.compose.runtime.getValue
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.github.k1rakishou.fsaf.FileManager
 import com.github.k1rakishou.fsaf.file.FileDescriptorMode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.SerialName
@@ -19,11 +19,10 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import xyz.secozzi.aniyomilocalmanager.data.anidb.episode.EpisodeRepository
 import xyz.secozzi.aniyomilocalmanager.data.anidb.episode.dto.EpisodeModel
-import xyz.secozzi.aniyomilocalmanager.data.anidb.search.dto.ADBAnime
-import xyz.secozzi.aniyomilocalmanager.database.ALMDatabase
 import xyz.secozzi.aniyomilocalmanager.domain.model.EpisodeType
 import xyz.secozzi.aniyomilocalmanager.domain.trackerid.TrackerIdRepository
 import xyz.secozzi.aniyomilocalmanager.preferences.AniDBPreferences
+import xyz.secozzi.aniyomilocalmanager.preferences.preference.asState
 import xyz.secozzi.aniyomilocalmanager.presentation.util.RequestState
 import xyz.secozzi.aniyomilocalmanager.ui.home.tabs.ANIME_DIRECTORY_NAME
 import xyz.secozzi.aniyomilocalmanager.utils.getDirectoryName
@@ -51,6 +50,9 @@ class EpisodeScreenModel(
         prettyPrint = true
         prettyPrintIndent = "    "
     }
+
+    private val nameFormat by preferences.nameFormat.asState(screenModelScope)
+    private val scanlatorFormat by preferences.scanlatorFormat.asState(screenModelScope)
 
     init {
         if (aniDBId != null) {
@@ -114,14 +116,23 @@ class EpisodeScreenModel(
         }
     }
 
+    fun toEpisodeInfo(episodeModel: EpisodeModel): EpisodeInfo {
+        return EpisodeInfo(
+            name = getFormattedString(nameFormat, episodeModel),
+            scanlator = getFormattedString(scanlatorFormat, episodeModel),
+            episodeNumber = episodeModel.episodeNumber,
+            date = episodeModel.airingDate,
+        )
+    }
+
     fun updateStartPreview() {
         val startEpisode = mutableState.value.getSuccessData()[selectedType.value.id]!![start.value - 1].copy(
             episodeNumber = start.value + offset.value
         )
         startPreview.update { _ ->
             EpisodeInfo(
-                name = getFormattedString(preferences.nameFormat.get(), startEpisode),
-                scanlator = getFormattedString(preferences.scanlatorFormat.get(), startEpisode),
+                name = getFormattedString(nameFormat, startEpisode),
+                scanlator = getFormattedString(scanlatorFormat, startEpisode),
                 episodeNumber = startEpisode.episodeNumber,
                 date = startEpisode.airingDate,
             )
@@ -134,8 +145,8 @@ class EpisodeScreenModel(
         )
         endPreview.update { _ ->
             EpisodeInfo(
-                name = getFormattedString(preferences.nameFormat.get(), endEpisode),
-                scanlator = getFormattedString(preferences.scanlatorFormat.get(), endEpisode),
+                name = getFormattedString(nameFormat, endEpisode),
+                scanlator = getFormattedString(scanlatorFormat, endEpisode),
                 episodeNumber = endEpisode.episodeNumber,
                 date = endEpisode.airingDate,
             )
@@ -149,18 +160,20 @@ class EpisodeScreenModel(
                 try {
                     val episodes = episodeRepo.getEpisodes(anidbId)
                         .groupBy { it.episodeType.id }
+                        .toSortedMap()
+                        .mapValues { (_, episodes) -> episodes.sortedBy { it.episodeNumber } }
 
                     availableTypes.update {
-                        episodes
-                            .map { (type, items) -> when (type) {
-                                    1 -> EpisodeType.Regular(extraData = items.size)
-                                    2 -> EpisodeType.Special(extraData = items.size)
-                                    3 -> EpisodeType.Credit(extraData = items.size)
-                                    4 -> EpisodeType.Trailer(extraData = items.size)
-                                    5 -> EpisodeType.Parody(extraData = items.size)
-                                    else -> EpisodeType.Other(extraData = items.size)
-                                }
+                        episodes.map { (type, items) ->
+                            when (type) {
+                                1 -> EpisodeType.Regular(extraData = items.size)
+                                2 -> EpisodeType.Special(extraData = items.size)
+                                3 -> EpisodeType.Credit(extraData = items.size)
+                                4 -> EpisodeType.Trailer(extraData = items.size)
+                                5 -> EpisodeType.Parody(extraData = items.size)
+                                else -> EpisodeType.Other(extraData = items.size)
                             }
+                        }
                     }
 
                     selectedType.update {
@@ -186,8 +199,8 @@ class EpisodeScreenModel(
     fun generateJsonString(): String {
         return prettyJson.encodeToString(
             mutableState.value.getSuccessData()[selectedType.value.id]!!.subList(start.value - 1, end.value).map { ep ->
-                val name = getFormattedString(preferences.nameFormat.get(), ep).takeIf { it.isNotBlank() }
-                val scanlator = getFormattedString(preferences.scanlatorFormat.get(), ep).takeIf { it.isNotBlank() }
+                val name = getFormattedString(nameFormat, ep).takeIf { it.isNotBlank() }
+                val scanlator = getFormattedString(scanlatorFormat, ep).takeIf { it.isNotBlank() }
 
                 buildJsonObject {
                     put("episode_number", ep.episodeNumber + offset.value)

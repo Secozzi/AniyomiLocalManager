@@ -1,6 +1,7 @@
 package xyz.secozzi.aniyomilocalmanager.ui.entry.anime.cover
 
 import android.net.Uri
+import android.util.Log
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope

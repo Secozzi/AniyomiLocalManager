@@ -73,6 +73,8 @@
     <string name="episode_episode">Episode %d</string>
     <string name="episode_generate_details_success">Successfully created episodes.json</string>
     <string name="episode_generate_details_failure">Failed to create episodes.json</string>
+    <string name="episode_list_preview">Preview episode list</string>
+    <string name="episode_list_preview_title">Episode list</string>
 
     // Preferences
     <string name="pref_settings_title">Settings</string>

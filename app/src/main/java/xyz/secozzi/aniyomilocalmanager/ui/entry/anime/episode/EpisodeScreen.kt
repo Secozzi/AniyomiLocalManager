@@ -1,7 +1,10 @@
 package xyz.secozzi.aniyomilocalmanager.ui.entry.anime.episode
 
 import android.widget.Toast
+import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,13 +12,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.FileDownload
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Numbers
+import androidx.compose.material.icons.outlined.RemoveRedEye
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.HorizontalDivider
@@ -32,11 +40,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.model.rememberNavigatorScreenModel
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -44,9 +54,11 @@ import com.github.k1rakishou.fsaf.FileManager
 import org.koin.compose.koinInject
 import xyz.secozzi.aniyomilocalmanager.R
 import xyz.secozzi.aniyomilocalmanager.data.anidb.episode.EpisodeRepository
+import xyz.secozzi.aniyomilocalmanager.data.anidb.episode.dto.EpisodeModel
 import xyz.secozzi.aniyomilocalmanager.data.anidb.search.dto.ADBAnime
 import xyz.secozzi.aniyomilocalmanager.data.search.SearchRepositoryManager
 import xyz.secozzi.aniyomilocalmanager.database.ALMDatabase
+import xyz.secozzi.aniyomilocalmanager.domain.model.EpisodeType
 import xyz.secozzi.aniyomilocalmanager.domain.trackerid.TrackerIdRepository
 import xyz.secozzi.aniyomilocalmanager.preferences.AniDBPreferences
 import xyz.secozzi.aniyomilocalmanager.presentation.Screen
@@ -58,8 +70,10 @@ import xyz.secozzi.aniyomilocalmanager.presentation.search.SearchScreen
 import xyz.secozzi.aniyomilocalmanager.presentation.util.RequestState
 import xyz.secozzi.aniyomilocalmanager.presentation.util.clearResults
 import xyz.secozzi.aniyomilocalmanager.presentation.util.getResult
+import xyz.secozzi.aniyomilocalmanager.presentation.util.setScreenResult
 import xyz.secozzi.aniyomilocalmanager.ui.entry.anime.episode.components.OutlinedNumericChooser
 import xyz.secozzi.aniyomilocalmanager.ui.entry.anime.episode.components.PreviewEpisodeCard
+import xyz.secozzi.aniyomilocalmanager.ui.entry.anime.episode.preview.PreviewEpisodeScreen
 import xyz.secozzi.aniyomilocalmanager.ui.preferences.AniDBPreferencesScreen
 import xyz.secozzi.aniyomilocalmanager.ui.theme.spacing
 import xyz.secozzi.aniyomilocalmanager.utils.getDirectoryName
@@ -120,6 +134,18 @@ class EpisodeScreen(val path: String, val aniDBId: Long?) : Screen() {
                             Icon(Icons.Default.Settings, null)
                         }
 
+                        IconButton(
+                            onClick = {
+                                navigator.setScreenResult(TYPES_KEY, availableTypes)
+                                navigator.setScreenResult(EPISODES_KEY, state.getSuccessData().mapValues { (_, values) ->
+                                    values.map { screenModel.toEpisodeInfo(it) }
+                                })
+                                navigator.push(PreviewEpisodeScreen(path, aniDBId))
+                            },
+                            enabled = state.isSuccess(),
+                        ) {
+                            Icon(Icons.Outlined.RemoveRedEye, null)
+                        }
                         IconButton(
                             onClick = {
                                 navigator.push(
@@ -209,6 +235,7 @@ class EpisodeScreen(val path: String, val aniDBId: Long?) : Screen() {
                 onSuccess = { values ->
                     Column(
                         modifier = paddingModifier
+                            .verticalScroll(rememberScrollState())
                             .padding(
                                 start = MaterialTheme.spacing.medium,
                                 end = MaterialTheme.spacing.medium,
@@ -254,9 +281,7 @@ class EpisodeScreen(val path: String, val aniDBId: Long?) : Screen() {
                         )
 
                         Column(
-                            verticalArrangement = Arrangement.spacedBy(
-                                MaterialTheme.spacing.small
-                            )
+                            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
                         ) {
                             HorizontalDivider()
 
@@ -275,6 +300,12 @@ class EpisodeScreen(val path: String, val aniDBId: Long?) : Screen() {
                                 )
                             }
 
+                            val previewModifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(16.dp))
+                                .background(MaterialTheme.colorScheme.surfaceContainerLow)
+                                .padding(MaterialTheme.spacing.medium)
+
                             if (startPreview != null) {
                                 PreviewEpisodeCard(
                                     title = startPreview!!.name,
@@ -283,7 +314,8 @@ class EpisodeScreen(val path: String, val aniDBId: Long?) : Screen() {
                                     extraInfo = listOf(
                                         startPreview!!.date ?: "",
                                         startPreview!!.scanlator ?: "",
-                                    )
+                                    ),
+                                    modifier = previewModifier,
                                 )
                             }
 
@@ -295,7 +327,8 @@ class EpisodeScreen(val path: String, val aniDBId: Long?) : Screen() {
                                     extraInfo = listOf(
                                         endPreview!!.date ?: "",
                                         endPreview!!.scanlator ?: "",
-                                    )
+                                    ),
+                                    modifier = previewModifier,
                                 )
                             }
                         }
@@ -305,3 +338,8 @@ class EpisodeScreen(val path: String, val aniDBId: Long?) : Screen() {
         }
     }
 }
+
+const val TYPES_KEY = "available_types"
+typealias TYPES_RESULT = List<EpisodeType>
+const val EPISODES_KEY = "episode_list"
+typealias EPISODES_RESULT = Map<Int, List<EpisodeInfo>>
