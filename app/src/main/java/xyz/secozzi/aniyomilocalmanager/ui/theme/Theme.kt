@@ -1,21 +1,17 @@
 package xyz.secozzi.aniyomilocalmanager.ui.theme
 
+import android.app.Activity
 import android.os.Build
-import androidx.annotation.StringRes
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.Immutable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import org.koin.compose.koinInject
-import xyz.secozzi.aniyomilocalmanager.R
-import xyz.secozzi.aniyomilocalmanager.preferences.AppearancePreferences
-import xyz.secozzi.aniyomilocalmanager.preferences.preference.collectAsState
 
 private val lightScheme = lightColorScheme(
     primary = primaryLight,
@@ -93,41 +89,33 @@ private val darkScheme = darkColorScheme(
     surfaceContainerHighest = surfaceContainerHighestDark,
 )
 
-@Composable
-fun AniyomiLocalManagerTheme(content: @Composable () -> Unit) {
-    val preferences = koinInject<AppearancePreferences>()
-    val darkMode by preferences.darkMode.collectAsState()
-    val darkTheme = isSystemInDarkTheme()
-    val dynamicColor by preferences.materialYou.collectAsState()
-    val context = LocalContext.current
+@Immutable
+data class ColorFamily(
+    val color: Color,
+    val onColor: Color,
+    val colorContainer: Color,
+    val onColorContainer: Color
+)
 
+@Composable
+fun AniyomiLocalManagerTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    dynamicColor: Boolean = true,
+    content: @Composable() () -> Unit
+) {
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            when (darkMode) {
-                DarkMode.Dark -> dynamicDarkColorScheme(context)
-                DarkMode.Light -> dynamicLightColorScheme(context)
-                else -> if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-            }
+            val context = LocalContext.current
+            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 
-        darkMode == DarkMode.Dark -> darkScheme
-        darkMode == DarkMode.Light -> lightScheme
-        else -> if (darkTheme) darkScheme else lightScheme
+        darkTheme -> darkScheme
+        else -> lightScheme
     }
 
-    CompositionLocalProvider(
-        LocalSpacing provides Spacing(),
-    ) {
-        MaterialTheme(
-            colorScheme = colorScheme,
-            typography = Typography,
-            content = content,
-        )
-    }
-}
-
-enum class DarkMode(@StringRes val titleRes: Int) {
-    Dark(R.string.pref_appearance_darkmode_dark),
-    Light(R.string.pref_appearance_darkmode_light),
-    System(R.string.pref_appearance_darkmode_system),
+    MaterialTheme(
+        colorScheme = colorScheme,
+        typography = AniyomiLocalManagerTypography,
+        content = content,
+    )
 }

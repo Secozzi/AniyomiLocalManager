@@ -6,7 +6,7 @@
 
     <application
         android:name=".App"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -19,7 +19,6 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.AniyomiLocalManager">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,7 +27,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".presentation.crash.CrashActivity" />
+        <!-- <activity android:name=".presentation.crash.CrashActivity" /> -->
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -39,7 +38,5 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-
     </application>
-
 </manifest>
