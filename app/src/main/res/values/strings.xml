@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Aniyomi Local Manager</string>
+
+    <!-- Home screen -->
+    <string name="label_manga">Manga</string>
+    <string name="label_anime">Anime</string>
 </resources>
