@@ -1,25 +1,25 @@
 package xyz.secozzi.aniyomilocalmanager
 
 import android.os.Bundle
+import android.view.View
+import android.view.ViewTreeObserver
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.navigation3.runtime.entryProvider
-import androidx.navigation3.runtime.rememberNavBackStack
-import androidx.navigation3.ui.NavDisplay
-import xyz.secozzi.aniyomilocalmanager.presentation.utils.predictiveHorizonal
-import xyz.secozzi.aniyomilocalmanager.presentation.utils.slideHorizontal
-import xyz.secozzi.aniyomilocalmanager.ui.home.HomeScreen
-import xyz.secozzi.aniyomilocalmanager.ui.home.HomeRoute
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import xyz.secozzi.aniyomilocalmanager.navigation.Navigator
+import xyz.secozzi.aniyomilocalmanager.ui.home.anime.AnimeScreenViewModel
+import xyz.secozzi.aniyomilocalmanager.ui.home.manga.MangaScreenViewModel
 import xyz.secozzi.aniyomilocalmanager.ui.theme.AniyomiLocalManagerTheme
-import xyz.secozzi.aniyomilocalmanager.ui.utils.LocalBackStack
 
 class MainActivity : ComponentActivity() {
+    private val mangaScreenViewModel by viewModel<MangaScreenViewModel>()
+    private val animeScreenViewModel by viewModel<AnimeScreenViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        delaySplashScreen()
 
         setContent {
             enableEdgeToEdge()
@@ -32,25 +32,19 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    @Composable
-    private fun Navigator() {
-        val backStack = rememberNavBackStack(HomeRoute)
-
-        CompositionLocalProvider(
-            LocalBackStack provides backStack,
-        ) {
-            NavDisplay(
-                backStack = backStack,
-                onBack = { backStack.removeLastOrNull() },
-                transitionSpec = { slideHorizontal },
-                popTransitionSpec = { slideHorizontal },
-                predictivePopTransitionSpec = { predictiveHorizonal },
-                entryProvider = entryProvider {
-                    entry<HomeRoute> {
-                        HomeScreen()
+    private fun delaySplashScreen() {
+        val content: View = findViewById(android.R.id.content)
+        content.viewTreeObserver.addOnPreDrawListener(
+            object : ViewTreeObserver.OnPreDrawListener {
+                override fun onPreDraw(): Boolean {
+                    return if (animeScreenViewModel.isLoaded.value || mangaScreenViewModel.isLoaded.value) {
+                        content.viewTreeObserver.removeOnPreDrawListener(this)
+                        true
+                    } else {
+                        false
                     }
-                },
-            )
-        }
+                }
+            },
+        )
     }
 }

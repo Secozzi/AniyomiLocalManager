@@ -24,6 +24,9 @@ android {
     }
 
     buildTypes {
+        debug {
+            applicationIdSuffix = ".debug"
+        }
         release {
             isMinifyEnabled = true
             isShrinkResources = false
@@ -46,8 +49,9 @@ tasks.withType<KotlinCompile>().configureEach {
     compilerOptions {
         jvmTarget.set(JvmTarget.JVM_21)
         freeCompilerArgs.addAll(
-            "-Xcontext-receivers",
+            "-Xcontext-parameters",
             "-opt-in=kotlin.RequiresOptIn",
+            "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api"
         )
     }
 }
@@ -77,10 +81,14 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.material3.android)
     implementation(libs.androidx.material3.icons.extended)
+    implementation(libs.androidx.preferences.ktx)
+    implementation(libs.immutable.collections)
     implementation(libs.google.fonts)
 
     implementation(libs.bundles.compose.navigation3)
     implementation(libs.serialization.json)
+    implementation(libs.bundles.koin)
+    implementation(libs.simple.storage)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
