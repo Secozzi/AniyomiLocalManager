@@ -1,4 +1,4 @@
-package xyz.secozzi.aniyomilocalmanager.presentation.settings
+package xyz.secozzi.aniyomilocalmanager.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -17,13 +17,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import xyz.secozzi.aniyomilocalmanager.presentation.PreviewContent
+import xyz.secozzi.aniyomilocalmanager.presentation.settings.SettingsListItem
 import xyz.secozzi.aniyomilocalmanager.ui.theme.spacing
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun MainSettingsListItem(
+fun ColoredListItem(
     title: String,
-    subtitle: String,
+    subtitle: String?,
     icon: ImageVector,
     itemSize: Int,
     index: Int,
@@ -36,7 +37,7 @@ fun MainSettingsListItem(
         itemSize = itemSize,
         index = index,
         modifier = modifier,
-        supportingContent = { Text(subtitle) },
+        supportingContent = { subtitle?.let { Text(it) } },
         leadingContent = {
             Box(
                 modifier = Modifier
@@ -62,7 +63,7 @@ fun MainSettingsListItem(
 @Composable
 fun MainSettingsListItemPreview() {
     PreviewContent {
-        MainSettingsListItem(
+        ColoredListItem(
             title = "Appearance",
             subtitle = "Theme, tabs",
             icon = Icons.Outlined.Palette,

@@ -5,6 +5,8 @@
     <string name="generic_cancel">Cancel</string>
     <string name="generic_confirm">Confirm</string>
     <string name="generic_select">Select</string>
+    <string name="no_id_set">No ID set</string>
+    <string name="generic_id">ID: %d</string>
 
     <!-- Home screen -->
     <string name="label_manga">Manga</string>
@@ -13,6 +15,14 @@
     <string name="no_location_set_manga">No location set! Select local directory</string>
     <string name="select_invalid_location">Invalid location</string>
 
+    <!-- Anime entry -->
+    <string name="edit_cover">Edit cover</string>
+    <string name="anime_edit_details">Edit details.json</string>
+    <string name="anime_edit_episodes">Edit episodes.json</string>
+
+    <!-- Manga entry -->
+    <string name="manga_edit_comicinfo">Edit ComicInfo.xml</string>
+
     <!-- Preferences -->
     <string name="pref_settings_title">Settings</string>
     <string name="pref_appearance_title">Appearance</string>
@@ -20,6 +30,7 @@
     <string name="pref_mangabaka_title">MangaBaka</string>
     <string name="pref_anilist_title">AniList</string>
     <string name="pref_anidb_title">AniDB</string>
+    <string name="pref_mal_title">MyAnimeList</string>
     <string name="pref_cover_title">Covers</string>
 
     <!-- Preferences - Appearance -->
@@ -53,6 +64,9 @@
 
     <!-- Preferences - AniDB -->
     <string name="pref_anidb_summary">details.json, episodes.json</string>
+
+    <!-- Preferences - MAL -->
+    <string name="pref_mal_summary">details.json, episodes.json</string>
 
     <!-- Preferences - Cover -->
     <string name="pref_cover_summary">Cover providers</string>

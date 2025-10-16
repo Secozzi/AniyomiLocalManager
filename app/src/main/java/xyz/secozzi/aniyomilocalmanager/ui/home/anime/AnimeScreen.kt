@@ -17,6 +17,7 @@ import org.koin.compose.koinInject
 import xyz.secozzi.aniyomilocalmanager.R
 import xyz.secozzi.aniyomilocalmanager.domain.storage.StorageManager
 import xyz.secozzi.aniyomilocalmanager.presentation.home.anime.AnimeScreenContent
+import xyz.secozzi.aniyomilocalmanager.ui.anime.entry.AnimeEntryRoute
 import xyz.secozzi.aniyomilocalmanager.ui.preferences.PreferencesRoute
 import xyz.secozzi.aniyomilocalmanager.ui.utils.LocalBackStack
 
@@ -71,7 +72,7 @@ fun AnimeScreen(
             if (item.isSeason) {
                 viewModel.addPathSegment(item.name)
             } else {
-                // TODO
+                backstack.add(AnimeEntryRoute(item.path))
             }
         },
     )

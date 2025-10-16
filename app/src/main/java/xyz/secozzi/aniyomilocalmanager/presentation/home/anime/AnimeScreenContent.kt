@@ -133,6 +133,7 @@ private fun AnimeScreenContentPreview() {
             entries = listOf(
                 AnimeListEntry(
                     isSeason = false,
+                    path = "",
                     name = "Astra.Lost.in.Space.S01.1080p.BluRay.Opus2.0.H.264-LYS1TH3A",
                     lastModified = "29/10/2024 - 10:07:22",
                     size = 5,

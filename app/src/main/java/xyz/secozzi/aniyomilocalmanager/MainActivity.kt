@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
         content.viewTreeObserver.addOnPreDrawListener(
             object : ViewTreeObserver.OnPreDrawListener {
                 override fun onPreDraw(): Boolean {
-                    return if (animeScreenViewModel.isLoaded.value || mangaScreenViewModel.isLoaded.value) {
+                    return if (animeScreenViewModel.isLoaded || mangaScreenViewModel.isLoaded) {
                         content.viewTreeObserver.removeOnPreDrawListener(this)
                         true
                     } else {

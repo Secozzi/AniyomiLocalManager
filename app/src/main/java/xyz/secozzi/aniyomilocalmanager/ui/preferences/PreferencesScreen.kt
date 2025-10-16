@@ -31,7 +31,8 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.Serializable
 import xyz.secozzi.aniyomilocalmanager.R
 import xyz.secozzi.aniyomilocalmanager.presentation.PreviewContent
-import xyz.secozzi.aniyomilocalmanager.presentation.settings.MainSettingsListItem
+import xyz.secozzi.aniyomilocalmanager.presentation.components.ColoredListItem
+import xyz.secozzi.aniyomilocalmanager.ui.theme.spacing
 import xyz.secozzi.aniyomilocalmanager.ui.utils.LocalBackStack
 
 private data class PreferenceItem(
@@ -84,6 +85,12 @@ fun PreferencesScreen() {
             onClick = { },
         ),
         PreferenceItem(
+            title = R.string.pref_mal_title,
+            subtitle = R.string.pref_mal_summary,
+            icon = ImageVector.vectorResource(R.drawable.mal_icon),
+            onClick = { },
+        ),
+        PreferenceItem(
             title = R.string.pref_cover_title,
             subtitle = R.string.pref_cover_summary,
             icon = Icons.Outlined.Image,
@@ -109,7 +116,7 @@ fun PreferencesScreen() {
             modifier = Modifier.padding(horizontal = 16.dp),
         ) {
             itemsIndexed(appItems) { index, item ->
-                MainSettingsListItem(
+                ColoredListItem(
                     title = stringResource(item.title),
                     subtitle = stringResource(item.subtitle),
                     icon = item.icon,
@@ -120,10 +127,10 @@ fun PreferencesScreen() {
                 )
             }
 
-            item { Spacer(Modifier.height(8.dp)) }
+            item { Spacer(Modifier.height(MaterialTheme.spacing.smaller)) }
 
             itemsIndexed(entryItems) { index, item ->
-                MainSettingsListItem(
+                ColoredListItem(
                     title = stringResource(item.title),
                     subtitle = stringResource(item.subtitle),
                     icon = item.icon,

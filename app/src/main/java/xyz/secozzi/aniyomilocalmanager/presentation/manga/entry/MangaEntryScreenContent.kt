@@ -1,0 +1,163 @@
+package xyz.secozzi.aniyomilocalmanager.presentation.manga.entry
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.outlined.BookOnline
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.unit.dp
+import xyz.secozzi.aniyomilocalmanager.R
+import xyz.secozzi.aniyomilocalmanager.database.entities.MangaTrackerEntity
+import xyz.secozzi.aniyomilocalmanager.presentation.PreviewContent
+import xyz.secozzi.aniyomilocalmanager.presentation.components.ExpressiveListItem
+import xyz.secozzi.aniyomilocalmanager.ui.manga.entry.MangaEntryScreenViewModel
+import xyz.secozzi.aniyomilocalmanager.ui.theme.spacing
+
+@Composable
+fun MangaEntryScreenContent(
+    state: MangaEntryScreenViewModel.State.Success,
+    onBack: () -> Unit,
+    onEditCover: () -> Unit,
+    onEditComicInfo: () -> Unit,
+    onClickMangaBaka: () -> Unit,
+    onClickAnilist: () -> Unit,
+    onClickMal: () -> Unit,
+) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(state.name) },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.AutoMirrored.Outlined.ArrowBack, null)
+                    }
+                },
+            )
+        },
+    ) { contentPadding ->
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(2.dp),
+            contentPadding = contentPadding,
+            modifier = Modifier.padding(horizontal = 16.dp),
+        ) {
+            // Items
+            item {
+                ExpressiveListItem(
+                    itemSize = 2,
+                    index = 0,
+                    headlineContent = { Text(text = stringResource(R.string.edit_cover)) },
+                    leadingContent = { Icon(if (state.hasCover) Icons.Default.Check else Icons.Default.Clear, null) },
+                    onClick = onEditCover,
+                )
+            }
+
+            item {
+                ExpressiveListItem(
+                    itemSize = 2,
+                    index = 1,
+                    headlineContent = { Text(text = stringResource(R.string.anime_edit_details)) },
+                    leadingContent = {
+                        Icon(if (state.hasComicInfo) Icons.Default.Check else Icons.Default.Clear, null)
+                    },
+                    onClick = onEditComicInfo,
+                )
+            }
+
+            item { Spacer(Modifier.height(MaterialTheme.spacing.smaller)) }
+
+            // Ids
+            item {
+                ExpressiveListItem(
+                    itemSize = 3,
+                    index = 0,
+                    headlineContent = { Text(text = stringResource(R.string.pref_mangabaka_title)) },
+                    leadingContent = { Icon(Icons.Outlined.BookOnline, null) },
+                    supportingContent = {
+                        Text(
+                            text = state.data.mangabaka?.let {
+                                stringResource(R.string.generic_id, it)
+                            } ?: stringResource(R.string.no_id_set),
+                        )
+                    },
+                    onClick = onClickMangaBaka,
+                )
+            }
+
+            item {
+                ExpressiveListItem(
+                    itemSize = 3,
+                    index = 1,
+                    headlineContent = { Text(text = stringResource(R.string.pref_anilist_title)) },
+                    leadingContent = { Icon(ImageVector.vectorResource(R.drawable.anilist_icon), null) },
+                    supportingContent = {
+                        Text(
+                            text = state.data.anilist?.let {
+                                stringResource(R.string.generic_id, it)
+                            } ?: stringResource(R.string.no_id_set),
+                        )
+                    },
+                    onClick = onClickAnilist,
+                )
+            }
+
+            item {
+                ExpressiveListItem(
+                    itemSize = 3,
+                    index = 2,
+                    headlineContent = { Text(text = stringResource(R.string.pref_mal_title)) },
+                    leadingContent = { Icon(ImageVector.vectorResource(R.drawable.mal_icon), null) },
+                    supportingContent = {
+                        Text(
+                            text = state.data.mal?.let {
+                                stringResource(R.string.generic_id, it)
+                            } ?: stringResource(R.string.no_id_set),
+                        )
+                    },
+                    onClick = onClickMal,
+                )
+            }
+        }
+    }
+}
+
+@PreviewLightDark
+@Composable
+private fun MangaEntryScreenContentPreview() {
+    PreviewContent {
+        MangaEntryScreenContent(
+            state = MangaEntryScreenViewModel.State.Success(
+                name = "Boku no Hero Academia",
+                hasCover = false,
+                hasComicInfo = true,
+                data = MangaTrackerEntity(
+                    path = "",
+                    anilist = 1234L,
+                    mal = 54321L,
+                ),
+            ),
+            onBack = {},
+            onEditCover = {},
+            onEditComicInfo = {},
+            onClickMangaBaka = {},
+            onClickAnilist = {},
+            onClickMal = {},
+        )
+    }
+}

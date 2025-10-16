@@ -16,6 +16,7 @@ import org.koin.compose.koinInject
 import xyz.secozzi.aniyomilocalmanager.R
 import xyz.secozzi.aniyomilocalmanager.domain.storage.StorageManager
 import xyz.secozzi.aniyomilocalmanager.presentation.home.manga.MangaScreenContent
+import xyz.secozzi.aniyomilocalmanager.ui.manga.entry.MangaEntryRoute
 import xyz.secozzi.aniyomilocalmanager.ui.preferences.PreferencesRoute
 import xyz.secozzi.aniyomilocalmanager.ui.utils.LocalBackStack
 
@@ -60,8 +61,6 @@ fun MangaScreen(
         bottomPadding = bottomPadding,
         onClickSelectLocation = { locationPicker.launch(null) },
         onClickSettings = { backstack.add(PreferencesRoute) },
-        onClickItem = { item ->
-            // TODO
-        },
+        onClickItem = { backstack.add(MangaEntryRoute(it.path)) },
     )
 }

@@ -1,8 +1,12 @@
 package xyz.secozzi.aniyomilocalmanager.ui.home.anime
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
+import androidx.lifecycle.viewmodel.compose.saveable
 import com.anggrayudi.storage.file.baseName
 import com.anggrayudi.storage.file.children
 import com.anggrayudi.storage.file.extension
@@ -30,18 +34,21 @@ import java.time.format.DateTimeFormatter
 import kotlin.time.Duration.Companion.seconds
 
 class AnimeScreenViewModel(
+    savedStateHandle: SavedStateHandle,
     private val dataPreferences: DataPreferences,
     private val storageManager: StorageManager,
     private val filesComparator: FilesComparator,
 ) : ViewModel() {
+    @OptIn(SavedStateHandleSaveableApi::class)
+    var isLoaded by savedStateHandle.saveable {
+        mutableStateOf(false)
+    }
+
     val storageLocationFlow = dataPreferences.animeStorageLocation.stateIn(viewModelScope)
     private val relativePaths = MutableStateFlow<List<String>>(emptyList())
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
-
-    private val _isLoaded = MutableStateFlow(false)
-    val isLoaded = _isLoaded.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -73,7 +80,7 @@ class AnimeScreenViewModel(
     val state = combine(storageLocationFlow, relativePaths) { a, b -> a to b }
         .mapLatest { (location, relative) ->
             if (location.isEmpty()) {
-                _isLoaded.update { _ -> true }
+                isLoaded = true
                 return@mapLatest State.Unset
             }
 
@@ -98,6 +105,7 @@ class AnimeScreenViewModel(
 
                         AnimeListEntry(
                             isSeason = isSeason,
+                            path = storageManager.getPath(dir),
                             name = dir.fullName,
                             lastModified = Instant.ofEpochMilli(dir.lastModified())
                                 .atZone(ZoneId.systemDefault())
@@ -109,7 +117,7 @@ class AnimeScreenViewModel(
                         )
                     }
 
-                _isLoaded.update { _ -> true }
+                isLoaded = true
                 _isLoading.update { _ -> false }
                 State.Success(
                     relative = relative,

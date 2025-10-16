@@ -1,8 +1,12 @@
 package xyz.secozzi.aniyomilocalmanager.ui.home.manga
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
+import androidx.lifecycle.viewmodel.compose.saveable
 import com.anggrayudi.storage.file.children
 import com.anggrayudi.storage.file.fullName
 import kotlinx.coroutines.Dispatchers
@@ -25,15 +29,18 @@ import java.time.format.DateTimeFormatter
 import kotlin.time.Duration.Companion.seconds
 
 class MangaScreenViewModel(
+    savedStateHandle: SavedStateHandle,
     private val dataPreferences: DataPreferences,
     private val storageManager: StorageManager,
     private val filesComparator: FilesComparator,
 ) : ViewModel() {
+    @OptIn(SavedStateHandleSaveableApi::class)
+    var isLoaded by savedStateHandle.saveable {
+        mutableStateOf(false)
+    }
+
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
-
-    private val _isLoaded = MutableStateFlow(false)
-    val isLoaded = _isLoaded.asStateFlow()
 
     fun setStorageLocation(location: String) {
         dataPreferences.mangaStorageLocation.set(location)
@@ -43,7 +50,7 @@ class MangaScreenViewModel(
     val state = dataPreferences.mangaStorageLocation.stateIn(viewModelScope)
         .mapLatest { location ->
             if (location.isEmpty()) {
-                _isLoaded.update { _ -> true }
+                isLoaded = true
                 return@mapLatest State.Unset
             }
 
@@ -60,6 +67,7 @@ class MangaScreenViewModel(
                         val names = children.map { it.fullName }
 
                         MangaListEntry(
+                            path = storageManager.getPath(dir),
                             name = dir.fullName,
                             lastModified = Instant.ofEpochMilli(dir.lastModified())
                                 .atZone(ZoneId.systemDefault())
@@ -70,7 +78,7 @@ class MangaScreenViewModel(
                         )
                     }
 
-                _isLoaded.update { _ -> true }
+                isLoaded = true
                 _isLoading.update { _ -> false }
                 State.Success(
                     entries = entries,
