@@ -63,7 +63,7 @@ class MangaScreenViewModel(
                     .filter { it.isDirectory }
                     .sortedWith(filesComparator)
                     .map { dir ->
-                        val children = dir.children
+                        val children = dir.children.filterNot { it.fullName.startsWith(".") }
                         val names = children.map { it.fullName }
 
                         MangaListEntry(

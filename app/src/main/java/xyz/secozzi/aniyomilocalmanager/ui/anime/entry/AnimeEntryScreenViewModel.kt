@@ -24,7 +24,9 @@ class AnimeEntryScreenViewModel(
                 val entity = data ?: AnimeTrackerEntity(path)
 
                 val dir = storageManager.getFromPath(path)!!
-                val names = dir.children.map { it.fullName }
+                val names = dir.children
+                    .filterNot { it.fullName.startsWith(".") }
+                    .map { it.fullName }
 
                 mutableState.update { _ ->
                     State.Success(

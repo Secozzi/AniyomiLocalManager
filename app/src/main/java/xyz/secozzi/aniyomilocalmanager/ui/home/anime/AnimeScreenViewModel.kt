@@ -94,7 +94,7 @@ class AnimeScreenViewModel(
                     .filter { it.isDirectory }
                     .sortedWith(filesComparator)
                     .map { dir ->
-                        val children = dir.children
+                        val children = dir.children.filterNot { it.fullName.startsWith(".") }
                         val isSeason = when {
                             children.any { it.extension in EPISODE_FILE_TYPES } -> false
                             children.any { it.isDirectory } -> true

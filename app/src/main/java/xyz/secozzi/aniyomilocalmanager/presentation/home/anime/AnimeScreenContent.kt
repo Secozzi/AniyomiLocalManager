@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material3.ContainedLoadingIndicator
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
@@ -35,7 +36,7 @@ import androidx.compose.ui.zIndex
 import xyz.secozzi.aniyomilocalmanager.R
 import xyz.secozzi.aniyomilocalmanager.domain.home.AnimeListEntry
 import xyz.secozzi.aniyomilocalmanager.presentation.PreviewContent
-import xyz.secozzi.aniyomilocalmanager.presentation.home.UnsetContent
+import xyz.secozzi.aniyomilocalmanager.presentation.components.InfoContent
 import xyz.secozzi.aniyomilocalmanager.presentation.home.list.AnimeListEntry
 import xyz.secozzi.aniyomilocalmanager.ui.home.anime.AnimeScreenViewModel
 import xyz.secozzi.aniyomilocalmanager.ui.theme.spacing
@@ -86,9 +87,11 @@ fun AnimeScreenContent(
         when (state) {
             AnimeScreenViewModel.State.Idle -> {}
             AnimeScreenViewModel.State.Unset -> {
-                UnsetContent(
+                InfoContent(
                     onClick = onClickSelectLocation,
+                    icon = Icons.Outlined.Folder,
                     subtitle = stringResource(R.string.no_location_set_anime),
+                    buttonText = stringResource(R.string.generic_select),
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(contentPadding),

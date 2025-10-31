@@ -44,6 +44,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -53,6 +54,7 @@ tasks.withType<KotlinCompile>().configureEach {
         freeCompilerArgs.addAll(
             "-Xwhen-guards",
             "-Xcontext-parameters",
+            "-Xmulti-dollar-interpolation",
             "-opt-in=kotlin.RequiresOptIn",
             "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api"
         )
@@ -100,6 +102,8 @@ dependencies {
     implementation(libs.serialization.json)
     implementation(libs.bundles.koin)
     implementation(libs.simple.storage)
+    implementation(libs.bundles.ktor)
+    implementation(libs.bundles.coil)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -27,15 +27,19 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation3.runtime.NavKey
 import com.anggrayudi.storage.file.getBasePath
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import xyz.secozzi.aniyomilocalmanager.R
+import xyz.secozzi.aniyomilocalmanager.database.domain.AnimeTrackerRepository
+import xyz.secozzi.aniyomilocalmanager.database.domain.MangaTrackerRepository
 import xyz.secozzi.aniyomilocalmanager.domain.storage.StorageManager
 import xyz.secozzi.aniyomilocalmanager.preferences.DataPreferences
 import xyz.secozzi.aniyomilocalmanager.preferences.preference.collectAsState
@@ -94,7 +98,7 @@ fun DataPreferencesScreen() {
         DataPreferencesScreenModel.Dialog.ConfirmDeleteIds -> {
             ConfirmDialog(
                 onConfirm = {
-                    // TODO
+                    viewModel.deleteTrackerData()
                     viewModel.dismissDialog()
                 },
                 onDismiss = { viewModel.dismissDialog() },
@@ -104,12 +108,22 @@ fun DataPreferencesScreen() {
     }
 }
 
-class DataPreferencesScreenModel() : ViewModel() {
+class DataPreferencesScreenModel(
+    private val mangaTrackerRepository: MangaTrackerRepository,
+    private val animeTrackerRepository: AnimeTrackerRepository,
+) : ViewModel() {
     private val _dialog = MutableStateFlow<Dialog?>(null)
     val dialog = _dialog.asStateFlow()
 
     sealed interface Dialog {
         data object ConfirmDeleteIds : Dialog
+    }
+
+    fun deleteTrackerData() {
+        viewModelScope.launch {
+            mangaTrackerRepository.clearTrackerIds()
+            animeTrackerRepository.clearTrackerIds()
+        }
     }
 
     fun setConfirmDialog() {

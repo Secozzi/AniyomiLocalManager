@@ -2,6 +2,7 @@ package xyz.secozzi.aniyomilocalmanager.presentation.manga.entry
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -26,13 +27,14 @@ import androidx.compose.ui.unit.dp
 import xyz.secozzi.aniyomilocalmanager.R
 import xyz.secozzi.aniyomilocalmanager.database.entities.MangaTrackerEntity
 import xyz.secozzi.aniyomilocalmanager.presentation.PreviewContent
+import xyz.secozzi.aniyomilocalmanager.presentation.components.ErrorContent
 import xyz.secozzi.aniyomilocalmanager.presentation.components.ExpressiveListItem
 import xyz.secozzi.aniyomilocalmanager.ui.manga.entry.MangaEntryScreenViewModel
 import xyz.secozzi.aniyomilocalmanager.ui.theme.spacing
 
 @Composable
 fun MangaEntryScreenContent(
-    state: MangaEntryScreenViewModel.State.Success,
+    state: MangaEntryScreenViewModel.State,
     onBack: () -> Unit,
     onEditCover: () -> Unit,
     onEditComicInfo: () -> Unit,
@@ -43,7 +45,11 @@ fun MangaEntryScreenContent(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(state.name) },
+                title = {
+                    if (state is MangaEntryScreenViewModel.State.Success) {
+                        Text(state.name)
+                    }
+                },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Outlined.ArrowBack, null)
@@ -52,86 +58,101 @@ fun MangaEntryScreenContent(
             )
         },
     ) { contentPadding ->
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(2.dp),
-            contentPadding = contentPadding,
-            modifier = Modifier.padding(horizontal = 16.dp),
-        ) {
-            // Items
-            item {
-                ExpressiveListItem(
-                    itemSize = 2,
-                    index = 0,
-                    headlineContent = { Text(text = stringResource(R.string.edit_cover)) },
-                    leadingContent = { Icon(if (state.hasCover) Icons.Default.Check else Icons.Default.Clear, null) },
-                    onClick = onEditCover,
+        when (state) {
+            MangaEntryScreenViewModel.State.Idle -> {}
+            is MangaEntryScreenViewModel.State.Error -> {
+                ErrorContent(
+                    throwable = state.exception,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(contentPadding),
                 )
             }
-
-            item {
-                ExpressiveListItem(
-                    itemSize = 2,
-                    index = 1,
-                    headlineContent = { Text(text = stringResource(R.string.anime_edit_details)) },
-                    leadingContent = {
-                        Icon(if (state.hasComicInfo) Icons.Default.Check else Icons.Default.Clear, null)
-                    },
-                    onClick = onEditComicInfo,
-                )
-            }
-
-            item { Spacer(Modifier.height(MaterialTheme.spacing.smaller)) }
-
-            // Ids
-            item {
-                ExpressiveListItem(
-                    itemSize = 3,
-                    index = 0,
-                    headlineContent = { Text(text = stringResource(R.string.pref_mangabaka_title)) },
-                    leadingContent = { Icon(Icons.Outlined.BookOnline, null) },
-                    supportingContent = {
-                        Text(
-                            text = state.data.mangabaka?.let {
-                                stringResource(R.string.generic_id, it)
-                            } ?: stringResource(R.string.no_id_set),
+            is MangaEntryScreenViewModel.State.Success -> {
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(2.dp),
+                    contentPadding = contentPadding,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                ) {
+                    // Items
+                    item {
+                        ExpressiveListItem(
+                            itemSize = 2,
+                            index = 0,
+                            headlineContent = { Text(text = stringResource(R.string.edit_cover)) },
+                            leadingContent = {
+                                Icon(if (state.hasCover) Icons.Default.Check else Icons.Default.Clear, null)
+                            },
+                            onClick = onEditCover,
                         )
-                    },
-                    onClick = onClickMangaBaka,
-                )
-            }
+                    }
 
-            item {
-                ExpressiveListItem(
-                    itemSize = 3,
-                    index = 1,
-                    headlineContent = { Text(text = stringResource(R.string.pref_anilist_title)) },
-                    leadingContent = { Icon(ImageVector.vectorResource(R.drawable.anilist_icon), null) },
-                    supportingContent = {
-                        Text(
-                            text = state.data.anilist?.let {
-                                stringResource(R.string.generic_id, it)
-                            } ?: stringResource(R.string.no_id_set),
+                    item {
+                        ExpressiveListItem(
+                            itemSize = 2,
+                            index = 1,
+                            headlineContent = { Text(text = stringResource(R.string.anime_edit_details)) },
+                            leadingContent = {
+                                Icon(if (state.hasComicInfo) Icons.Default.Check else Icons.Default.Clear, null)
+                            },
+                            onClick = onEditComicInfo,
                         )
-                    },
-                    onClick = onClickAnilist,
-                )
-            }
+                    }
 
-            item {
-                ExpressiveListItem(
-                    itemSize = 3,
-                    index = 2,
-                    headlineContent = { Text(text = stringResource(R.string.pref_mal_title)) },
-                    leadingContent = { Icon(ImageVector.vectorResource(R.drawable.mal_icon), null) },
-                    supportingContent = {
-                        Text(
-                            text = state.data.mal?.let {
-                                stringResource(R.string.generic_id, it)
-                            } ?: stringResource(R.string.no_id_set),
+                    item { Spacer(Modifier.height(MaterialTheme.spacing.smaller)) }
+
+                    // Ids
+                    item {
+                        ExpressiveListItem(
+                            itemSize = 3,
+                            index = 0,
+                            headlineContent = { Text(text = stringResource(R.string.pref_mangabaka_title)) },
+                            leadingContent = { Icon(Icons.Outlined.BookOnline, null) },
+                            supportingContent = {
+                                Text(
+                                    text = state.data.mangabaka?.let {
+                                        stringResource(R.string.generic_id, it)
+                                    } ?: stringResource(R.string.no_id_set),
+                                )
+                            },
+                            onClick = onClickMangaBaka,
                         )
-                    },
-                    onClick = onClickMal,
-                )
+                    }
+
+                    item {
+                        ExpressiveListItem(
+                            itemSize = 3,
+                            index = 1,
+                            headlineContent = { Text(text = stringResource(R.string.pref_anilist_title)) },
+                            leadingContent = { Icon(ImageVector.vectorResource(R.drawable.anilist_icon), null) },
+                            supportingContent = {
+                                Text(
+                                    text = state.data.anilist?.let {
+                                        stringResource(R.string.generic_id, it)
+                                    } ?: stringResource(R.string.no_id_set),
+                                )
+                            },
+                            onClick = onClickAnilist,
+                        )
+                    }
+
+                    item {
+                        ExpressiveListItem(
+                            itemSize = 3,
+                            index = 2,
+                            headlineContent = { Text(text = stringResource(R.string.pref_mal_title)) },
+                            leadingContent = { Icon(ImageVector.vectorResource(R.drawable.mal_icon), null) },
+                            supportingContent = {
+                                Text(
+                                    text = state.data.mal?.let {
+                                        stringResource(R.string.generic_id, it)
+                                    } ?: stringResource(R.string.no_id_set),
+                                )
+                            },
+                            onClick = onClickMal,
+                        )
+                    }
+                }
             }
         }
     }

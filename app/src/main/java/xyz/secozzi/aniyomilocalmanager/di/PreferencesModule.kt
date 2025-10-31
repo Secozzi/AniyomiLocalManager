@@ -5,7 +5,9 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 import xyz.secozzi.aniyomilocalmanager.preferences.AppearancePreferences
+import xyz.secozzi.aniyomilocalmanager.preferences.CoverPreferences
 import xyz.secozzi.aniyomilocalmanager.preferences.DataPreferences
+import xyz.secozzi.aniyomilocalmanager.preferences.MangaBakaPreferences
 import xyz.secozzi.aniyomilocalmanager.preferences.preference.AndroidPreferenceStore
 import xyz.secozzi.aniyomilocalmanager.preferences.preference.PreferenceStore
 
@@ -14,4 +16,6 @@ val PreferencesModule = module {
 
     singleOf(::AppearancePreferences)
     singleOf(::DataPreferences)
+    singleOf(::MangaBakaPreferences)
+    singleOf(::CoverPreferences)
 }

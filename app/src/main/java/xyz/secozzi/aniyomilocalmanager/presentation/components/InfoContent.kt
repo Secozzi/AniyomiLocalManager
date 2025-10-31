@@ -1,4 +1,4 @@
-package xyz.secozzi.aniyomilocalmanager.presentation.home
+package xyz.secozzi.aniyomilocalmanager.presentation.components
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -14,7 +14,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Folder
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilledTonalButton
@@ -30,20 +30,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import xyz.secozzi.aniyomilocalmanager.R
 import xyz.secozzi.aniyomilocalmanager.presentation.PreviewContent
 import xyz.secozzi.aniyomilocalmanager.ui.theme.spacing
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun UnsetContent(
-    onClick: () -> Unit,
-    subtitle: String,
-    modifier: Modifier = Modifier,
+fun InfoIcon(
+    icon: ImageVector,
 ) {
     val transition = rememberInfiniteTransition(
         label = "Icon rotate",
@@ -58,6 +55,37 @@ fun UnsetContent(
         label = "Icon animation",
     )
 
+    Box {
+        Spacer(
+            Modifier
+                .graphicsLayer {
+                    rotationZ = angle
+                }
+                .clip(MaterialShapes.Cookie12Sided.toShape())
+                .background(MaterialTheme.colorScheme.primaryContainer)
+                .padding(32.dp)
+                .size(100.dp),
+        )
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onPrimaryContainer,
+            modifier = Modifier
+                .padding(32.dp)
+                .size(100.dp),
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+fun InfoContent(
+    onClick: () -> Unit,
+    icon: ImageVector,
+    subtitle: String,
+    buttonText: String,
+    modifier: Modifier = Modifier,
+) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(
@@ -66,26 +94,7 @@ fun UnsetContent(
         ),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Box {
-            Spacer(
-                Modifier
-                    .graphicsLayer {
-                        rotationZ = angle
-                    }
-                    .clip(MaterialShapes.Cookie12Sided.toShape())
-                    .background(MaterialTheme.colorScheme.primaryContainer)
-                    .padding(32.dp)
-                    .size(100.dp),
-            )
-            Icon(
-                imageVector = Icons.Outlined.Folder,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                modifier = Modifier
-                    .padding(32.dp)
-                    .size(100.dp),
-            )
-        }
+        InfoIcon(icon)
 
         Text(
             text = subtitle,
@@ -98,7 +107,7 @@ fun UnsetContent(
             shapes = ButtonDefaults.shapes(),
         ) {
             Text(
-                text = stringResource(R.string.generic_select),
+                text = buttonText,
                 style = MaterialTheme.typography.bodyLarge,
             )
         }
@@ -110,9 +119,11 @@ fun UnsetContent(
 private fun UnsetContentPreview() {
     PreviewContent {
         Surface {
-            UnsetContent(
+            InfoContent(
                 onClick = {},
-                subtitle = "No location set! Select localanime directory",
+                icon = Icons.Outlined.Search,
+                subtitle = "No anilist ID set! Search anilist entry",
+                buttonText = "Search",
             )
         }
     }

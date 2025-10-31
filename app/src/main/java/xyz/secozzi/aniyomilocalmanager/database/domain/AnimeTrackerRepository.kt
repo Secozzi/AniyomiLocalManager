@@ -7,4 +7,6 @@ interface AnimeTrackerRepository {
     suspend fun upsert(animeTrackerEntity: AnimeTrackerEntity)
 
     fun getTrackData(path: String): Flow<AnimeTrackerEntity?>
+
+    suspend fun clearTrackerIds()
 }

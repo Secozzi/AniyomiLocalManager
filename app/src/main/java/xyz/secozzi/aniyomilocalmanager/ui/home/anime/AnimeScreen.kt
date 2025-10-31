@@ -12,8 +12,8 @@ import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.unit.Dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.anggrayudi.storage.file.fullName
-import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinActivityViewModel
 import xyz.secozzi.aniyomilocalmanager.R
 import xyz.secozzi.aniyomilocalmanager.domain.storage.StorageManager
 import xyz.secozzi.aniyomilocalmanager.presentation.home.anime.AnimeScreenContent
@@ -30,7 +30,7 @@ fun AnimeScreen(
     val backstack = LocalBackStack.current
 
     val storageManager = koinInject<StorageManager>()
-    val viewModel = koinViewModel<AnimeScreenViewModel>()
+    val viewModel = koinActivityViewModel<AnimeScreenViewModel>()
 
     val state by viewModel.state.collectAsStateWithLifecycle()
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()

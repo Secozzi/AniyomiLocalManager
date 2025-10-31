@@ -13,8 +13,8 @@ preference-ktx = "1.2.1"
 
 material3 = "1.5.0-alpha04"
 material3-android = "1.4.0"
-navigation3 = "1.0.0-alpha10"
-lifecycleViewmodelNav3 = "2.10.0-alpha04"
+navigation3 = "1.0.0-beta01"
+lifecycleViewmodelNav3 = "2.10.0-beta01"
 material3AdaptiveNav3 = "1.0.0-alpha03"
 serialization_version = "1.9.0"
 immutable-collections = "0.4.0"
@@ -25,7 +25,10 @@ ksp = "2.2.20-2.0.4"
 ktlint-core = "1.7.1"
 spotless = "8.0.0"
 koin = "4.1.1"
+coil = "3.3.0"
 simple-storage = "2.2.0"
+ktor = "3.3.1"
+navigation3Runtime = "1.0.0-beta01"
 
 [libraries]
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
@@ -58,6 +61,14 @@ room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
+ktor-client-content = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-client-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+coil-ktor = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
+
 serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "serialization_version" }
 koin-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
@@ -67,6 +78,8 @@ simple-storage = { group = "com.anggrayudi", name = "storage", version.ref = "si
 [bundles]
 compose-navigation3 = ["androidx-navigation3-runtime", "androidx-navigation3-ui", "androidx-lifecycle-viewmodel", "androidx-material3-adaptive"]
 koin = ["koin-compose", "koin-android", "koin-startup"]
+ktor = ["ktor-client-core", "ktor-client-android", "ktor-client-content", "ktor-client-json"]
+coil = ["coil-compose", "coil-ktor"]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

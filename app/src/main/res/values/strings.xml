@@ -5,8 +5,10 @@
     <string name="generic_cancel">Cancel</string>
     <string name="generic_confirm">Confirm</string>
     <string name="generic_select">Select</string>
+    <string name="generic_search">Search</string>
     <string name="no_id_set">No ID set</string>
     <string name="generic_id">ID: %d</string>
+    <string name="label_cover">Cover</string>
 
     <!-- Home screen -->
     <string name="label_manga">Manga</string>
@@ -15,6 +17,9 @@
     <string name="no_location_set_manga">No location set! Select local directory</string>
     <string name="select_invalid_location">Invalid location</string>
 
+    <!-- Other -->
+    <string name="on_error">Something went wrong</string>
+
     <!-- Anime entry -->
     <string name="edit_cover">Edit cover</string>
     <string name="anime_edit_details">Edit details.json</string>
@@ -22,6 +27,19 @@
 
     <!-- Manga entry -->
     <string name="manga_edit_comicinfo">Edit ComicInfo.xml</string>
+    <string name="manga_no_mb_id_set">No MangaBaka ID set, please search for an entry</string>
+
+    <!-- Cover screen -->
+    <string name="cover_loading_image_placeholder">Loading …</string>
+    <string name="cover_downloading_cover">Downloading</string>
+    <string name="cover_download_cover">Download cover</string>
+    <string name="cover_download_cover_success">Successfully downloaded cover</string>
+    <string name="cover_download_cover_failure">Failed to download cover</string>
+    <string name="cover_volume_label">Volume %s</string>
+
+    <!-- Search -->
+    <string name="search_started">Started</string>
+    <string name="search_status">Status</string>
 
     <!-- Preferences -->
     <string name="pref_settings_title">Settings</string>
@@ -32,6 +50,9 @@
     <string name="pref_anidb_title">AniDB</string>
     <string name="pref_mal_title">MyAnimeList</string>
     <string name="pref_cover_title">Covers</string>
+    <string name="pref_english">English</string>
+    <string name="pref_romaji">Romaji</string>
+    <string name="pref_native">Native</string>
 
     <!-- Preferences - Appearance -->
     <string name="pref_appearance_summary">Theme, tabs</string>
@@ -58,6 +79,7 @@
 
     <!-- Preferences - MangaBaka -->
     <string name="pref_mangabaka_summary">ComicInfo.xml</string>
+    <string name="pref_mangabaka_title_lang">Preferred title language</string>
 
     <!-- Preferences - AniList -->
     <string name="pref_anilist_summary">details.json, ComicInfo.xml</string>
@@ -70,4 +92,8 @@
 
     <!-- Preferences - Cover -->
     <string name="pref_cover_summary">Cover providers</string>
+    <string name="pref_fanart_title">Fanart.tv</string>
+    <string name="pref_mangadex_title">Mangadex</string>
+    <string name="pref_display_label">Display</string>
+    <string name="pref_grid_size">Grid size</string>
 </resources>

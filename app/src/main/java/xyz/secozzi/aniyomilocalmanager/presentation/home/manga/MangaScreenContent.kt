@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material3.ContainedLoadingIndicator
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
@@ -31,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import xyz.secozzi.aniyomilocalmanager.R
 import xyz.secozzi.aniyomilocalmanager.domain.home.MangaListEntry
-import xyz.secozzi.aniyomilocalmanager.presentation.home.UnsetContent
+import xyz.secozzi.aniyomilocalmanager.presentation.components.InfoContent
 import xyz.secozzi.aniyomilocalmanager.presentation.home.list.MangaListEntry
 import xyz.secozzi.aniyomilocalmanager.ui.home.manga.MangaScreenViewModel
 
@@ -80,9 +81,11 @@ fun MangaScreenContent(
         when (state) {
             MangaScreenViewModel.State.Idle -> {}
             MangaScreenViewModel.State.Unset -> {
-                UnsetContent(
+                InfoContent(
                     onClick = onClickSelectLocation,
+                    icon = Icons.Outlined.Folder,
                     subtitle = stringResource(R.string.no_location_set_manga),
+                    buttonText = stringResource(R.string.generic_select),
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(contentPadding),

@@ -70,7 +70,7 @@ fun PreferencesScreen() {
             title = R.string.pref_mangabaka_title,
             subtitle = R.string.pref_mangabaka_summary,
             icon = Icons.Outlined.BookOnline,
-            onClick = { },
+            onClick = { backstack.add(MangaBakaPreferencesRoute) },
         ),
         PreferenceItem(
             title = R.string.pref_anilist_title,
@@ -94,7 +94,7 @@ fun PreferencesScreen() {
             title = R.string.pref_cover_title,
             subtitle = R.string.pref_cover_summary,
             icon = Icons.Outlined.Image,
-            onClick = { },
+            onClick = { backstack.add(CoverPreferencesRoute) },
         ),
     )
 
