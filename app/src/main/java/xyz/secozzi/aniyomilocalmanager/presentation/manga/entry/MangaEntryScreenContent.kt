@@ -35,6 +35,7 @@ import xyz.secozzi.aniyomilocalmanager.ui.theme.spacing
 @Composable
 fun MangaEntryScreenContent(
     state: MangaEntryScreenViewModel.State,
+    name: String,
     onBack: () -> Unit,
     onEditCover: () -> Unit,
     onEditComicInfo: () -> Unit,
@@ -45,11 +46,7 @@ fun MangaEntryScreenContent(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {
-                    if (state is MangaEntryScreenViewModel.State.Success) {
-                        Text(state.name)
-                    }
-                },
+                title = { Text(name) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Outlined.ArrowBack, null)
@@ -164,7 +161,6 @@ private fun MangaEntryScreenContentPreview() {
     PreviewContent {
         MangaEntryScreenContent(
             state = MangaEntryScreenViewModel.State.Success(
-                name = "Boku no Hero Academia",
                 hasCover = false,
                 hasComicInfo = true,
                 data = MangaTrackerEntity(
@@ -173,6 +169,7 @@ private fun MangaEntryScreenContentPreview() {
                     mal = 54321L,
                 ),
             ),
+            name = "Boku no Hero Academia",
             onBack = {},
             onEditCover = {},
             onEditComicInfo = {},

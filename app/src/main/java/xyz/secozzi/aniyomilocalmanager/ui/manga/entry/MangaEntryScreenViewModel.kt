@@ -7,7 +7,6 @@ import com.anggrayudi.storage.file.children
 import com.anggrayudi.storage.file.fullName
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.Json
 import xyz.secozzi.aniyomilocalmanager.database.domain.MangaTrackerRepository
 import xyz.secozzi.aniyomilocalmanager.database.entities.MangaTrackerEntity
 import xyz.secozzi.aniyomilocalmanager.domain.search.models.SearchResultItem
@@ -19,7 +18,6 @@ class MangaEntryScreenViewModel(
     private val path: String,
     private val trackerRepository: MangaTrackerRepository,
     private val storageManager: StorageManager,
-    private val json: Json,
 ) : ViewModel() {
 
     val state = trackerRepository.getTrackData(path)
@@ -37,7 +35,6 @@ class MangaEntryScreenViewModel(
                 .map { it.fullName }
 
             State.Success(
-                name = dir.fullName,
                 hasCover = names.any { it.contains("cover") },
                 hasComicInfo = names.any { it.equals("comicinfo.xml", true) },
                 data = entity,
@@ -66,7 +63,6 @@ class MangaEntryScreenViewModel(
 
         @Immutable
         data class Success(
-            val name: String,
             val hasCover: Boolean,
             val hasComicInfo: Boolean,
             val data: MangaTrackerEntity,
