@@ -8,6 +8,7 @@ import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 import xyz.secozzi.aniyomilocalmanager.presentation.anime.entry.AnimeEntryScreenContent
+import xyz.secozzi.aniyomilocalmanager.ui.anime.cover.AnimeCoverRoute
 import xyz.secozzi.aniyomilocalmanager.ui.utils.LocalBackStack
 
 @Serializable
@@ -29,7 +30,7 @@ fun AnimeEntryScreen(path: String) {
     AnimeEntryScreenContent(
         state = state as AnimeEntryScreenViewModel.State.Success,
         onBack = { backStack.removeLastOrNull() },
-        onEditCover = { },
+        onEditCover = { backStack.add(AnimeCoverRoute(path)) },
         onEditDetails = { },
         onEditEpisodes = { },
         onClickAnilist = { },

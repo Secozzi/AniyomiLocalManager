@@ -10,10 +10,11 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import xyz.secozzi.aniyomilocalmanager.data.search.SearchManager
 import xyz.secozzi.aniyomilocalmanager.domain.search.models.SearchResultItem
+import xyz.secozzi.aniyomilocalmanager.domain.search.service.SearchIds
 import xyz.secozzi.aniyomilocalmanager.utils.StateViewModel
 
 class SearchScreenViewModel(
-    private val searchRepositoryId: Long,
+    private val searchRepositoryId: SearchIds,
     private val searchManager: SearchManager,
 ) : StateViewModel<SearchScreenViewModel.State>(State.Idle) {
 

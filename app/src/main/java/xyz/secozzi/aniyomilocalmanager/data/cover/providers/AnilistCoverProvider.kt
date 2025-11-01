@@ -58,56 +58,56 @@ class AnilistCoverProvider(
         )
     }
 
-    companion object {
-        private const val API_URL = "https://graphql.anilist.co/"
-    }
-}
-
-@Serializable
-private data class AnilistRequestBody(
-    val query: String,
-    val variables: AnilistRequestBodyVariables,
-) {
     @Serializable
-    data class AnilistRequestBodyVariables(
-        val id: Long,
-        val type: String,
-    )
-}
-
-@Serializable
-private data class AnilistResponseDto(
-    val data: AnilistDataDto,
-) {
-    @Serializable
-    data class AnilistDataDto(
-        @SerialName("Media")
-        val media: AnilistMediaDto,
+    data class AnilistRequestBody(
+        val query: String,
+        val variables: AnilistRequestBodyVariables,
     ) {
         @Serializable
-        data class AnilistMediaDto(
-            val coverImage: AnilistCoverDto,
-            val idMal: Long?,
-            val startDate: AnilistStartDateDto,
-            val title: AnilistTitleDto,
-            val format: String?,
+        data class AnilistRequestBodyVariables(
+            val id: Long,
+            val type: String,
+        )
+    }
+
+    @Serializable
+    data class AnilistResponseDto(
+        val data: AnilistDataDto,
+    ) {
+        @Serializable
+        data class AnilistDataDto(
+            @SerialName("Media")
+            val media: AnilistMediaDto,
         ) {
             @Serializable
-            data class AnilistCoverDto(
-                val extraLarge: String?,
-                val large: String,
-            )
+            data class AnilistMediaDto(
+                val coverImage: AnilistCoverDto,
+                val idMal: Long?,
+                val startDate: AnilistStartDateDto,
+                val title: AnilistTitleDto,
+                val format: String?,
+            ) {
+                @Serializable
+                data class AnilistCoverDto(
+                    val extraLarge: String?,
+                    val large: String,
+                )
 
-            @Serializable
-            data class AnilistStartDateDto(
-                val year: Int?,
-            )
+                @Serializable
+                data class AnilistStartDateDto(
+                    val year: Int?,
+                )
 
-            @Serializable
-            data class AnilistTitleDto(
-                val romaji: String?,
-                val native: String?,
-            )
+                @Serializable
+                data class AnilistTitleDto(
+                    val romaji: String?,
+                    val native: String?,
+                )
+            }
         }
+    }
+
+    companion object {
+        private const val API_URL = "https://graphql.anilist.co/"
     }
 }

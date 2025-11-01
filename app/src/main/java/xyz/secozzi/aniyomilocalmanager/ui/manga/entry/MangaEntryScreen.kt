@@ -8,10 +8,10 @@ import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
-import xyz.secozzi.aniyomilocalmanager.domain.search.service.TrackerIds
+import xyz.secozzi.aniyomilocalmanager.domain.search.models.SearchResultItem
+import xyz.secozzi.aniyomilocalmanager.domain.search.service.SearchIds
 import xyz.secozzi.aniyomilocalmanager.presentation.manga.entry.MangaEntryScreenContent
 import xyz.secozzi.aniyomilocalmanager.ui.manga.cover.MangaCoverRoute
-import xyz.secozzi.aniyomilocalmanager.ui.search.SearchResult
 import xyz.secozzi.aniyomilocalmanager.ui.search.SearchRoute
 import xyz.secozzi.aniyomilocalmanager.ui.utils.LocalBackStack
 import xyz.secozzi.aniyomilocalmanager.utils.LocalResultStore
@@ -28,10 +28,10 @@ fun MangaEntryScreen(path: String) {
         parametersOf(path)
     }
 
-    val result: String? = resultStore.getResultState<SearchResult>()
+    val result: SearchResultItem? = resultStore.getResultState<SearchResultItem>()
     LaunchedEffect(result) {
         if (result == null) return@LaunchedEffect
-        resultStore.removeResult<SearchResult>()
+        resultStore.removeResult<SearchResultItem>()
         viewModel.updateIds(result)
     }
 
@@ -44,7 +44,7 @@ fun MangaEntryScreen(path: String) {
         onEditComicInfo = { },
         onClickMangaBaka = {
             val name = (state as MangaEntryScreenViewModel.State.Success).name
-            backStack.add(SearchRoute(name, TrackerIds.MangaBaka))
+            backStack.add(SearchRoute(name, SearchIds.MangaBaka))
         },
         onClickAnilist = { },
         onClickMal = { },

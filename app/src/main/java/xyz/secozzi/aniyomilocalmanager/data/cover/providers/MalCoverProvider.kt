@@ -41,42 +41,42 @@ class MalCoverProvider(
 
         return mangaResponse.data.title to mangaResponse.data.published.prop.from.year
     }
-}
 
-@Serializable
-data class MalResultDto<T>(
-    val data: T,
-)
-
-@Serializable
-private data class MalMangaDto(
-    val title: String,
-    val published: MalMangaPublishedDto,
-) {
     @Serializable
-    data class MalMangaPublishedDto(
-        val prop: MalMangaPublishedPropDto,
+    data class MalResultDto<T>(
+        val data: T,
+    )
+
+    @Serializable
+    data class MalMangaDto(
+        val title: String,
+        val published: MalMangaPublishedDto,
     ) {
         @Serializable
-        data class MalMangaPublishedPropDto(
-            val from: MalMangaPublishedFromDto,
+        data class MalMangaPublishedDto(
+            val prop: MalMangaPublishedPropDto,
         ) {
             @Serializable
-            data class MalMangaPublishedFromDto(
-                val year: Int? = null,
-            )
+            data class MalMangaPublishedPropDto(
+                val from: MalMangaPublishedFromDto,
+            ) {
+                @Serializable
+                data class MalMangaPublishedFromDto(
+                    val year: Int? = null,
+                )
+            }
         }
     }
-}
 
-@Serializable
-data class MalCoverDto(
-    val jpg: MalJpgDto,
-) {
     @Serializable
-    data class MalJpgDto(
-        @SerialName("image_url") val imageUrl: String? = null,
-        @SerialName("small_image_url") val smallImageUrl: String? = null,
-        @SerialName("large_image_url") val largeImageUrl: String? = null,
-    )
+    data class MalCoverDto(
+        val jpg: MalJpgDto,
+    ) {
+        @Serializable
+        data class MalJpgDto(
+            @SerialName("image_url") val imageUrl: String? = null,
+            @SerialName("small_image_url") val smallImageUrl: String? = null,
+            @SerialName("large_image_url") val largeImageUrl: String? = null,
+        )
+    }
 }

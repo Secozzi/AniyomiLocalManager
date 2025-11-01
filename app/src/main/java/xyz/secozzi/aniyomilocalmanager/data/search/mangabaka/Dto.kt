@@ -17,6 +17,9 @@ data class SearchResultDto(
     @SerialName("romanized_title")
     val romanizedTitle: String? = null,
     val cover: CoverDto,
+    val authors: List<String>? = null,
+    val artists: List<String>? = null,
+    val genres: List<String>? = null,
     val description: String? = null,
     val type: String,
     val status: String,

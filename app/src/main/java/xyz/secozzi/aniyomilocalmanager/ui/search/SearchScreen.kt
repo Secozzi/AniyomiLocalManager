@@ -8,28 +8,25 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
 import org.koin.androidx.compose.koinViewModel
-import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
+import xyz.secozzi.aniyomilocalmanager.domain.search.models.SearchResultItem
+import xyz.secozzi.aniyomilocalmanager.domain.search.service.SearchIds
 import xyz.secozzi.aniyomilocalmanager.presentation.search.SearchScreenContent
 import xyz.secozzi.aniyomilocalmanager.ui.utils.LocalBackStack
 import xyz.secozzi.aniyomilocalmanager.utils.LocalResultStore
 
-typealias SearchResult = String
-
 @Serializable
 data class SearchRoute(
     val query: String,
-    val searchRepositoryId: Long,
+    val searchRepositoryId: SearchIds,
 ) : NavKey
 
 @Composable
-fun SearchScreen(query: String, searchRepositoryId: Long) {
+fun SearchScreen(query: String, searchRepositoryId: SearchIds) {
     val backStack = LocalBackStack.current
     val resultStore = LocalResultStore.current
 
-    val json = koinInject<Json>()
     val viewModel = koinViewModel<SearchScreenViewModel> {
         parametersOf(query, searchRepositoryId)
     }
@@ -51,7 +48,7 @@ fun SearchScreen(query: String, searchRepositoryId: Long) {
         onSearch = viewModel::search,
         onSelect = viewModel::updateSelected,
         onClickSelect = {
-            resultStore.setResult<SearchResult>(result = json.encodeToString(it))
+            resultStore.setResult<SearchResultItem>(result = it)
             backStack.removeLastOrNull()
         },
     )

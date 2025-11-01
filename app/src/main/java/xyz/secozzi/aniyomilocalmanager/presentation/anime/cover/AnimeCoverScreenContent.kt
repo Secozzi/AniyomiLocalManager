@@ -1,4 +1,4 @@
-package xyz.secozzi.aniyomilocalmanager.presentation.manga.cover
+package xyz.secozzi.aniyomilocalmanager.presentation.anime.cover
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -15,22 +15,20 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import xyz.secozzi.aniyomilocalmanager.R
 import xyz.secozzi.aniyomilocalmanager.domain.cover.model.CoverData
 import xyz.secozzi.aniyomilocalmanager.domain.search.models.SearchResultItem
-import xyz.secozzi.aniyomilocalmanager.presentation.PreviewContent
 import xyz.secozzi.aniyomilocalmanager.presentation.components.ErrorContent
 import xyz.secozzi.aniyomilocalmanager.presentation.components.InfoContent
 import xyz.secozzi.aniyomilocalmanager.presentation.components.LoadingContent
 import xyz.secozzi.aniyomilocalmanager.presentation.cover.CoverScreenContent
 import xyz.secozzi.aniyomilocalmanager.presentation.cover.DownloadBottomBar
 import xyz.secozzi.aniyomilocalmanager.presentation.cover.DownloadingBottomBar
-import xyz.secozzi.aniyomilocalmanager.ui.manga.cover.MangaCoverScreenViewModel
+import xyz.secozzi.aniyomilocalmanager.ui.anime.cover.AnimeCoverScreenViewModel
 
 @Composable
-fun MangaCoverScreenContent(
-    state: MangaCoverScreenViewModel.State,
+fun AnimeCoverScreenContent(
+    state: AnimeCoverScreenViewModel.State,
     selectedCover: CoverData?,
     isDownloadingCover: Boolean,
     gridSize: Int,
@@ -69,7 +67,7 @@ fun MangaCoverScreenContent(
         },
     ) { contentPadding ->
         // Wait until database is updated, otherwise the idle screen will be briefly shown
-        if (result != null || state == MangaCoverScreenViewModel.State.Loading) {
+        if (result != null || state == AnimeCoverScreenViewModel.State.Loading) {
             LoadingContent(
                 modifier = Modifier
                     .fillMaxSize()
@@ -79,11 +77,11 @@ fun MangaCoverScreenContent(
         }
 
         when (state) {
-            MangaCoverScreenViewModel.State.Idle -> { }
-            MangaCoverScreenViewModel.State.Loading -> {
+            AnimeCoverScreenViewModel.State.Idle -> { }
+            AnimeCoverScreenViewModel.State.Loading -> {
                 throw IllegalStateException("How?")
             }
-            is MangaCoverScreenViewModel.State.Error -> {
+            is AnimeCoverScreenViewModel.State.Error -> {
                 ErrorContent(
                     throwable = state.exception,
                     modifier = Modifier
@@ -91,7 +89,7 @@ fun MangaCoverScreenContent(
                         .padding(contentPadding),
                 )
             }
-            MangaCoverScreenViewModel.State.NoID -> {
+            AnimeCoverScreenViewModel.State.NoID -> {
                 InfoContent(
                     onClick = onClickSearch,
                     icon = Icons.Outlined.Search,
@@ -102,7 +100,7 @@ fun MangaCoverScreenContent(
                         .padding(contentPadding),
                 )
             }
-            is MangaCoverScreenViewModel.State.Success -> {
+            is AnimeCoverScreenViewModel.State.Success -> {
                 CoverScreenContent(
                     covers = state.data,
                     selectedCover = selectedCover,
@@ -112,51 +110,5 @@ fun MangaCoverScreenContent(
                 )
             }
         }
-    }
-}
-
-@PreviewLightDark
-@Composable
-private fun MangaCoverScreenContentTest() {
-    PreviewContent {
-        val cover2 = CoverData(
-            coverUrl = "2",
-            origin = "AniList",
-            hint = "Volume 2",
-        )
-
-        val successState = MangaCoverScreenViewModel.State.Success(
-            listOf(
-                CoverData(
-                    coverUrl = "1",
-                    origin = "AniList",
-                    hint = "Volume 1",
-                ),
-                cover2,
-                CoverData(
-                    coverUrl = "3",
-                    origin = "AniList",
-                    hint = "Volume 3",
-                ),
-                CoverData(
-                    coverUrl = "4",
-                    origin = "AniList",
-                    hint = "Volume 4",
-                ),
-            ),
-        )
-
-        MangaCoverScreenContent(
-            state = successState,
-            selectedCover = cover2,
-            isDownloadingCover = false,
-            gridSize = 3,
-            result = null,
-            onBack = { },
-            onClickSearch = { },
-            onClickSettings = { },
-            onClickDownload = { },
-            onClickCover = { },
-        )
     }
 }

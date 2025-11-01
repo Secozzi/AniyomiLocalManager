@@ -1,5 +1,6 @@
 package xyz.secozzi.aniyomilocalmanager.presentation.components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -16,6 +17,7 @@ import androidx.compose.material.icons.outlined.BugReport
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,6 +34,10 @@ fun ErrorContent(
     throwable: Throwable,
     modifier: Modifier = Modifier,
 ) {
+    LaunchedEffect(throwable) {
+        Log.e("aniyomi-local-manager", throwable.stackTraceToString())
+    }
+
     Column(
         modifier = modifier.padding(horizontal = MaterialTheme.spacing.medium),
         verticalArrangement = Arrangement.spacedBy(

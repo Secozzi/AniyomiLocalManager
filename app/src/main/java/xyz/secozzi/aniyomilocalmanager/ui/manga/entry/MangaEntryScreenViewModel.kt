@@ -44,14 +44,13 @@ class MangaEntryScreenViewModel(
             )
         }
 
-    fun updateIds(resultData: String) {
-        val result = json.decodeFromString<SearchResultItem>(resultData)
+    fun updateIds(result: SearchResultItem) {
         viewModelScope.launch {
             trackerRepository.upsert(
                 MangaTrackerEntity(
                     path = path,
                     mangabaka = result.trackerIds[TrackerIds.MangaBaka],
-                    anilist = result.trackerIds[TrackerIds.AniList],
+                    anilist = result.trackerIds[TrackerIds.Anilist],
                     mal = result.trackerIds[TrackerIds.Mal],
                 ),
             )

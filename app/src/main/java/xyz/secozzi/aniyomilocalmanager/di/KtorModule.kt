@@ -5,6 +5,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
 import io.ktor.client.plugins.UserAgent
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.http.ContentType
 import io.ktor.serialization.kotlinx.json.json
 import org.koin.dsl.module
 import xyz.secozzi.aniyomilocalmanager.BuildConfig
@@ -23,7 +24,10 @@ val KtorModule = module {
             }
 
             install(ContentNegotiation) {
-                json(json = get())
+                json(
+                    json = get(),
+                    contentType = ContentType.Any,
+                )
             }
         }
     }

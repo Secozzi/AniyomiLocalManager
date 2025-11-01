@@ -28,6 +28,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import xyz.secozzi.aniyomilocalmanager.R
+import xyz.secozzi.aniyomilocalmanager.domain.entry.model.Status
 import xyz.secozzi.aniyomilocalmanager.domain.search.models.SearchResultItem
 import xyz.secozzi.aniyomilocalmanager.presentation.PreviewContent
 import xyz.secozzi.aniyomilocalmanager.presentation.components.ErrorContent
@@ -131,9 +132,19 @@ private fun SearchScreenContentPreview() {
             query = "Tower of God",
             state = SearchScreenViewModel.State.Success(
                 items = listOf(
-                    SearchResultItem("Tower of God", null, null, null, null, null, emptyMap()),
+                    SearchResultItem(
+                        titles = listOf("Tower of God"),
+                        coverUrl = null,
+                        type = null,
+                        Status.Unknown,
+                        description = null,
+                        startDate = null,
+                        genres = emptyList(),
+                        authors = emptyList(),
+                        artists = emptyList(),
+                        trackerIds = emptyMap(),
+                    ),
                 ),
-                // selected = SearchResultItem("Tower of God", null, null, null, null, null, emptyMap()),
             ),
             selected = null,
             focusRequester = remember { FocusRequester() },

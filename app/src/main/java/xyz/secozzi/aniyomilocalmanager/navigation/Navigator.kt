@@ -9,6 +9,8 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import xyz.secozzi.aniyomilocalmanager.presentation.utils.predictiveHorizonal
 import xyz.secozzi.aniyomilocalmanager.presentation.utils.slideHorizontal
+import xyz.secozzi.aniyomilocalmanager.ui.anime.cover.AnimeCoverRoute
+import xyz.secozzi.aniyomilocalmanager.ui.anime.cover.AnimeCoverScreen
 import xyz.secozzi.aniyomilocalmanager.ui.anime.entry.AnimeEntryRoute
 import xyz.secozzi.aniyomilocalmanager.ui.anime.entry.AnimeEntryScreen
 import xyz.secozzi.aniyomilocalmanager.ui.home.HomeRoute
@@ -17,6 +19,8 @@ import xyz.secozzi.aniyomilocalmanager.ui.manga.cover.MangaCoverRoute
 import xyz.secozzi.aniyomilocalmanager.ui.manga.cover.MangaCoverScreen
 import xyz.secozzi.aniyomilocalmanager.ui.manga.entry.MangaEntryRoute
 import xyz.secozzi.aniyomilocalmanager.ui.manga.entry.MangaEntryScreen
+import xyz.secozzi.aniyomilocalmanager.ui.preferences.AnilistPreferencesRoute
+import xyz.secozzi.aniyomilocalmanager.ui.preferences.AnilistPreferencesScreen
 import xyz.secozzi.aniyomilocalmanager.ui.preferences.AppearancePreferencesRoute
 import xyz.secozzi.aniyomilocalmanager.ui.preferences.AppearancePreferencesScreen
 import xyz.secozzi.aniyomilocalmanager.ui.preferences.CoverPreferencesRoute
@@ -61,6 +65,9 @@ fun Navigator() {
                 entry<AnimeEntryRoute> { route ->
                     AnimeEntryScreen(route.path)
                 }
+                entry<AnimeCoverRoute> { route ->
+                    AnimeCoverScreen(route.path)
+                }
 
                 // Manga
                 entry<MangaEntryRoute> { route ->
@@ -87,6 +94,9 @@ fun Navigator() {
                 }
                 entry<MangaBakaPreferencesRoute> {
                     MangaBakaPreferencesScreen()
+                }
+                entry<AnilistPreferencesRoute> {
+                    AnilistPreferencesScreen()
                 }
                 entry<CoverPreferencesRoute> {
                     CoverPreferencesScreen()

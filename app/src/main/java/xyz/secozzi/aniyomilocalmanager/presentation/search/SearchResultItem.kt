@@ -34,6 +34,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import xyz.secozzi.aniyomilocalmanager.R
+import xyz.secozzi.aniyomilocalmanager.domain.entry.model.Status
 import xyz.secozzi.aniyomilocalmanager.domain.search.models.SearchResultItem
 import xyz.secozzi.aniyomilocalmanager.ui.theme.spacing
 import java.util.Locale
@@ -96,7 +97,7 @@ fun SearchResultItem(
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
                 Column {
                     Text(
-                        text = searchItem.title,
+                        text = searchItem.titles.firstOrNull() ?: stringResource(R.string.title_unavailable),
                         modifier = Modifier.padding(end = MaterialTheme.spacing.large),
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
@@ -114,14 +115,10 @@ fun SearchResultItem(
                             text = searchItem.startDate,
                         )
                     }
-                    if (!searchItem.status.isNullOrBlank()) {
+                    if (searchItem.status != Status.Unknown) {
                         SearchResultItemDetails(
                             title = stringResource(R.string.search_status),
-                            text = searchItem.status.replace("_", " ")
-                                .lowercase()
-                                .replaceFirstChar {
-                                    if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString()
-                                },
+                            text = stringResource(searchItem.status.stringRes),
                         )
                     }
                 }

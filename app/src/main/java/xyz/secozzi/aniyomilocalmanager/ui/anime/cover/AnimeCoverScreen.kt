@@ -1,4 +1,4 @@
-package xyz.secozzi.aniyomilocalmanager.ui.manga.cover
+package xyz.secozzi.aniyomilocalmanager.ui.anime.cover
 
 import android.widget.Toast
 import androidx.compose.runtime.Composable
@@ -20,7 +20,7 @@ import xyz.secozzi.aniyomilocalmanager.domain.search.service.SearchIds
 import xyz.secozzi.aniyomilocalmanager.domain.storage.StorageManager
 import xyz.secozzi.aniyomilocalmanager.preferences.CoverPreferences
 import xyz.secozzi.aniyomilocalmanager.preferences.preference.collectAsStateWithLifecycle
-import xyz.secozzi.aniyomilocalmanager.presentation.manga.cover.MangaCoverScreenContent
+import xyz.secozzi.aniyomilocalmanager.presentation.anime.cover.AnimeCoverScreenContent
 import xyz.secozzi.aniyomilocalmanager.ui.preferences.CoverPreferencesRoute
 import xyz.secozzi.aniyomilocalmanager.ui.search.SearchRoute
 import xyz.secozzi.aniyomilocalmanager.ui.utils.LocalBackStack
@@ -28,10 +28,10 @@ import xyz.secozzi.aniyomilocalmanager.utils.CollectAsEffect
 import xyz.secozzi.aniyomilocalmanager.utils.LocalResultStore
 
 @Serializable
-data class MangaCoverRoute(val path: String) : NavKey
+data class AnimeCoverRoute(val path: String) : NavKey
 
 @Composable
-fun MangaCoverScreen(path: String) {
+fun AnimeCoverScreen(path: String) {
     val context = LocalContext.current
     val resources = LocalResources.current
     val backStack = LocalBackStack.current
@@ -41,7 +41,7 @@ fun MangaCoverScreen(path: String) {
     val coverPreferences = koinInject<CoverPreferences>()
     val name = remember { storageManager.getFromPath(path)!!.fullName }
 
-    val viewModel = koinViewModel<MangaCoverScreenViewModel> {
+    val viewModel = koinViewModel<AnimeCoverScreenViewModel> {
         parametersOf(path)
     }
 
@@ -59,7 +59,7 @@ fun MangaCoverScreen(path: String) {
 
     CollectAsEffect(viewModel.toastEvent) {
         when (it) {
-            is MangaCoverScreenViewModel.ToastEvent.Downloaded -> {
+            is AnimeCoverScreenViewModel.ToastEvent.Downloaded -> {
                 val message = if (it.success) {
                     resources.getString(R.string.cover_download_cover_success)
                 } else {
@@ -71,14 +71,14 @@ fun MangaCoverScreen(path: String) {
         }
     }
 
-    MangaCoverScreenContent(
+    AnimeCoverScreenContent(
         state = state,
         selectedCover = selectedCover,
         isDownloadingCover = isDownloadingCover,
         gridSize = gridSize,
         result = result,
         onBack = { backStack.removeLastOrNull() },
-        onClickSearch = { backStack.add(SearchRoute(name, SearchIds.MangaBaka)) },
+        onClickSearch = { backStack.add(SearchRoute(name, SearchIds.AnilistAnime)) },
         onClickSettings = { backStack.add(CoverPreferencesRoute) },
         onClickDownload = viewModel::downloadCover,
         onClickCover = viewModel::selectCover,

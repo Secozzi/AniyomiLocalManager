@@ -12,5 +12,10 @@ interface CoverRepository {
         mangadex: Boolean,
     ): List<CoverData>
 
-    suspend fun getAnimeCovers(trackerEntity: AnimeTrackerEntity): List<CoverData>
+    suspend fun getAnimeCovers(
+        trackerEntity: AnimeTrackerEntity,
+        anilist: Boolean,
+        mal: Boolean,
+        fanart: Boolean,
+    ): List<CoverData>
 }

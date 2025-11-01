@@ -3,6 +3,7 @@ package xyz.secozzi.aniyomilocalmanager.data.cover
 import android.content.Context
 import xyz.secozzi.aniyomilocalmanager.R
 import xyz.secozzi.aniyomilocalmanager.data.cover.providers.AnilistCoverProvider
+import xyz.secozzi.aniyomilocalmanager.data.cover.providers.FanartCoverProvider
 import xyz.secozzi.aniyomilocalmanager.data.cover.providers.MalCoverProvider
 import xyz.secozzi.aniyomilocalmanager.data.cover.providers.MalType
 import xyz.secozzi.aniyomilocalmanager.data.cover.providers.MangadexCoverProvider
@@ -17,6 +18,7 @@ class CoverRepositoryImpl(
     private val anilistCoverProvider: AnilistCoverProvider,
     private val malCoverProvider: MalCoverProvider,
     private val mangadexCoverProvider: MangadexCoverProvider,
+    private val fanartCoverProvider: FanartCoverProvider,
 ) : CoverRepository {
     override suspend fun getMangaCovers(
         trackerEntity: MangaTrackerEntity,
@@ -68,7 +70,41 @@ class CoverRepositoryImpl(
         return covers.distinctBy { it.coverUrl }
     }
 
-    override suspend fun getAnimeCovers(trackerEntity: AnimeTrackerEntity): List<CoverData> {
-        return emptyList()
+    override suspend fun getAnimeCovers(
+        trackerEntity: AnimeTrackerEntity,
+        anilist: Boolean,
+        mal: Boolean,
+        fanart: Boolean,
+    ): List<CoverData> {
+        val covers = mutableListOf<CoverData>()
+
+        if (anilist && trackerEntity.anilist != null) {
+            anilistCoverProvider.getCoverData(trackerEntity.anilist, AnilistSearchType.ANIME).let {
+                covers.add(
+                    CoverData(
+                        origin = context.getString(R.string.pref_anilist_title),
+                        coverUrl = it.coverImage,
+                        hint = null,
+                    ),
+                )
+            }
+        }
+
+        if (mal && trackerEntity.mal != null) {
+            covers.addAll(
+                malCoverProvider.getCovers(
+                    malId = trackerEntity.mal,
+                    type = MalType.Anime,
+                ),
+            )
+        }
+
+        if (fanart) {
+            covers.addAll(
+                fanartCoverProvider.getCovers(trackerEntity.anilist, trackerEntity.mal, trackerEntity.anidb),
+            )
+        }
+
+        return covers.distinctBy { it.coverUrl }
     }
 }

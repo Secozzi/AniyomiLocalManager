@@ -1,4 +1,4 @@
-package xyz.secozzi.aniyomilocalmanager.ui.manga.cover
+package xyz.secozzi.aniyomilocalmanager.ui.anime.cover
 
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
@@ -17,8 +17,8 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import xyz.secozzi.aniyomilocalmanager.database.domain.MangaTrackerRepository
-import xyz.secozzi.aniyomilocalmanager.database.entities.MangaTrackerEntity
+import xyz.secozzi.aniyomilocalmanager.database.domain.AnimeTrackerRepository
+import xyz.secozzi.aniyomilocalmanager.database.entities.AnimeTrackerEntity
 import xyz.secozzi.aniyomilocalmanager.domain.cover.model.CoverData
 import xyz.secozzi.aniyomilocalmanager.domain.cover.repository.CoverRepository
 import xyz.secozzi.aniyomilocalmanager.domain.search.models.SearchResultItem
@@ -27,10 +27,10 @@ import xyz.secozzi.aniyomilocalmanager.domain.storage.StorageManager
 import xyz.secozzi.aniyomilocalmanager.preferences.CoverPreferences
 import xyz.secozzi.aniyomilocalmanager.utils.asResultFlow
 
-class MangaCoverScreenViewModel(
+class AnimeCoverScreenViewModel(
     private val path: String,
     private val coverPreferences: CoverPreferences,
-    private val trackerRepository: MangaTrackerRepository,
+    private val trackerRepository: AnimeTrackerRepository,
     private val coverRepository: CoverRepository,
     private val storageManager: StorageManager,
     private val client: HttpClient,
@@ -38,11 +38,11 @@ class MangaCoverScreenViewModel(
     fun updateIds(result: SearchResultItem) {
         viewModelScope.launch {
             trackerRepository.upsert(
-                MangaTrackerEntity(
+                AnimeTrackerEntity(
                     path = path,
-                    mangabaka = result.trackerIds[TrackerIds.MangaBaka],
                     anilist = result.trackerIds[TrackerIds.Anilist],
                     mal = result.trackerIds[TrackerIds.Mal],
+                    anidb = result.trackerIds[TrackerIds.Anidb],
                 ),
             )
         }
@@ -58,10 +58,10 @@ class MangaCoverScreenViewModel(
     val selectedCover = _selectedCover.asStateFlow()
 
     private val preferencesFlow = combine(
-        coverPreferences.mangaCoverAnilist.stateIn(viewModelScope),
-        coverPreferences.mangaCoverMal.stateIn(viewModelScope),
-        coverPreferences.mangaCoverMangadex.stateIn(viewModelScope),
-    ) { al, mal, md -> Triple(al, mal, md) }
+        coverPreferences.animeCoverAnilist.stateIn(viewModelScope),
+        coverPreferences.animeCoverMal.stateIn(viewModelScope),
+        coverPreferences.animeCoverFanart.stateIn(viewModelScope),
+    ) { al, mal, fa -> Triple(al, mal, fa) }
 
     val state = combine(
         trackerRepository.getTrackData(path),
@@ -73,13 +73,13 @@ class MangaCoverScreenViewModel(
             loadingResult = State.Loading,
             getErrorResult = { State.Error(it) },
         ) { (data, prefs) ->
-            if (data?.mangabaka == null && data?.anilist == null && data?.mal == null) {
+            if (data?.anilist == null && data?.mal == null) {
                 State.NoID
             } else {
                 _selectedCover.update { _ -> null }
 
                 val covers = withContext(Dispatchers.IO) {
-                    coverRepository.getMangaCovers(data, prefs.first, prefs.second, prefs.third)
+                    coverRepository.getAnimeCovers(data, prefs.first, prefs.second, prefs.third)
                 }
 
                 State.Success(

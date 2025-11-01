@@ -20,14 +20,24 @@
     <!-- Other -->
     <string name="on_error">Something went wrong</string>
 
+    <!-- Common entry -->
+    <string name="title_unavailable">Title N/A</string>
+    <string name="status_unknown">Unknown</string>
+    <string name="status_ongoing">Ongoing</string>
+    <string name="status_completed">Completed</string>
+    <string name="status_licensed">Licensed</string>
+    <string name="status_publishing_finished">Publishing finished</string>
+    <string name="status_cancelled">Cancelled</string>
+    <string name="status_on_hiatus">On hiatus</string>
+
     <!-- Anime entry -->
     <string name="edit_cover">Edit cover</string>
     <string name="anime_edit_details">Edit details.json</string>
     <string name="anime_edit_episodes">Edit episodes.json</string>
+    <string name="entry_no_id_set">No ID set, please search for an entry</string>
 
     <!-- Manga entry -->
     <string name="manga_edit_comicinfo">Edit ComicInfo.xml</string>
-    <string name="manga_no_mb_id_set">No MangaBaka ID set, please search for an entry</string>
 
     <!-- Cover screen -->
     <string name="cover_loading_image_placeholder">Loading …</string>
@@ -53,6 +63,7 @@
     <string name="pref_english">English</string>
     <string name="pref_romaji">Romaji</string>
     <string name="pref_native">Native</string>
+    <string name="pref_title_lang">Preferred title language</string>
 
     <!-- Preferences - Appearance -->
     <string name="pref_appearance_summary">Theme, tabs</string>
@@ -79,10 +90,10 @@
 
     <!-- Preferences - MangaBaka -->
     <string name="pref_mangabaka_summary">ComicInfo.xml</string>
-    <string name="pref_mangabaka_title_lang">Preferred title language</string>
 
     <!-- Preferences - AniList -->
     <string name="pref_anilist_summary">details.json, ComicInfo.xml</string>
+    <string name="pref_studio_count">Studio count</string>
 
     <!-- Preferences - AniDB -->
     <string name="pref_anidb_summary">details.json, episodes.json</string>
