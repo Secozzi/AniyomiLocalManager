@@ -1,4 +1,4 @@
-package xyz.secozzi.aniyomilocalmanager.presentation.anime.details
+package xyz.secozzi.aniyomilocalmanager.presentation.manga.details
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -30,12 +30,12 @@ import xyz.secozzi.aniyomilocalmanager.presentation.components.TopLoadingIndicat
 import xyz.secozzi.aniyomilocalmanager.presentation.components.details.DetailsScreenContent
 import xyz.secozzi.aniyomilocalmanager.presentation.components.details.GenerateBottomBar
 import xyz.secozzi.aniyomilocalmanager.presentation.components.details.SearchIcon
-import xyz.secozzi.aniyomilocalmanager.ui.anime.details.AnimeDetailsScreenViewModel
+import xyz.secozzi.aniyomilocalmanager.ui.manga.details.MangaDetailsScreenViewModel
 
 @Composable
-fun AnimeDetailsScreenContent(
+fun MangaDetailsScreenContent(
     onBack: () -> Unit,
-    state: AnimeDetailsScreenViewModel.State,
+    state: MangaDetailsScreenViewModel.State,
     selectedSearch: SearchIds?,
     isLoading: Boolean,
     onEditTitle: (String) -> Unit,
@@ -48,12 +48,12 @@ fun AnimeDetailsScreenContent(
     onDownload: () -> Unit,
     onCopy: () -> Unit,
 ) {
-    val successState = state as? AnimeDetailsScreenViewModel.State.Success
+    val successState = state as? MangaDetailsScreenViewModel.State.Success
     var isMenuExpanded by remember { mutableStateOf(false) }
 
     val dropdownItems = remember(successState) {
         buildList(4) {
-            add(null to R.string.details_json_name)
+            add(null to R.string.details_comicinfo_name)
             successState?.searchIds?.keys?.forEach {
                 add(it to it.stringRes)
             }
@@ -96,7 +96,7 @@ fun AnimeDetailsScreenContent(
         },
         bottomBar = {
             GenerateBottomBar(
-                label = stringResource(R.string.details_generate_details),
+                label = stringResource(R.string.details_generate_comicinfo),
                 onGenerate = onDownload,
                 onCopy = onCopy,
             )
@@ -108,8 +108,8 @@ fun AnimeDetailsScreenContent(
         )
 
         when (state) {
-            AnimeDetailsScreenViewModel.State.Idle -> { }
-            is AnimeDetailsScreenViewModel.State.Error -> {
+            MangaDetailsScreenViewModel.State.Idle -> { }
+            is MangaDetailsScreenViewModel.State.Error -> {
                 ErrorContent(
                     throwable = state.throwable,
                     modifier = Modifier
@@ -117,12 +117,12 @@ fun AnimeDetailsScreenContent(
                         .padding(contentPadding),
                 )
             }
-            is AnimeDetailsScreenViewModel.State.Success -> {
+            is MangaDetailsScreenViewModel.State.Success -> {
                 DetailsScreenContent(
                     contentPadding = contentPadding,
                     details = state.details,
-                    authorLabel = stringResource(R.string.details_edit_studio),
-                    artistLabel = stringResource(R.string.details_edit_fansub),
+                    authorLabel = stringResource(R.string.details_edit_author),
+                    artistLabel = stringResource(R.string.details_edit_artist),
                     onEditTitle = onEditTitle,
                     onEditAuthor = onEditAuthor,
                     onEditArtist = onEditArtist,
@@ -137,12 +137,12 @@ fun AnimeDetailsScreenContent(
 
 @Composable
 @PreviewLightDark
-private fun AnimeDetailsScreenContentPreview() {
+private fun MangaDetailsScreenContentPreview() {
     PreviewContent {
-        AnimeDetailsScreenContent(
+        MangaDetailsScreenContent(
             onBack = { },
-            state = AnimeDetailsScreenViewModel.State.Idle,
-            selectedSearch = SearchIds.AnilistAnime,
+            state = MangaDetailsScreenViewModel.State.Idle,
+            selectedSearch = SearchIds.AnilistManga,
             isLoading = false,
             onEditTitle = { },
             onEditAuthor = { },

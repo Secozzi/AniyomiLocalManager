@@ -13,6 +13,7 @@ class AnilistMangaSearch(
     }
 
     override suspend fun getFromId(id: String): EntryDetails {
-        TODO("Not yet implemented")
+        val anilistId = id.toLongOrNull() ?: return EntryDetails.Empty
+        return anilistSearch.getFromId(anilistId, AnilistSearchType.MANGA)
     }
 }

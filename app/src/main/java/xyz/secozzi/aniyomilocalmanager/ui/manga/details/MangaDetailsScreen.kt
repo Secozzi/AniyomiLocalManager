@@ -1,4 +1,4 @@
-package xyz.secozzi.aniyomilocalmanager.ui.anime.details
+package xyz.secozzi.aniyomilocalmanager.ui.manga.details
 
 import android.content.ClipData
 import android.widget.Toast
@@ -14,21 +14,21 @@ import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 import xyz.secozzi.aniyomilocalmanager.R
-import xyz.secozzi.aniyomilocalmanager.presentation.anime.details.AnimeDetailsScreenContent
+import xyz.secozzi.aniyomilocalmanager.presentation.manga.details.MangaDetailsScreenContent
 import xyz.secozzi.aniyomilocalmanager.ui.utils.LocalBackStack
 import xyz.secozzi.aniyomilocalmanager.utils.CollectAsEffect
 
 @Serializable
-data class AnimeDetailsRoute(val path: String) : NavKey
+data class MangaDetailsRoute(val path: String) : NavKey
 
 @Composable
-fun AnimeDetailsScreen(path: String) {
+fun MangaDetailsScreen(path: String) {
     val context = LocalContext.current
     val resources = LocalResources.current
     val backStack = LocalBackStack.current
     val clipboard = LocalClipboard.current
 
-    val viewModel = koinViewModel<AnimeDetailsScreenViewModel> {
+    val viewModel = koinViewModel<MangaDetailsScreenViewModel> {
         parametersOf(path)
     }
 
@@ -38,22 +38,22 @@ fun AnimeDetailsScreen(path: String) {
 
     CollectAsEffect(viewModel.uiEvent) {
         when (it) {
-            is AnimeDetailsScreenViewModel.UiEvent.Downloaded -> {
+            is MangaDetailsScreenViewModel.UiEvent.Downloaded -> {
                 val message = if (it.success) {
-                    resources.getString(R.string.details_generate_details_success)
+                    resources.getString(R.string.details_generate_comicinfo_success)
                 } else {
-                    resources.getString(R.string.details_generate_details_failure)
+                    resources.getString(R.string.details_generate_comicinfo_failure)
                 }
 
                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
             }
-            is AnimeDetailsScreenViewModel.UiEvent.Copy -> {
+            is MangaDetailsScreenViewModel.UiEvent.Copy -> {
                 clipboard.setClipEntry(ClipEntry(ClipData.newPlainText(it.text, it.text)))
             }
         }
     }
 
-    AnimeDetailsScreenContent(
+    MangaDetailsScreenContent(
         onBack = { backStack.removeLastOrNull() },
         state = state,
         selectedSearch = selectedSearch,
@@ -65,7 +65,7 @@ fun AnimeDetailsScreen(path: String) {
         onEditGenre = viewModel::updateGenre,
         onEditStatus = viewModel::updateStatus,
         onClickSearchId = viewModel::updateSelectedSearchId,
-        onDownload = viewModel::generateDetails,
-        onCopy = viewModel::copyDetails,
+        onDownload = viewModel::generateComicInfo,
+        onCopy = viewModel::copyComicInfo,
     )
 }

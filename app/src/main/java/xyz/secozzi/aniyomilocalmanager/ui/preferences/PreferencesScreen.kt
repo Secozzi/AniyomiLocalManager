@@ -76,7 +76,7 @@ fun PreferencesScreen() {
             title = R.string.pref_anilist_title,
             subtitle = R.string.pref_anilist_summary,
             icon = ImageVector.vectorResource(R.drawable.anilist_icon),
-            onClick = { },
+            onClick = { backstack.add(AnilistPreferencesRoute) },
         ),
         PreferenceItem(
             title = R.string.pref_anidb_title,
@@ -144,9 +144,9 @@ fun PreferencesScreen() {
     }
 }
 
-@PreviewLightDark()
 @Composable
-fun PreferencesScreenPreview() {
+@PreviewLightDark
+private fun PreferencesScreenPreview() {
     PreviewContent {
         PreferencesScreen()
     }

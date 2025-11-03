@@ -16,6 +16,7 @@ import xyz.secozzi.aniyomilocalmanager.domain.search.service.SearchIds
 import xyz.secozzi.aniyomilocalmanager.domain.storage.StorageManager
 import xyz.secozzi.aniyomilocalmanager.presentation.manga.entry.MangaEntryScreenContent
 import xyz.secozzi.aniyomilocalmanager.ui.manga.cover.MangaCoverRoute
+import xyz.secozzi.aniyomilocalmanager.ui.manga.details.MangaDetailsRoute
 import xyz.secozzi.aniyomilocalmanager.ui.search.SearchRoute
 import xyz.secozzi.aniyomilocalmanager.ui.utils.LocalBackStack
 import xyz.secozzi.aniyomilocalmanager.utils.LocalResultStore
@@ -49,7 +50,7 @@ fun MangaEntryScreen(path: String) {
         name = name,
         onBack = { backStack.removeLastOrNull() },
         onEditCover = { backStack.add(MangaCoverRoute(path)) },
-        onEditComicInfo = { },
+        onEditComicInfo = { backStack.add(MangaDetailsRoute(path)) },
         onClickMangaBaka = { backStack.add(SearchRoute(name, SearchIds.MangaBaka)) },
         onClickAnilist = { backStack.add(SearchRoute(name, SearchIds.AnilistManga)) },
         onClickMal = { },

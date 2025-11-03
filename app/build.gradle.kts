@@ -99,7 +99,7 @@ dependencies {
     implementation(libs.room.ktx)
 
     implementation(libs.bundles.compose.navigation3)
-    implementation(libs.serialization.json)
+    implementation(libs.bundles.serialization)
     implementation(libs.bundles.koin)
     implementation(libs.simple.storage)
     implementation(libs.bundles.ktor)

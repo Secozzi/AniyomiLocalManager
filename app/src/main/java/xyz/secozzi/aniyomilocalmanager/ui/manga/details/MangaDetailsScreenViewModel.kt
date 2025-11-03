@@ -1,5 +1,6 @@
-package xyz.secozzi.aniyomilocalmanager.ui.anime.details
+package xyz.secozzi.aniyomilocalmanager.ui.manga.details
 
+import android.util.Log
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.viewModelScope
 import kotlinx.collections.immutable.ImmutableMap
@@ -12,16 +13,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.addAll
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.decodeFromStream
-import kotlinx.serialization.json.put
-import kotlinx.serialization.json.putJsonArray
+import kotlinx.serialization.decodeFromString
+import nl.adaptivity.xmlutil.serialization.XML
 import xyz.secozzi.aniyomilocalmanager.data.search.SearchManager
-import xyz.secozzi.aniyomilocalmanager.database.domain.AnimeTrackerRepository
-import xyz.secozzi.aniyomilocalmanager.domain.entry.anime.model.AnimeDetails
+import xyz.secozzi.aniyomilocalmanager.database.domain.MangaTrackerRepository
+import xyz.secozzi.aniyomilocalmanager.domain.entry.manga.model.ComicInfo
+import xyz.secozzi.aniyomilocalmanager.domain.entry.manga.model.ComicInfoPublishingStatus
 import xyz.secozzi.aniyomilocalmanager.domain.entry.model.EntryDetails
 import xyz.secozzi.aniyomilocalmanager.domain.entry.model.Status
 import xyz.secozzi.aniyomilocalmanager.domain.search.service.SearchIds
@@ -30,27 +27,29 @@ import xyz.secozzi.aniyomilocalmanager.utils.StateViewModel
 import xyz.secozzi.aniyomilocalmanager.utils.withMinimumDuration
 import kotlin.time.Duration.Companion.seconds
 
-@OptIn(ExperimentalSerializationApi::class)
-class AnimeDetailsScreenViewModel(
+class MangaDetailsScreenViewModel(
     private val path: String,
-    private val trackerRepository: AnimeTrackerRepository,
+    private val trackerRepository: MangaTrackerRepository,
     private val storageManager: StorageManager,
     private val searchManager: SearchManager,
-    private val json: Json,
-) : StateViewModel<AnimeDetailsScreenViewModel.State>(State.Idle) {
+    private val xml: XML,
+) : StateViewModel<MangaDetailsScreenViewModel.State>(State.Idle) {
 
     init {
         viewModelScope.launch {
             trackerRepository.getTrackData(path).collectLatest { data ->
-                val searchIds = buildMap(2) {
+                val searchIds = buildMap(3) {
+                    if (data?.mangabaka != null) {
+                        put(SearchIds.MangaBaka, data.mangabaka.toString())
+                    }
                     if (data?.anilist != null) {
-                        put(SearchIds.AnilistAnime, data.anilist.toString())
+                        put(SearchIds.AnilistManga, data.anilist.toString())
                     }
                     if (data?.mal != null) {
-                        put(SearchIds.MalAnime, data.mal.toString())
+                        put(SearchIds.MalManga, data.mal.toString())
                     }
                 }.toPersistentMap()
-                val details = getDetailsFromDetails(path)
+                val details = getDetailsFromComicinfo(path)
 
                 mutableState.update {
                     State.Success(
@@ -62,25 +61,24 @@ class AnimeDetailsScreenViewModel(
         }
     }
 
-    private fun getDetailsFromDetails(path: String): EntryDetails {
-        return storageManager.getFromPath(path)?.findFile("details.json")?.let {
+    private fun getDetailsFromComicinfo(path: String): EntryDetails {
+        return storageManager.getFromPath(path)?.findFile("ComicInfo.xml")?.let {
             try {
-                val data = storageManager.getInputStream(it)!!.use { s ->
-                    json.decodeFromStream<AnimeDetails>(s)
+                val data = storageManager.getInputStream(it)!!.reader().use { r ->
+                    xml.decodeFromString<ComicInfo>(r.readText())
                 }
 
                 EntryDetails(
-                    title = data.title.orEmpty(),
-                    titles = listOfNotNull(data.title),
-                    authors = data.author.orEmpty(),
-                    artists = data.artist.orEmpty(),
-                    description = data.description.orEmpty(),
-                    genre = data.genre.orEmpty().joinToString(),
-                    status = Status.entries.firstOrNull { s ->
-                        s.id == data.status
-                    } ?: Status.Unknown,
+                    title = data.series?.value.orEmpty(),
+                    titles = listOfNotNull(data.series?.value),
+                    authors = data.writer?.value.orEmpty(),
+                    artists = data.penciller?.value.orEmpty(),
+                    description = data.summary?.value.orEmpty(),
+                    genre = data.genre?.value.orEmpty(),
+                    status = ComicInfoPublishingStatus.toStatusValue(data.publishingStatus?.value),
                 )
             } catch (e: Exception) {
+                Log.i("aniyomi-local-manager", e.stackTraceToString())
                 EntryDetails.Empty
             }
         } ?: EntryDetails.Empty
@@ -103,7 +101,7 @@ class AnimeDetailsScreenViewModel(
 
         viewModelScope.launch(Dispatchers.IO) {
             val details = if (selected == null) {
-                getDetailsFromDetails(path)
+                getDetailsFromComicinfo(path)
             } else {
                 val id = successState.searchIds[selected]!!
                 withMinimumDuration(1.5.seconds) {
@@ -156,52 +154,55 @@ class AnimeDetailsScreenViewModel(
         }
     }
 
-    private val prettyJson = Json {
-        prettyPrint = true
-        prettyPrintIndent = "    "
-    }
-
-    fun generateJsonString(): String? {
+    fun generateXmlString(): String? {
         val details = (state.value as? State.Success)?.details ?: return null
 
-        return prettyJson.encodeToString(
-            buildJsonObject {
-                put("title", details.title)
-                put("author", details.authors)
-                put("artist", details.artists)
-                put("description", details.description)
-                putJsonArray("genre") {
-                    addAll(details.genre.split(", "))
-                }
-                put("status", details.status.id)
+        val comicInfo = ComicInfo(
+            series = ComicInfo.Series(details.title),
+            summary = details.description.takeIf { it.isNotBlank() }?.let {
+                ComicInfo.Summary(it)
             },
+            writer = details.authors.takeIf { it.isNotBlank() }?.let {
+                ComicInfo.Writer(it)
+            },
+            penciller = details.artists.takeIf { it.isNotBlank() }?.let {
+                ComicInfo.Penciller(it)
+            },
+            genre = details.genre.takeIf { it.isNotBlank() }?.let {
+                ComicInfo.Genre(it)
+            },
+            publishingStatus = ComicInfo.PublishingStatusTachiyomi(
+                ComicInfoPublishingStatus.toComicInfoValue(details.status),
+            ),
         )
+
+        return xml.encodeToString(ComicInfo.serializer(), comicInfo)
     }
 
     private fun performDownload(): Boolean {
-        val data = generateJsonString() ?: return false
+        val data = generateXmlString() ?: return false
         val dir = storageManager.getFromPath(path) ?: return false
-        val details = dir.findFile("details.json")
-            ?: dir.createFile("application/json", "details.json")
+        val comicInfo = dir.findFile("ComicInfo.xml")
+            ?: dir.createFile("application/xml", "ComicInfo.xml")
             ?: return false
 
-        storageManager.getOutputStream(details, "wt").use { output ->
+        storageManager.getOutputStream(comicInfo, "wt").use { output ->
             output!!.write(data.toByteArray())
         }
 
         return true
     }
 
-    fun copyDetails() {
+    fun copyComicInfo() {
         viewModelScope.launch {
-            val data = generateJsonString()
+            val data = generateXmlString()
             if (data != null) {
                 _uiEvent.emit(UiEvent.Copy(data))
             }
         }
     }
 
-    fun generateDetails() {
+    fun generateComicInfo() {
         viewModelScope.launch {
             val result = performDownload()
             _uiEvent.emit(UiEvent.Downloaded(result))

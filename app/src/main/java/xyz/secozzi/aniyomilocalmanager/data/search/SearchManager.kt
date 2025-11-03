@@ -16,7 +16,7 @@ class SearchManager(
             SearchIds.MangaBaka -> mangaBakaSearch
             SearchIds.AnilistAnime -> anilistAnimeSearch
             SearchIds.AnilistManga -> anilistMangaSearch
-            else -> throw Exception("Invalid search repository")
+            else -> throw Exception("Invalid search repository: $id")
         }
     }
 }

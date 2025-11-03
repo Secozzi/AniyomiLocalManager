@@ -8,6 +8,7 @@ import xyz.secozzi.aniyomilocalmanager.ui.anime.entry.AnimeEntryScreenViewModel
 import xyz.secozzi.aniyomilocalmanager.ui.home.anime.AnimeScreenViewModel
 import xyz.secozzi.aniyomilocalmanager.ui.home.manga.MangaScreenViewModel
 import xyz.secozzi.aniyomilocalmanager.ui.manga.cover.MangaCoverScreenViewModel
+import xyz.secozzi.aniyomilocalmanager.ui.manga.details.MangaDetailsScreenViewModel
 import xyz.secozzi.aniyomilocalmanager.ui.manga.entry.MangaEntryScreenViewModel
 import xyz.secozzi.aniyomilocalmanager.ui.preferences.DataPreferencesScreenModel
 import xyz.secozzi.aniyomilocalmanager.ui.search.SearchScreenViewModel
@@ -21,5 +22,6 @@ val ViewModelsModule = module {
     viewModelOf(::MangaCoverScreenViewModel)
     viewModelOf(::AnimeCoverScreenViewModel)
     viewModelOf(::AnimeDetailsScreenViewModel)
+    viewModelOf(::MangaDetailsScreenViewModel)
     viewModelOf(::SearchScreenViewModel)
 }

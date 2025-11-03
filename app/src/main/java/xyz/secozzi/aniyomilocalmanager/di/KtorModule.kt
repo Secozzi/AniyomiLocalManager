@@ -7,6 +7,7 @@ import io.ktor.client.plugins.UserAgent
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.http.ContentType
 import io.ktor.serialization.kotlinx.json.json
+import io.ktor.serialization.kotlinx.xml.xml
 import org.koin.dsl.module
 import xyz.secozzi.aniyomilocalmanager.BuildConfig
 
@@ -24,9 +25,13 @@ val KtorModule = module {
             }
 
             install(ContentNegotiation) {
+                xml(format = get())
+                json(json = get())
+
+                // For github raws
                 json(
                     json = get(),
-                    contentType = ContentType.Any,
+                    contentType = ContentType.Text.Plain,
                 )
             }
         }

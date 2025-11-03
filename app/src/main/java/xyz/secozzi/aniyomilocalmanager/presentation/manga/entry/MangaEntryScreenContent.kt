@@ -88,7 +88,7 @@ fun MangaEntryScreenContent(
                         ExpressiveListItem(
                             itemSize = 2,
                             index = 1,
-                            headlineContent = { Text(text = stringResource(R.string.anime_edit_details)) },
+                            headlineContent = { Text(text = stringResource(R.string.manga_edit_comicinfo)) },
                             leadingContent = {
                                 Icon(if (state.hasComicInfo) Icons.Default.Check else Icons.Default.Clear, null)
                             },

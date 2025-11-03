@@ -19,6 +19,8 @@ import xyz.secozzi.aniyomilocalmanager.ui.home.HomeRoute
 import xyz.secozzi.aniyomilocalmanager.ui.home.HomeScreen
 import xyz.secozzi.aniyomilocalmanager.ui.manga.cover.MangaCoverRoute
 import xyz.secozzi.aniyomilocalmanager.ui.manga.cover.MangaCoverScreen
+import xyz.secozzi.aniyomilocalmanager.ui.manga.details.MangaDetailsRoute
+import xyz.secozzi.aniyomilocalmanager.ui.manga.details.MangaDetailsScreen
 import xyz.secozzi.aniyomilocalmanager.ui.manga.entry.MangaEntryRoute
 import xyz.secozzi.aniyomilocalmanager.ui.manga.entry.MangaEntryScreen
 import xyz.secozzi.aniyomilocalmanager.ui.preferences.AnilistPreferencesRoute
@@ -80,6 +82,9 @@ fun Navigator() {
                 }
                 entry<MangaCoverRoute> { route ->
                     MangaCoverScreen(route.path)
+                }
+                entry<MangaDetailsRoute> { route ->
+                    MangaDetailsScreen(route.path)
                 }
 
                 // Search

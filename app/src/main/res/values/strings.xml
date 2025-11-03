@@ -39,10 +39,16 @@
     <!-- Details -->
     <string name="details_title">Details</string>
     <string name="details_json_name">details.json</string>
+    <string name="details_comicinfo_name">ComicInfo.xml</string>
     <string name="details_generate_details">Generate details.json</string>
     <string name="details_generate_details_success">Successfully created details.json</string>
     <string name="details_generate_details_failure">Failed to create details.json</string>
+    <string name="details_generate_comicinfo">Generate ComicInfo.xml</string>
+    <string name="details_generate_comicinfo_success">Successfully created ComicInfo.xml</string>
+    <string name="details_generate_comicinfo_failure">Failed to create ComicInfo.xml</string>
     <string name="details_edit_title">Title</string>
+    <string name="details_edit_author">Author</string>
+    <string name="details_edit_artist">Artist</string>
     <string name="details_edit_studio">Animation studios</string>
     <string name="details_edit_fansub">Fansub</string>
     <string name="details_edit_description">Description</string>
