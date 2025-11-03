@@ -9,7 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.BookOnline
+import androidx.compose.material.icons.outlined.Book
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -69,7 +69,7 @@ fun PreferencesScreen() {
         PreferenceItem(
             title = R.string.pref_mangabaka_title,
             subtitle = R.string.pref_mangabaka_summary,
-            icon = Icons.Outlined.BookOnline,
+            icon = Icons.Outlined.Book,
             onClick = { backstack.add(MangaBakaPreferencesRoute) },
         ),
         PreferenceItem(

@@ -90,3 +90,6 @@ val TertiaryFixed = Color(0xFFEAC6F3)
 val TertiaryFixedDim = Color(0xFFDBB8E4)
 val OnTertiaryFixed = Color(0xFF442A4E)
 val OnTertiaryFixedVariant = Color(0xFF62466C)
+
+@Suppress("ktlint:standard:property-naming")
+const val DisabledAlpha = 0.38f

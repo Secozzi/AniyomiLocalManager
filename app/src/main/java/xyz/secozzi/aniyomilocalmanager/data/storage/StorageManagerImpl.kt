@@ -7,8 +7,9 @@ import androidx.documentfile.provider.DocumentFile
 import com.anggrayudi.storage.file.DocumentFileCompat
 import com.anggrayudi.storage.file.findFolder
 import com.anggrayudi.storage.file.getAbsolutePath
-import com.anggrayudi.storage.file.openOutputStream
+import com.anggrayudi.storage.file.openInputStream
 import xyz.secozzi.aniyomilocalmanager.domain.storage.StorageManager
+import java.io.InputStream
 import java.io.OutputStream
 
 class StorageManagerImpl(private val context: Context) : StorageManager {
@@ -39,7 +40,11 @@ class StorageManagerImpl(private val context: Context) : StorageManager {
         return current
     }
 
-    override fun getOutputStream(file: DocumentFile, append: Boolean): OutputStream? {
-        return file.openOutputStream(context, append)
+    override fun getOutputStream(file: DocumentFile, mode: String): OutputStream? {
+        return context.contentResolver.openOutputStream(file.uri, mode)
+    }
+
+    override fun getInputStream(file: DocumentFile): InputStream? {
+        return file.openInputStream(context)
     }
 }

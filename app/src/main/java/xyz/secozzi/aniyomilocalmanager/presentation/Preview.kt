@@ -8,6 +8,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigationevent.NavigationEventDispatcher
+import androidx.navigationevent.NavigationEventDispatcherOwner
+import androidx.navigationevent.compose.LocalNavigationEventDispatcherOwner
 import coil3.ColorImage
 import coil3.annotation.ExperimentalCoilApi
 import coil3.compose.AsyncImagePreviewHandler
@@ -30,9 +33,16 @@ fun PreviewContent(content: @Composable () -> Unit) {
         }
     }
 
+    val noopNavEvent = remember {
+        object : NavigationEventDispatcherOwner {
+            override val navigationEventDispatcher = NavigationEventDispatcher()
+        }
+    }
+
     CompositionLocalProvider(
         LocalBackStack provides backstack,
         LocalAsyncImagePreviewHandler provides previewHandler,
+        LocalNavigationEventDispatcherOwner provides noopNavEvent,
     ) {
         AniyomiLocalManagerPreviewTheme {
             Surface {

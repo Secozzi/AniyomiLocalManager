@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
@@ -28,17 +28,16 @@ import xyz.secozzi.aniyomilocalmanager.ui.theme.spacing
 fun DownloadingBottomBar() {
     Row(
         horizontalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth()
+            .windowInsetsPadding(NavigationBarDefaults.windowInsets),
     ) {
         Button(
             onClick = { },
-            modifier = Modifier
-                .windowInsetsPadding(NavigationBarDefaults.windowInsets)
-                .padding(bottom = MaterialTheme.spacing.smaller),
+            modifier = Modifier.heightIn(min = MaterialTheme.spacing.extraLarge),
         ) {
             CircularWavyProgressIndicator(
                 trackColor = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier.size(MaterialTheme.spacing.larger),
+                modifier = Modifier.size(MaterialTheme.spacing.large),
             )
             Spacer(Modifier.width(MaterialTheme.spacing.smaller))
             Text(
@@ -55,18 +54,16 @@ fun DownloadBottomBar(
 ) {
     Row(
         horizontalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth()
+            .windowInsetsPadding(NavigationBarDefaults.windowInsets),
     ) {
         Button(
             onClick = onClick,
-            modifier = Modifier
-                .windowInsetsPadding(NavigationBarDefaults.windowInsets)
-                .padding(bottom = MaterialTheme.spacing.smaller),
+            modifier = Modifier.heightIn(min = MaterialTheme.spacing.extraLarge),
         ) {
             Icon(
                 imageVector = Icons.Filled.Download,
                 contentDescription = null,
-                modifier = Modifier.size(MaterialTheme.spacing.larger),
             )
             Spacer(Modifier.width(MaterialTheme.spacing.smaller))
             Text(

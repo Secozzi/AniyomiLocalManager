@@ -11,6 +11,8 @@ import xyz.secozzi.aniyomilocalmanager.presentation.utils.predictiveHorizonal
 import xyz.secozzi.aniyomilocalmanager.presentation.utils.slideHorizontal
 import xyz.secozzi.aniyomilocalmanager.ui.anime.cover.AnimeCoverRoute
 import xyz.secozzi.aniyomilocalmanager.ui.anime.cover.AnimeCoverScreen
+import xyz.secozzi.aniyomilocalmanager.ui.anime.details.AnimeDetailsRoute
+import xyz.secozzi.aniyomilocalmanager.ui.anime.details.AnimeDetailsScreen
 import xyz.secozzi.aniyomilocalmanager.ui.anime.entry.AnimeEntryRoute
 import xyz.secozzi.aniyomilocalmanager.ui.anime.entry.AnimeEntryScreen
 import xyz.secozzi.aniyomilocalmanager.ui.home.HomeRoute
@@ -67,6 +69,9 @@ fun Navigator() {
                 }
                 entry<AnimeCoverRoute> { route ->
                     AnimeCoverScreen(route.path)
+                }
+                entry<AnimeDetailsRoute> { route ->
+                    AnimeDetailsScreen(route.path)
                 }
 
                 // Manga

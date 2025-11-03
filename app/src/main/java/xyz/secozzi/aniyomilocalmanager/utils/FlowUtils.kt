@@ -52,7 +52,7 @@ fun <T> CollectAsEffect(
     flow: SharedFlow<T>,
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     minActiveState: Lifecycle.State = Lifecycle.State.STARTED,
-    block: (T) -> Unit,
+    block: suspend (T) -> Unit,
 ) {
     LaunchedEffect(Unit) {
         lifecycleOwner.repeatOnLifecycle(minActiveState) {

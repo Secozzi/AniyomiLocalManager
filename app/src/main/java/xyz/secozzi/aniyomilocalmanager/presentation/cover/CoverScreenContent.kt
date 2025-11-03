@@ -21,7 +21,11 @@ fun CoverScreenContent(
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(gridSize),
-        contentPadding = paddingValues + PaddingValues(horizontal = MaterialTheme.spacing.small),
+        contentPadding = paddingValues + PaddingValues(
+            start = MaterialTheme.spacing.small,
+            end = MaterialTheme.spacing.small,
+            bottom = MaterialTheme.spacing.smaller,
+        ),
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
     ) {

@@ -3,6 +3,7 @@ package xyz.secozzi.aniyomilocalmanager.data.search.mangabaka
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import xyz.secozzi.aniyomilocalmanager.domain.entry.model.EntryDetails
 import xyz.secozzi.aniyomilocalmanager.domain.entry.model.Status
 import xyz.secozzi.aniyomilocalmanager.domain.preferences.LangPrefEnum
 import xyz.secozzi.aniyomilocalmanager.domain.search.models.SearchResultItem
@@ -54,5 +55,9 @@ class MangaBakaSearch(
                 },
             )
         }
+    }
+
+    override suspend fun getFromId(id: String): EntryDetails {
+        TODO("Not yet implemented")
     }
 }

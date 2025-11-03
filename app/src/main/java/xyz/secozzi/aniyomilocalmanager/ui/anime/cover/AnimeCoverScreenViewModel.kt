@@ -94,7 +94,7 @@ class AnimeCoverScreenViewModel(
         val cover = dir.createFile("image/$fileExt", "cover.$fileExt") ?: return false
 
         withContext(Dispatchers.IO) {
-            storageManager.getOutputStream(cover, false).use { output ->
+            storageManager.getOutputStream(cover, "wt").use { output ->
                 client.get(coverData.coverUrl).bodyAsChannel().toInputStream().use { input ->
                     input.copyTo(output!!)
                 }

@@ -7,6 +7,7 @@ import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -28,6 +29,7 @@ import xyz.secozzi.aniyomilocalmanager.presentation.cover.DownloadBottomBar
 import xyz.secozzi.aniyomilocalmanager.presentation.cover.DownloadingBottomBar
 import xyz.secozzi.aniyomilocalmanager.ui.manga.cover.MangaCoverScreenViewModel
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun MangaCoverScreenContent(
     state: MangaCoverScreenViewModel.State,

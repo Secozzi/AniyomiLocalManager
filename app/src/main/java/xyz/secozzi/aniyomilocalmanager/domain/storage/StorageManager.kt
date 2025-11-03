@@ -2,6 +2,7 @@ package xyz.secozzi.aniyomilocalmanager.domain.storage
 
 import android.net.Uri
 import androidx.documentfile.provider.DocumentFile
+import java.io.InputStream
 import java.io.OutputStream
 
 interface StorageManager {
@@ -15,5 +16,7 @@ interface StorageManager {
 
     fun getChild(baseDirectory: DocumentFile, relative: List<String>): DocumentFile?
 
-    fun getOutputStream(file: DocumentFile, append: Boolean): OutputStream?
+    fun getOutputStream(file: DocumentFile, mode: String): OutputStream?
+
+    fun getInputStream(file: DocumentFile): InputStream?
 }
