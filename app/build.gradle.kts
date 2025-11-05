@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.spotless)
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
+    alias(libs.plugins.stability.analyzer)
 }
 
 android {

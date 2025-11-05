@@ -29,6 +29,7 @@ coil = "3.3.0"
 simple-storage = "2.2.0"
 ktor = "3.3.1"
 xml-serialization-version = "0.91.3"
+stability-analyzer = "0.4.2"
 
 [libraries]
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
@@ -93,3 +94,4 @@ serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref 
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 room = { id = "androidx.room", version.ref = "room" }
+stability-analyzer = { id = "com.github.skydoves.compose.stability.analyzer", version.ref = "stability-analyzer" }

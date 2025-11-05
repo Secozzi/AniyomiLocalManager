@@ -49,7 +49,7 @@ fun SettingsSwitch(
 
 @PreviewLightDark
 @Composable
-fun SettingsSwitchPreview() {
+private fun SettingsSwitchPreview() {
     PreviewContent {
         Column {
             SettingsSwitch(true) { }

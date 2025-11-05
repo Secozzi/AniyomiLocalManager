@@ -11,6 +11,8 @@ import com.anggrayudi.storage.file.baseName
 import com.anggrayudi.storage.file.children
 import com.anggrayudi.storage.file.extension
 import com.anggrayudi.storage.file.fullName
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -120,7 +122,7 @@ class AnimeScreenViewModel(
                 isLoaded = true
                 _isLoading.update { _ -> false }
                 State.Success(
-                    relative = relative,
+                    relative = relative.toPersistentList(),
                     entries = entries,
                 )
             }
@@ -135,6 +137,7 @@ class AnimeScreenViewModel(
         private val EPISODE_FILE_TYPES = listOf("avi", "flv", "mkv", "mov", "mp4", "webm", "wmv")
     }
 
+    @Immutable
     sealed interface State {
         @Immutable
         data object Idle : State
@@ -145,7 +148,7 @@ class AnimeScreenViewModel(
         @Immutable
         data class Success(
             val entries: List<AnimeListEntry>,
-            val relative: List<String>,
+            val relative: ImmutableList<String>,
         ) : State
     }
 }

@@ -61,7 +61,7 @@ internal fun SettingsListItem(
 
 @PreviewLightDark
 @Composable
-fun SettingsListItemPreview() {
+private fun SettingsListItemPreview() {
     PreviewContent {
         SettingsListItem(
             title = "Material You",

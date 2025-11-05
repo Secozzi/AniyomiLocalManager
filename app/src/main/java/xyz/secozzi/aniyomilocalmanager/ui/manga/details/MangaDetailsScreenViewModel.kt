@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.viewModelScope
 import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.collections.immutable.toPersistentMap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -70,7 +71,7 @@ class MangaDetailsScreenViewModel(
 
                 EntryDetails(
                     title = data.series?.value.orEmpty(),
-                    titles = listOfNotNull(data.series?.value),
+                    titles = listOfNotNull(data.series?.value).toPersistentList(),
                     authors = data.writer?.value.orEmpty(),
                     artists = data.penciller?.value.orEmpty(),
                     description = data.summary?.value.orEmpty(),

@@ -18,12 +18,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import xyz.secozzi.aniyomilocalmanager.presentation.PreviewContent
 
 // From https://github.com/SkyD666/PodAura
 @Composable
 fun PathLevelIndication(
-    pathList: List<String>,
+    pathList: ImmutableList<String>,
     onNavigateTo: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -65,7 +67,7 @@ fun PathLevelIndication(
 private fun PathLevelIndicationPreview() {
     PreviewContent {
         PathLevelIndication(
-            pathList = listOf("/Aniyomi/localanime", "One Piece", "Season 1"),
+            pathList = persistentListOf("/Aniyomi/localanime", "One Piece", "Season 1"),
             onNavigateTo = {},
         )
     }

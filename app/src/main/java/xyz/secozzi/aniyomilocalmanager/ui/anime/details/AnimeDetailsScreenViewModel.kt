@@ -3,6 +3,7 @@ package xyz.secozzi.aniyomilocalmanager.ui.anime.details
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.viewModelScope
 import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.collections.immutable.toPersistentMap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -71,7 +72,7 @@ class AnimeDetailsScreenViewModel(
 
                 EntryDetails(
                     title = data.title.orEmpty(),
-                    titles = listOfNotNull(data.title),
+                    titles = listOfNotNull(data.title).toPersistentList(),
                     authors = data.author.orEmpty(),
                     artists = data.artist.orEmpty(),
                     description = data.description.orEmpty(),

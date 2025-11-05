@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.serialization.Serializable
 import org.koin.compose.koinInject
 import xyz.secozzi.aniyomilocalmanager.R
@@ -26,6 +27,7 @@ import xyz.secozzi.aniyomilocalmanager.preferences.MangaBakaPreferences
 import xyz.secozzi.aniyomilocalmanager.preferences.preference.collectAsState
 import xyz.secozzi.aniyomilocalmanager.presentation.PreviewContent
 import xyz.secozzi.aniyomilocalmanager.presentation.settings.ButtonGroup
+import xyz.secozzi.aniyomilocalmanager.presentation.settings.ButtonGroupEntry
 import xyz.secozzi.aniyomilocalmanager.presentation.settings.SettingsListItem
 import xyz.secozzi.aniyomilocalmanager.ui.utils.LocalBackStack
 
@@ -70,7 +72,13 @@ private fun MangaBakaPreferencesScreenContent(
             modifier = Modifier.padding(horizontal = 16.dp),
         ) {
             item {
-                val themeEntries = remember { LangPrefEnum.entries.map { it to it.titleRes } }
+                val themeEntries = remember {
+                    LangPrefEnum.entries.map { ButtonGroupEntry(it, it.titleRes) }.toPersistentList()
+                }
+                val selected = remember(prefLang) {
+                    ButtonGroupEntry(prefLang, prefLang.titleRes)
+                }
+
                 SettingsListItem(
                     title = stringResource(R.string.pref_title_lang),
                     itemSize = 1,
@@ -78,7 +86,7 @@ private fun MangaBakaPreferencesScreenContent(
                     supportingContent = {
                         ButtonGroup(
                             entries = themeEntries,
-                            selected = prefLang,
+                            selected = selected,
                             onSelect = onPrefLangClicked,
                         )
                     },

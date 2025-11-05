@@ -26,8 +26,8 @@ import xyz.secozzi.aniyomilocalmanager.R
 import xyz.secozzi.aniyomilocalmanager.preferences.AppearancePreferences
 import xyz.secozzi.aniyomilocalmanager.preferences.preference.collectAsState
 import xyz.secozzi.aniyomilocalmanager.presentation.utils.TopLevelBackStack
-import xyz.secozzi.aniyomilocalmanager.presentation.utils.predictiveHorizonal
-import xyz.secozzi.aniyomilocalmanager.presentation.utils.slideHorizontal
+import xyz.secozzi.aniyomilocalmanager.presentation.utils.popSpec
+import xyz.secozzi.aniyomilocalmanager.presentation.utils.transitionSpec
 import xyz.secozzi.aniyomilocalmanager.ui.home.anime.AnimeScreen
 import xyz.secozzi.aniyomilocalmanager.ui.home.manga.MangaScreen
 
@@ -83,9 +83,9 @@ fun HomeScreen() {
         NavDisplay(
             backStack = topLevelBackStack.backStack,
             onBack = { topLevelBackStack.removeLast() },
-            transitionSpec = { slideHorizontal },
-            popTransitionSpec = { slideHorizontal },
-            predictivePopTransitionSpec = { predictiveHorizonal },
+            transitionSpec = { transitionSpec },
+            popTransitionSpec = { popSpec },
+            predictivePopTransitionSpec = { popSpec },
             entryProvider = entryProvider {
                 entry<TopLevelRoute.Anime> {
                     AnimeScreen(mainPadding.calculateBottomPadding())

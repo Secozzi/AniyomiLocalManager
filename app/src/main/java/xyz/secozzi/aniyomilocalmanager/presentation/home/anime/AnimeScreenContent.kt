@@ -22,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import kotlinx.collections.immutable.persistentListOf
 import xyz.secozzi.aniyomilocalmanager.R
 import xyz.secozzi.aniyomilocalmanager.domain.home.AnimeListEntry
 import xyz.secozzi.aniyomilocalmanager.presentation.PreviewContent
@@ -121,12 +122,12 @@ private fun AnimeScreenContentPreview() {
                     hasEpisodes = true,
                 ),
             ),
-            relative = listOf("localanime", "Season 1"),
+            relative = persistentListOf("localanime", "Season 1"),
         )
         val unsetState = AnimeScreenViewModel.State.Unset
 
         AnimeScreenContent(
-            state = unsetState,
+            state = successState,
             isLoading = false,
             bottomPadding = 0.dp,
             onClickSelectLocation = {},

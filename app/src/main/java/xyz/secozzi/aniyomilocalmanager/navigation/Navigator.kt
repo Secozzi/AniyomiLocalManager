@@ -7,8 +7,8 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import xyz.secozzi.aniyomilocalmanager.presentation.utils.predictiveHorizonal
-import xyz.secozzi.aniyomilocalmanager.presentation.utils.slideHorizontal
+import xyz.secozzi.aniyomilocalmanager.presentation.utils.popSpec
+import xyz.secozzi.aniyomilocalmanager.presentation.utils.transitionSpec
 import xyz.secozzi.aniyomilocalmanager.ui.anime.cover.AnimeCoverRoute
 import xyz.secozzi.aniyomilocalmanager.ui.anime.cover.AnimeCoverScreen
 import xyz.secozzi.aniyomilocalmanager.ui.anime.details.AnimeDetailsRoute
@@ -53,9 +53,9 @@ fun Navigator() {
         NavDisplay(
             backStack = backStack,
             onBack = { backStack.removeLastOrNull() },
-            transitionSpec = { slideHorizontal },
-            popTransitionSpec = { predictiveHorizonal },
-            predictivePopTransitionSpec = { predictiveHorizonal },
+            transitionSpec = { transitionSpec },
+            popTransitionSpec = { popSpec },
+            predictivePopTransitionSpec = { popSpec },
             entryDecorators = listOf(
                 rememberSaveableStateHolderNavEntryDecorator(),
                 rememberViewModelStoreNavEntryDecorator(),

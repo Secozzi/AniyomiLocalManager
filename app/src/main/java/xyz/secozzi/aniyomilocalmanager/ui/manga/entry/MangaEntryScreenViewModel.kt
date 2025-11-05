@@ -54,6 +54,7 @@ class MangaEntryScreenViewModel(
         }
     }
 
+    @Immutable
     sealed interface State {
         @Immutable
         data object Idle : State

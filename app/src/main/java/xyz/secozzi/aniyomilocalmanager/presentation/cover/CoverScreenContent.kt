@@ -7,13 +7,14 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import kotlinx.collections.immutable.ImmutableList
 import xyz.secozzi.aniyomilocalmanager.domain.cover.model.CoverData
 import xyz.secozzi.aniyomilocalmanager.presentation.utils.plus
 import xyz.secozzi.aniyomilocalmanager.ui.theme.spacing
 
 @Composable
 fun CoverScreenContent(
-    covers: List<CoverData>,
+    covers: ImmutableList<CoverData>,
     selectedCover: CoverData?,
     gridSize: Int,
     onClickCover: (CoverData) -> Unit,

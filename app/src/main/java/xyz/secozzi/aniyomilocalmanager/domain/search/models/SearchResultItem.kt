@@ -1,10 +1,12 @@
 package xyz.secozzi.aniyomilocalmanager.domain.search.models
 
+import androidx.compose.runtime.Immutable
 import kotlinx.serialization.Serializable
 import xyz.secozzi.aniyomilocalmanager.domain.entry.model.Status
 import xyz.secozzi.aniyomilocalmanager.domain.search.service.TrackerIds
 
 @Serializable
+@Immutable
 data class SearchResultItem(
     val titles: List<String>,
     val coverUrl: String?,

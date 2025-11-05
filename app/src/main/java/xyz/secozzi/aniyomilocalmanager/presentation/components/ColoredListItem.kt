@@ -61,7 +61,7 @@ fun ColoredListItem(
 
 @PreviewLightDark
 @Composable
-fun MainSettingsListItemPreview() {
+private fun MainSettingsListItemPreview() {
     PreviewContent {
         ColoredListItem(
             title = "Appearance",

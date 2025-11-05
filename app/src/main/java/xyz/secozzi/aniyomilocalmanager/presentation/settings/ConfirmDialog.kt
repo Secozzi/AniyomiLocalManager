@@ -70,7 +70,7 @@ fun ConfirmDialog(
 
 @Preview
 @Composable
-fun ConfirmDialogPreview() {
+private fun ConfirmDialogPreview() {
     PreviewContent {
         ConfirmDialog({}, {})
     }

@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.serialization.Serializable
 import org.koin.compose.koinInject
 import xyz.secozzi.aniyomilocalmanager.R
@@ -32,6 +33,7 @@ import xyz.secozzi.aniyomilocalmanager.preferences.AppearancePreferences
 import xyz.secozzi.aniyomilocalmanager.preferences.preference.collectAsState
 import xyz.secozzi.aniyomilocalmanager.presentation.PreviewContent
 import xyz.secozzi.aniyomilocalmanager.presentation.settings.ButtonGroup
+import xyz.secozzi.aniyomilocalmanager.presentation.settings.ButtonGroupEntry
 import xyz.secozzi.aniyomilocalmanager.presentation.settings.SettingsListItem
 import xyz.secozzi.aniyomilocalmanager.presentation.settings.SettingsSwitch
 import xyz.secozzi.aniyomilocalmanager.ui.theme.DarkMode
@@ -95,7 +97,13 @@ private fun AppearancePreferencesScreenContent(
         ) {
             // Theme
             item {
-                val themeEntries = remember { DarkMode.entries.map { it to it.titleRes } }
+                val themeEntries = remember {
+                    DarkMode.entries.map { ButtonGroupEntry(it, it.titleRes) }.toPersistentList()
+                }
+                val selected = remember(darkMode) {
+                    ButtonGroupEntry(darkMode, darkMode.titleRes)
+                }
+
                 SettingsListItem(
                     title = stringResource(R.string.pref_appearance_theme),
                     itemSize = 2,
@@ -103,7 +111,7 @@ private fun AppearancePreferencesScreenContent(
                     supportingContent = {
                         ButtonGroup(
                             entries = themeEntries,
-                            selected = darkMode,
+                            selected = selected,
                             onSelect = onDarkModeClicked,
                         )
                     },

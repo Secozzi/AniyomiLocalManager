@@ -20,7 +20,7 @@ import xyz.secozzi.aniyomilocalmanager.ui.theme.AniyomiLocalManagerPreviewTheme
 import xyz.secozzi.aniyomilocalmanager.ui.utils.LocalBackStack
 
 @Serializable
-internal data object DummyRoute : NavKey
+private data object DummyRoute : NavKey
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
@@ -33,7 +33,7 @@ fun PreviewContent(content: @Composable () -> Unit) {
         }
     }
 
-    val noopNavEvent = remember {
+    val navEvent = remember {
         object : NavigationEventDispatcherOwner {
             override val navigationEventDispatcher = NavigationEventDispatcher()
         }
@@ -42,7 +42,7 @@ fun PreviewContent(content: @Composable () -> Unit) {
     CompositionLocalProvider(
         LocalBackStack provides backstack,
         LocalAsyncImagePreviewHandler provides previewHandler,
-        LocalNavigationEventDispatcherOwner provides noopNavEvent,
+        LocalNavigationEventDispatcherOwner provides navEvent,
     ) {
         AniyomiLocalManagerPreviewTheme {
             Surface {

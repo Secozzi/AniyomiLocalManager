@@ -8,13 +8,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import xyz.secozzi.aniyomilocalmanager.R
 import xyz.secozzi.aniyomilocalmanager.domain.entry.model.EntryDetails
 import xyz.secozzi.aniyomilocalmanager.domain.entry.model.Status
 import xyz.secozzi.aniyomilocalmanager.presentation.PreviewContent
+import xyz.secozzi.aniyomilocalmanager.presentation.components.DropdownItem
 import xyz.secozzi.aniyomilocalmanager.presentation.components.SimpleDropdown
 import xyz.secozzi.aniyomilocalmanager.presentation.utils.plus
 import xyz.secozzi.aniyomilocalmanager.ui.theme.spacing
@@ -93,15 +97,23 @@ fun DetailsScreenContent(
         item {
             SimpleDropdown(
                 label = stringResource(R.string.details_edit_status),
-                selected = details.status,
-                items = Status.entries,
+                selected = details.status.toDropdownItem(),
+                items = Status.entries.map { it.toDropdownItem() }.toPersistentList(),
                 onSelected = onEditStatus,
-                getDisplayName = { stringResource(it.stringRes) },
-                getExtraData = { null },
                 modifier = Modifier.fillMaxWidth(),
             )
         }
     }
+}
+
+@Composable
+@ReadOnlyComposable
+private fun Status.toDropdownItem(): DropdownItem<Status> {
+    return DropdownItem(
+        item = this,
+        displayName = stringResource(this.stringRes),
+        extraData = null,
+    )
 }
 
 @Composable
@@ -112,7 +124,7 @@ private fun DetailsScreenContentPreview() {
             contentPadding = PaddingValues(),
             details = EntryDetails(
                 title = "Boku no Hero Academia",
-                titles = listOf(
+                titles = persistentListOf(
                     "Boku no Hero Academia",
                     "My Hero Academia",
                     "僕のヒーローアカデミア",

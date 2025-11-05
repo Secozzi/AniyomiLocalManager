@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import kotlinx.collections.immutable.persistentListOf
 import xyz.secozzi.aniyomilocalmanager.R
 import xyz.secozzi.aniyomilocalmanager.domain.cover.model.CoverData
 import xyz.secozzi.aniyomilocalmanager.domain.search.models.SearchResultItem
@@ -128,7 +129,7 @@ private fun MangaCoverScreenContentTest() {
         )
 
         val successState = MangaCoverScreenViewModel.State.Success(
-            listOf(
+            persistentListOf(
                 CoverData(
                     coverUrl = "1",
                     origin = "AniList",

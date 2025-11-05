@@ -23,13 +23,15 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.toSize
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import xyz.secozzi.aniyomilocalmanager.presentation.PreviewContent
 
 @Composable
 fun EditableDropdownMenu(
     value: String,
     label: String,
-    values: List<String>,
+    values: ImmutableList<String>,
     onValueChange: (String) -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -90,7 +92,7 @@ private fun EditableDropdownMenuPreview() {
         EditableDropdownMenu(
             value = "Boku no Hero Academia",
             label = "Title",
-            values = listOf(
+            values = persistentListOf(
                 "Boku no Hero Academia",
                 "My Hero Academia",
                 "僕のヒーローアカデミア",

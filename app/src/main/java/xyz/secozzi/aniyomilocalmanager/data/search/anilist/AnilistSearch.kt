@@ -6,6 +6,7 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.serialization.Serializable
 import xyz.secozzi.aniyomilocalmanager.data.search.anilist.dto.AnilistMedia
 import xyz.secozzi.aniyomilocalmanager.data.search.anilist.dto.AnilistSearchPage
@@ -156,7 +157,7 @@ class AnilistSearch(
 
         return EntryDetails(
             title = searchResultItem.titles.firstOrNull().orEmpty(),
-            titles = searchResultItem.titles,
+            titles = searchResultItem.titles.toPersistentList(),
             authors = searchResultItem.authors.joinToString(),
             artists = searchResultItem.artists.joinToString(),
             description = searchResultItem.description.orEmpty(),

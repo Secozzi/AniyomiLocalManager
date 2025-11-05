@@ -1,5 +1,6 @@
 package xyz.secozzi.aniyomilocalmanager.presentation.settings
 
+import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.fadeIn
@@ -24,17 +25,25 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.ToggleButton
 import androidx.compose.material3.ToggleButtonDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import kotlinx.collections.immutable.ImmutableList
 import xyz.secozzi.aniyomilocalmanager.ui.theme.spacing
+
+@Stable
+data class ButtonGroupEntry<T>(
+    val item: T,
+    @param:StringRes val stringRes: Int,
+)
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun <T> ButtonGroup(
-    entries: List<Pair<T, Int>>,
-    selected: T,
+    entries: ImmutableList<ButtonGroupEntry<T>>,
+    selected: ButtonGroupEntry<T>,
     onSelect: (T) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -42,10 +51,10 @@ fun <T> ButtonGroup(
         horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
         modifier = modifier.padding(vertical = 4.dp),
     ) {
-        entries.forEachIndexed { index, (entry, buttonRes) ->
+        entries.forEachIndexed { index, entry ->
             ToggleButton(
                 checked = entry == selected,
-                onCheckedChange = { onSelect(entry) },
+                onCheckedChange = { onSelect(entry.item) },
                 modifier = Modifier
                     .weight(1f)
                     .padding(top = MaterialTheme.spacing.extraSmall)
@@ -72,7 +81,7 @@ fun <T> ButtonGroup(
                 }
                 Spacer(Modifier.size(MaterialTheme.spacing.extraSmall))
                 Text(
-                    text = stringResource(buttonRes),
+                    text = stringResource(entry.stringRes),
                     color = if (entry == selected) {
                         MaterialTheme.colorScheme.onPrimary
                     } else {

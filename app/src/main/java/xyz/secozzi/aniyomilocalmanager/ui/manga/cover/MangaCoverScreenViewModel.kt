@@ -7,6 +7,8 @@ import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsChannel
 import io.ktor.utils.io.jvm.javaio.toInputStream
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -83,7 +85,7 @@ class MangaCoverScreenViewModel(
                 }
 
                 State.Success(
-                    data = covers,
+                    data = covers.toPersistentList(),
                 )
             }
         }
@@ -141,7 +143,7 @@ class MangaCoverScreenViewModel(
 
         @Immutable
         data class Success(
-            val data: List<CoverData>,
+            val data: ImmutableList<CoverData>,
         ) : State
     }
 
