@@ -6,6 +6,7 @@ import xyz.secozzi.aniyomilocalmanager.R
 
 @Serializable
 enum class SearchIds(@param:StringRes val stringRes: Int) {
+    AniDB(R.string.pref_anidb_title),
     MangaBaka(R.string.pref_mangabaka_title),
     AnilistAnime(R.string.pref_anilist_title),
     AnilistManga(R.string.pref_anilist_title),

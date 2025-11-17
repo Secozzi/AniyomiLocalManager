@@ -5,6 +5,7 @@ import org.koin.dsl.module
 import xyz.secozzi.aniyomilocalmanager.ui.anime.cover.AnimeCoverScreenViewModel
 import xyz.secozzi.aniyomilocalmanager.ui.anime.details.AnimeDetailsScreenViewModel
 import xyz.secozzi.aniyomilocalmanager.ui.anime.entry.AnimeEntryScreenViewModel
+import xyz.secozzi.aniyomilocalmanager.ui.anime.episode.fetch.AnimeFetchEpisodesScreenViewModel
 import xyz.secozzi.aniyomilocalmanager.ui.home.anime.AnimeScreenViewModel
 import xyz.secozzi.aniyomilocalmanager.ui.home.manga.MangaScreenViewModel
 import xyz.secozzi.aniyomilocalmanager.ui.manga.cover.MangaCoverScreenViewModel
@@ -23,5 +24,6 @@ val ViewModelsModule = module {
     viewModelOf(::AnimeCoverScreenViewModel)
     viewModelOf(::AnimeDetailsScreenViewModel)
     viewModelOf(::MangaDetailsScreenViewModel)
+    viewModelOf(::AnimeFetchEpisodesScreenViewModel)
     viewModelOf(::SearchScreenViewModel)
 }

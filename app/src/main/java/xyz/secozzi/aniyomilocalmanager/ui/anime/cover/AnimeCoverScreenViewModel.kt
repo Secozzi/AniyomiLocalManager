@@ -3,6 +3,9 @@ package xyz.secozzi.aniyomilocalmanager.ui.anime.cover
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.anggrayudi.storage.file.baseName
+import com.anggrayudi.storage.file.children
+import com.anggrayudi.storage.file.fullName
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsChannel
@@ -93,7 +96,16 @@ class AnimeCoverScreenViewModel(
     private suspend fun performDownload(coverData: CoverData): Boolean {
         val fileExt = coverData.coverUrl.split(".").lastOrNull() ?: "jpg"
         val dir = storageManager.getFromPath(path) ?: return false
-        val cover = dir.createFile("image/$fileExt", "cover.$fileExt") ?: return false
+
+        // Rename previous covers
+        dir.children.forEach {
+            if (it.baseName.equals("cover", true)) {
+                it.renameTo(it.fullName + ".old")
+            }
+        }
+
+        val cover = dir.createFile("image/$fileExt", "cover.$fileExt")
+            ?: return false
 
         withContext(Dispatchers.IO) {
             storageManager.getOutputStream(cover, "wt").use { output ->

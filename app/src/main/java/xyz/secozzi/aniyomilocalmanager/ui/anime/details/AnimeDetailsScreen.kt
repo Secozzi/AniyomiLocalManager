@@ -38,6 +38,9 @@ fun AnimeDetailsScreen(path: String) {
 
     CollectAsEffect(viewModel.uiEvent) {
         when (it) {
+            is AnimeDetailsScreenViewModel.UiEvent.Copy -> {
+                clipboard.setClipEntry(ClipEntry(ClipData.newPlainText(it.text, it.text)))
+            }
             is AnimeDetailsScreenViewModel.UiEvent.Downloaded -> {
                 val message = if (it.success) {
                     resources.getString(R.string.details_generate_details_success)
@@ -46,9 +49,6 @@ fun AnimeDetailsScreen(path: String) {
                 }
 
                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-            }
-            is AnimeDetailsScreenViewModel.UiEvent.Copy -> {
-                clipboard.setClipEntry(ClipEntry(ClipData.newPlainText(it.text, it.text)))
             }
         }
     }

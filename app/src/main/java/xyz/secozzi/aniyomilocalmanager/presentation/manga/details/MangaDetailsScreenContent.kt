@@ -26,9 +26,9 @@ import xyz.secozzi.aniyomilocalmanager.domain.entry.model.Status
 import xyz.secozzi.aniyomilocalmanager.domain.search.service.SearchIds
 import xyz.secozzi.aniyomilocalmanager.presentation.PreviewContent
 import xyz.secozzi.aniyomilocalmanager.presentation.components.ErrorContent
+import xyz.secozzi.aniyomilocalmanager.presentation.components.GenerateBottomBar
 import xyz.secozzi.aniyomilocalmanager.presentation.components.TopLoadingIndicator
 import xyz.secozzi.aniyomilocalmanager.presentation.components.details.DetailsScreenContent
-import xyz.secozzi.aniyomilocalmanager.presentation.components.details.GenerateBottomBar
 import xyz.secozzi.aniyomilocalmanager.presentation.components.details.SearchIcon
 import xyz.secozzi.aniyomilocalmanager.ui.manga.details.MangaDetailsScreenViewModel
 

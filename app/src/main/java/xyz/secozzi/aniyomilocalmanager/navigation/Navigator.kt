@@ -15,6 +15,8 @@ import xyz.secozzi.aniyomilocalmanager.ui.anime.details.AnimeDetailsRoute
 import xyz.secozzi.aniyomilocalmanager.ui.anime.details.AnimeDetailsScreen
 import xyz.secozzi.aniyomilocalmanager.ui.anime.entry.AnimeEntryRoute
 import xyz.secozzi.aniyomilocalmanager.ui.anime.entry.AnimeEntryScreen
+import xyz.secozzi.aniyomilocalmanager.ui.anime.episode.fetch.AnimeFetchEpisodesRoute
+import xyz.secozzi.aniyomilocalmanager.ui.anime.episode.fetch.AnimeFetchEpisodesScreen
 import xyz.secozzi.aniyomilocalmanager.ui.home.HomeRoute
 import xyz.secozzi.aniyomilocalmanager.ui.home.HomeScreen
 import xyz.secozzi.aniyomilocalmanager.ui.manga.cover.MangaCoverRoute
@@ -23,6 +25,8 @@ import xyz.secozzi.aniyomilocalmanager.ui.manga.details.MangaDetailsRoute
 import xyz.secozzi.aniyomilocalmanager.ui.manga.details.MangaDetailsScreen
 import xyz.secozzi.aniyomilocalmanager.ui.manga.entry.MangaEntryRoute
 import xyz.secozzi.aniyomilocalmanager.ui.manga.entry.MangaEntryScreen
+import xyz.secozzi.aniyomilocalmanager.ui.preferences.AniDBPreferencesRoute
+import xyz.secozzi.aniyomilocalmanager.ui.preferences.AniDBPreferencesScreen
 import xyz.secozzi.aniyomilocalmanager.ui.preferences.AnilistPreferencesRoute
 import xyz.secozzi.aniyomilocalmanager.ui.preferences.AnilistPreferencesScreen
 import xyz.secozzi.aniyomilocalmanager.ui.preferences.AppearancePreferencesRoute
@@ -61,6 +65,7 @@ fun Navigator() {
                 rememberViewModelStoreNavEntryDecorator(),
             ),
             entryProvider = entryProvider {
+                // Home
                 entry<HomeRoute> {
                     HomeScreen()
                 }
@@ -74,6 +79,9 @@ fun Navigator() {
                 }
                 entry<AnimeDetailsRoute> { route ->
                     AnimeDetailsScreen(route.path)
+                }
+                entry<AnimeFetchEpisodesRoute> { route ->
+                    AnimeFetchEpisodesScreen(route.path)
                 }
 
                 // Manga
@@ -107,6 +115,9 @@ fun Navigator() {
                 }
                 entry<AnilistPreferencesRoute> {
                     AnilistPreferencesScreen()
+                }
+                entry<AniDBPreferencesRoute> {
+                    AniDBPreferencesScreen()
                 }
                 entry<CoverPreferencesRoute> {
                     CoverPreferencesScreen()

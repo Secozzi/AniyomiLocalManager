@@ -1,4 +1,4 @@
-package xyz.secozzi.aniyomilocalmanager.presentation.components.details
+package xyz.secozzi.aniyomilocalmanager.presentation.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -26,12 +26,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import xyz.secozzi.aniyomilocalmanager.presentation.PreviewContent
+import xyz.secozzi.aniyomilocalmanager.ui.theme.DisabledAlpha
 import xyz.secozzi.aniyomilocalmanager.ui.theme.spacing
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun GenerateBottomBar(
     label: String,
+    enabled: Boolean = true,
     onGenerate: () -> Unit,
     onCopy: () -> Unit,
 ) {
@@ -42,6 +44,7 @@ fun GenerateBottomBar(
     ) {
         Button(
             onClick = onGenerate,
+            enabled = enabled,
             modifier = Modifier.heightIn(min = MaterialTheme.spacing.extraLarge),
             colors = ButtonDefaults.buttonColors().copy(
                 containerColor = FloatingToolbarDefaults.vibrantFloatingToolbarColors().toolbarContainerColor,
@@ -63,10 +66,17 @@ fun GenerateBottomBar(
 
         IconButton(
             onClick = onCopy,
+            enabled = enabled,
             shape = FloatingActionButtonDefaults.shape,
             colors = IconButtonDefaults.iconButtonColors().copy(
                 containerColor = FloatingToolbarDefaults.vibrantFloatingToolbarColors().fabContainerColor,
                 contentColor = FloatingToolbarDefaults.vibrantFloatingToolbarColors().fabContentColor,
+                disabledContainerColor = FloatingToolbarDefaults.vibrantFloatingToolbarColors().fabContainerColor.copy(
+                    alpha = DisabledAlpha,
+                ),
+                disabledContentColor = FloatingToolbarDefaults.vibrantFloatingToolbarColors().fabContentColor.copy(
+                    alpha = DisabledAlpha,
+                ),
             ),
             modifier = Modifier.size(MaterialTheme.spacing.extraLarge),
         ) {
@@ -84,6 +94,7 @@ private fun GenerateBottomBarPreview() {
     PreviewContent {
         GenerateBottomBar(
             label = "Generate details.json",
+            enabled = false,
             onGenerate = { },
             onCopy = { },
         )

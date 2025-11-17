@@ -13,6 +13,7 @@ import xyz.secozzi.aniyomilocalmanager.domain.search.service.SearchIds
 @Composable
 fun SearchIcon(searchIds: SearchIds?) {
     val imageVector = when (searchIds) {
+        SearchIds.AniDB -> ImageVector.vectorResource(R.drawable.anidb_icon)
         SearchIds.MangaBaka -> Icons.Default.Book
         SearchIds.AnilistAnime, SearchIds.AnilistManga -> ImageVector.vectorResource(R.drawable.anilist_icon)
         SearchIds.MalAnime, SearchIds.MalManga -> ImageVector.vectorResource(R.drawable.mal_icon)

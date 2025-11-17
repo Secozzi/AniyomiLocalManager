@@ -5,7 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.anggrayudi.storage.file.children
 import com.anggrayudi.storage.file.fullName
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.WhileSubscribed
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import xyz.secozzi.aniyomilocalmanager.database.domain.AnimeTrackerRepository
 import xyz.secozzi.aniyomilocalmanager.database.entities.AnimeTrackerEntity
@@ -13,12 +17,20 @@ import xyz.secozzi.aniyomilocalmanager.domain.search.models.SearchResultItem
 import xyz.secozzi.aniyomilocalmanager.domain.search.service.TrackerIds
 import xyz.secozzi.aniyomilocalmanager.domain.storage.StorageManager
 import xyz.secozzi.aniyomilocalmanager.utils.asResultFlow
+import kotlin.time.Duration.Companion.seconds
 
 class AnimeEntryScreenViewModel(
     private val path: String,
     private val trackerRepository: AnimeTrackerRepository,
     private val storageManager: StorageManager,
 ) : ViewModel() {
+
+    val name = flow { emit(storageManager.getFromPath(path)!!.fullName) }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5.seconds),
+            initialValue = "",
+        )
 
     val state = trackerRepository.getTrackData(path)
         .distinctUntilChanged()

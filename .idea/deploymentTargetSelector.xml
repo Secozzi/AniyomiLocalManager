@@ -25,6 +25,9 @@
       <SelectionState runConfigName="Dark - EditableDropdownMenuPreview">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
+      <SelectionState runConfigName="Dark - AnimeFetchEpisodesScreenContentPreview">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
     </selectionStates>
   </component>
 </project>

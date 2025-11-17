@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -23,6 +24,7 @@ fun ExpressiveListItem(
     itemSize: Int,
     index: Int,
     modifier: Modifier = Modifier,
+    color: Color? = null,
     headlineContent: @Composable () -> Unit,
     supportingContent: @Composable (() -> Unit)? = null,
     leadingContent: @Composable (() -> Unit)? = null,
@@ -63,7 +65,7 @@ fun ExpressiveListItem(
         leadingContent = leadingContent,
         trailingContent = trailingContent,
         colors = ListItemDefaults.colors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer,
+            containerColor = color ?: MaterialTheme.colorScheme.surfaceContainer,
         ),
         modifier = modifier
             .clip(

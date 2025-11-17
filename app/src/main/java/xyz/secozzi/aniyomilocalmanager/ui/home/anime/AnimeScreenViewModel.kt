@@ -27,6 +27,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import xyz.secozzi.aniyomilocalmanager.domain.home.AnimeListEntry
+import xyz.secozzi.aniyomilocalmanager.domain.storage.EPISODE_FILE_TYPES
 import xyz.secozzi.aniyomilocalmanager.domain.storage.StorageManager
 import xyz.secozzi.aniyomilocalmanager.preferences.DataPreferences
 import xyz.secozzi.aniyomilocalmanager.utils.FilesComparator
@@ -132,10 +133,6 @@ class AnimeScreenViewModel(
             started = SharingStarted.WhileSubscribed(5.seconds),
             initialValue = State.Idle,
         )
-
-    companion object {
-        private val EPISODE_FILE_TYPES = listOf("avi", "flv", "mkv", "mov", "mp4", "webm", "wmv")
-    }
 
     @Immutable
     sealed interface State {

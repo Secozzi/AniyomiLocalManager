@@ -99,10 +99,12 @@ dependencies {
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
 
+    implementation(libs.simple.storage)
+    implementation(libs.kache)
+    implementation(libs.fuzzywuzzy)
     implementation(libs.bundles.compose.navigation3)
     implementation(libs.bundles.serialization)
     implementation(libs.bundles.koin)
-    implementation(libs.simple.storage)
     implementation(libs.bundles.ktor)
     implementation(libs.bundles.coil)
 

@@ -9,6 +9,7 @@
     <string name="no_id_set">No ID set</string>
     <string name="generic_id">ID: %d</string>
     <string name="label_cover">Cover</string>
+    <string name="label_episodes">Episodes</string>
 
     <!-- Home screen -->
     <string name="label_manga">Manga</string>
@@ -33,8 +34,33 @@
     <!-- Anime entry -->
     <string name="edit_cover">Edit cover</string>
     <string name="anime_edit_details">Edit details.json</string>
+    <string name="anime_fetch_episodes">Fetch episodes.json</string>
     <string name="anime_edit_episodes">Edit episodes.json</string>
     <string name="entry_no_id_set">No ID set, please search for an entry</string>
+
+    <!-- Anime fetch episodes -->
+    <string name="anime_fetch_title">Fetch episodes</string>
+    <string name="episode_type_regular">Regular episode</string>
+    <string name="episode_type_special">Special</string>
+    <string name="episode_type_credit">Credit</string>
+    <string name="episode_type_trailer">Trailer</string>
+    <string name="episode_type_parody">Parody</string>
+    <string name="episode_type_other">Other</string>
+    <string name="episode_episode">Episode %d</string>
+    <string name="episode_start_small">Start cannot go below %d</string>
+    <string name="episode_end_small">End cannot go below %d</string>
+    <string name="episode_start_big">Start cannot go above %d</string>
+    <string name="episode_end_big">End cannot go above %d</string>
+    <string name="episode_start_above_error">Start cannot go above end</string>
+    <string name="episode_end_below_error">End cannot go below start</string>
+    <string name="episode_type_label">Type</string>
+    <string name="episode_offset_label">Offset</string>
+    <string name="episode_start_label">Start</string>
+    <string name="episode_end_label">End</string>
+    <string name="episode_video_count">Video count</string>
+    <string name="episode_generate_details">Generate episodes.json</string>
+    <string name="episode_generate_details_success">Successfully created episodes.json</string>
+    <string name="episode_generate_details_failure">Failed to create episodes.json</string>
 
     <!-- Details -->
     <string name="details_title">Details</string>
@@ -53,7 +79,7 @@
     <string name="details_edit_fansub">Fansub</string>
     <string name="details_edit_description">Description</string>
     <string name="details_edit_genre">Genre</string>
-    <string name="details_edit_genre_summary">Use a comme (, ) to separate the genres.</string>
+    <string name="details_edit_genre_summary">Use a comma (, ) to separate the genres.</string>
     <string name="details_edit_status">Status</string>
 
     <!-- Manga entry -->
@@ -117,6 +143,20 @@
 
     <!-- Preferences - AniDB -->
     <string name="pref_anidb_summary">details.json, episodes.json</string>
+    <string name="pref_anidb_name_format">Episode name format</string>
+    <string name="pref_anidb_scanlator_format">Scanlator format</string>
+    <string name="pref_anidb_summary_format">Summary format</string>
+    <string name="pref_anidb_replacements">Possible replacements:\n
+\n
+%eng - English title\n
+%rom - Romaji title\n
+%nat - Native title\n
+%ep - Episode number\n
+%dur - Duration (m)\n
+%air - Airing date\n
+%rat - Rating\n
+%sum - Summary\n
+%type - Episode type</string>
 
     <!-- Preferences - MAL -->
     <string name="pref_mal_summary">details.json, episodes.json</string>

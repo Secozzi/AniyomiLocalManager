@@ -49,7 +49,7 @@ fun ErrorContent(
         InfoIcon(Icons.Outlined.BugReport)
 
         Text(text = stringResource(R.string.on_error))
-        Text(text = throwable.message!!)
+        Text(text = throwable.message ?: "")
         LogsContainer(throwable.stackTraceToString())
     }
 }

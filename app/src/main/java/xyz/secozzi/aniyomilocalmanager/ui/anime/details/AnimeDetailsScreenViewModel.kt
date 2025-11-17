@@ -29,6 +29,7 @@ import xyz.secozzi.aniyomilocalmanager.domain.search.service.SearchIds
 import xyz.secozzi.aniyomilocalmanager.domain.storage.StorageManager
 import xyz.secozzi.aniyomilocalmanager.utils.StateViewModel
 import xyz.secozzi.aniyomilocalmanager.utils.withMinimumDuration
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalSerializationApi::class)
@@ -43,9 +44,12 @@ class AnimeDetailsScreenViewModel(
     init {
         viewModelScope.launch {
             trackerRepository.getTrackData(path).collectLatest { data ->
-                val searchIds = buildMap(2) {
+                val searchIds = buildMap(3) {
                     if (data?.anilist != null) {
                         put(SearchIds.AnilistAnime, data.anilist.toString())
+                    }
+                    if (data?.anidb != null) {
+                        put(SearchIds.AniDB, data.anidb.toString())
                     }
                     if (data?.mal != null) {
                         put(SearchIds.MalAnime, data.mal.toString())
@@ -107,7 +111,7 @@ class AnimeDetailsScreenViewModel(
                 getDetailsFromDetails(path)
             } else {
                 val id = successState.searchIds[selected]!!
-                withMinimumDuration(1.5.seconds) {
+                withMinimumDuration(1.5.seconds, 150.milliseconds) {
                     searchManager.getSearchRepository(selected).getFromId(id)
                 }
             }

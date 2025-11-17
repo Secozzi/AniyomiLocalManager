@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ViewList
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
@@ -38,6 +39,7 @@ fun AnimeEntryScreenContent(
     onBack: () -> Unit,
     onEditCover: () -> Unit,
     onEditDetails: () -> Unit,
+    onFetchEpisodes: () -> Unit,
     onEditEpisodes: () -> Unit,
     onClickAnilist: () -> Unit,
     onClickAnidb: () -> Unit,
@@ -74,7 +76,7 @@ fun AnimeEntryScreenContent(
                     // Items
                     item {
                         ExpressiveListItem(
-                            itemSize = 3,
+                            itemSize = 2,
                             index = 0,
                             headlineContent = { Text(text = stringResource(R.string.edit_cover)) },
                             leadingContent = {
@@ -86,7 +88,7 @@ fun AnimeEntryScreenContent(
 
                     item {
                         ExpressiveListItem(
-                            itemSize = 3,
+                            itemSize = 2,
                             index = 1,
                             headlineContent = { Text(text = stringResource(R.string.anime_edit_details)) },
                             leadingContent = {
@@ -96,10 +98,24 @@ fun AnimeEntryScreenContent(
                         )
                     }
 
+                    item { Spacer(Modifier.height(MaterialTheme.spacing.smaller)) }
+
                     item {
                         ExpressiveListItem(
-                            itemSize = 3,
-                            index = 2,
+                            itemSize = 2,
+                            index = 0,
+                            headlineContent = { Text(text = stringResource(R.string.anime_fetch_episodes)) },
+                            leadingContent = {
+                                Icon(Icons.AutoMirrored.Filled.ViewList, null)
+                            },
+                            onClick = onFetchEpisodes,
+                        )
+                    }
+
+                    item {
+                        ExpressiveListItem(
+                            itemSize = 2,
+                            index = 1,
                             headlineContent = { Text(text = stringResource(R.string.anime_edit_episodes)) },
                             leadingContent = {
                                 Icon(if (state.hasDetails) Icons.Default.Check else Icons.Default.Clear, null)
@@ -186,6 +202,7 @@ private fun AnimeEntryScreenContentPreview() {
             onBack = {},
             onEditCover = {},
             onEditDetails = {},
+            onFetchEpisodes = {},
             onEditEpisodes = {},
             onClickAnilist = {},
             onClickAnidb = {},

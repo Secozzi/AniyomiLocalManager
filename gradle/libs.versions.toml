@@ -30,6 +30,8 @@ simple-storage = "2.2.0"
 ktor = "3.3.1"
 xml-serialization-version = "0.91.3"
 stability-analyzer = "0.4.2"
+kache = "2.1.1"
+fuzzywuzzy = "1.0.1"
 
 [libraries]
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
@@ -78,6 +80,8 @@ koin-compose = { group = "io.insert-koin", name = "koin-androidx-compose", versi
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 koin-startup = { group = "io.insert-koin", name = "koin-androidx-startup", version.ref = "koin" }
 simple-storage = { group = "com.anggrayudi", name = "storage", version.ref = "simple-storage" }
+kache = { group = "com.mayakapps.kache", name = "file-kache", version.ref = "kache" }
+fuzzywuzzy = { group = "com.github.jens-muenker", name = "fuzzywuzzy-kotlin", version.ref = "fuzzywuzzy" }
 
 [bundles]
 compose-navigation3 = ["androidx-navigation3-runtime", "androidx-navigation3-ui", "androidx-lifecycle-viewmodel", "androidx-material3-adaptive"]

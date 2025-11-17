@@ -82,7 +82,7 @@ fun PreferencesScreen() {
             title = R.string.pref_anidb_title,
             subtitle = R.string.pref_anidb_summary,
             icon = ImageVector.vectorResource(R.drawable.anidb_icon),
-            onClick = { },
+            onClick = { backstack.add(AniDBPreferencesRoute) },
         ),
         PreferenceItem(
             title = R.string.pref_mal_title,

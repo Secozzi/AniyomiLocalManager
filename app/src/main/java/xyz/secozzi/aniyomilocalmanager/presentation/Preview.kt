@@ -7,7 +7,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.navigation3.runtime.NavKey
-import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigationevent.NavigationEventDispatcher
 import androidx.navigationevent.NavigationEventDispatcherOwner
 import androidx.navigationevent.compose.LocalNavigationEventDispatcherOwner
@@ -17,15 +16,14 @@ import coil3.compose.AsyncImagePreviewHandler
 import coil3.compose.LocalAsyncImagePreviewHandler
 import kotlinx.serialization.Serializable
 import xyz.secozzi.aniyomilocalmanager.ui.theme.AniyomiLocalManagerPreviewTheme
-import xyz.secozzi.aniyomilocalmanager.ui.utils.LocalBackStack
 
 @Serializable
-private data object DummyRoute : NavKey
+internal data object DummyRoute : NavKey
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
 fun PreviewContent(content: @Composable () -> Unit) {
-    val backstack = rememberNavBackStack(DummyRoute)
+    // val backstack = rememberNavBackStack(DummyRoute)
 
     val previewHandler = remember {
         AsyncImagePreviewHandler {
@@ -40,7 +38,7 @@ fun PreviewContent(content: @Composable () -> Unit) {
     }
 
     CompositionLocalProvider(
-        LocalBackStack provides backstack,
+        // LocalBackStack provides backstack,
         LocalAsyncImagePreviewHandler provides previewHandler,
         LocalNavigationEventDispatcherOwner provides navEvent,
     ) {
