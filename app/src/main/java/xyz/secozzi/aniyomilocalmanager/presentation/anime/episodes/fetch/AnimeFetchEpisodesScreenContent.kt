@@ -45,7 +45,7 @@ import xyz.secozzi.aniyomilocalmanager.domain.entry.anime.model.EpisodeType
 import xyz.secozzi.aniyomilocalmanager.domain.search.service.SearchIds
 import xyz.secozzi.aniyomilocalmanager.presentation.PreviewContent
 import xyz.secozzi.aniyomilocalmanager.presentation.components.ErrorContent
-import xyz.secozzi.aniyomilocalmanager.presentation.components.GenerateBottomBar
+import xyz.secozzi.aniyomilocalmanager.presentation.components.FloatingBottomBar
 import xyz.secozzi.aniyomilocalmanager.presentation.components.InfoContent
 import xyz.secozzi.aniyomilocalmanager.presentation.components.TopLoadingIndicator
 import xyz.secozzi.aniyomilocalmanager.presentation.components.details.SearchIcon
@@ -133,11 +133,11 @@ fun AnimeFetchEpisodesScreenContent(
         },
         bottomBar = {
             if (state is AnimeFetchEpisodesScreenViewModel.State.Success && selectedTab == 0) {
-                GenerateBottomBar(
+                FloatingBottomBar(
                     label = stringResource(R.string.episode_generate_details),
                     enabled = isValid,
                     onGenerate = onGenerate,
-                    onCopy = onCopy,
+                    onSecondary = onCopy,
                 )
             }
         },
@@ -273,7 +273,7 @@ private fun AnimeFetchEpisodesScreenContentPreview() {
     PreviewContent {
         val episodes = persistentListOf(
             EpisodeDetails(
-                episodeNumber = 1,
+                episodeNumber = 1f,
                 name = "Ep. 1 - What? Moon over the Ruined Castle?",
                 dateUpload = "2024-01-08",
                 fillermark = false,
@@ -284,7 +284,7 @@ Source: crunchyroll""",
                 previewUrl = null,
             ),
             EpisodeDetails(
-                episodeNumber = 2,
+                episodeNumber = 2f,
                 name = "Ep. 2 - The Heroes Are a Couple of Beauties",
                 dateUpload = "2024-01-15",
                 fillermark = false,
@@ -297,7 +297,7 @@ Source: Crunchyroll""",
         )
         val credit = persistentListOf(
             EpisodeDetails(
-                episodeNumber = 1,
+                episodeNumber = 1f,
                 name = "Utopia (1-8, 10-12)",
                 dateUpload = "2024-01-08",
                 fillermark = false,
@@ -306,7 +306,7 @@ Source: Crunchyroll""",
                 previewUrl = null,
             ),
             EpisodeDetails(
-                episodeNumber = 1,
+                episodeNumber = 1f,
                 name = "Reversal (13-25)",
                 dateUpload = "2024-04-01",
                 fillermark = false,

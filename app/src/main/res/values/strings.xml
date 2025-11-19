@@ -46,7 +46,7 @@
     <string name="episode_type_trailer">Trailer</string>
     <string name="episode_type_parody">Parody</string>
     <string name="episode_type_other">Other</string>
-    <string name="episode_episode">Episode %d</string>
+    <string name="episode_episode">Episode %f</string>
     <string name="episode_start_small">Start cannot go below %d</string>
     <string name="episode_end_small">End cannot go below %d</string>
     <string name="episode_start_big">Start cannot go above %d</string>
@@ -61,6 +61,21 @@
     <string name="episode_generate_details">Generate episodes.json</string>
     <string name="episode_generate_details_success">Successfully created episodes.json</string>
     <string name="episode_generate_details_failure">Failed to create episodes.json</string>
+
+    <!-- Anime edit episodes -->
+    <string name="episode_edit_save_details">Save episodes.json</string>
+    <string name="episode_edit_title">Title</string>
+    <string name="episode_edit_episode_number">Episode number</string>
+    <string name="episode_edit_invalid_episode_number">Entry with episode number already exists</string>
+    <string name="episode_edit_invalid_episode_number_format">Episode number must be a decimal number</string>
+    <string name="episode_edit_filler">Filler</string>
+    <string name="episode_edit_description">Description</string>
+    <string name="episode_edit_scanlator">Scanlator</string>
+    <string name="episode_edit_preview_url">Preview url</string>
+    <string name="episode_edit_date">Date upload</string>
+    <string name="episode_edit_invalid_date">Invalid date</string>
+    <string name="episode_save_details_success">Successfully saved episodes.json</string>
+    <string name="episode_save_details_failure">Failed to save episodes.json</string>
 
     <!-- Details -->
     <string name="details_title">Details</string>

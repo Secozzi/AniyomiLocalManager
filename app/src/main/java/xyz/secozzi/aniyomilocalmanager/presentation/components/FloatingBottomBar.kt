@@ -24,6 +24,7 @@ import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import xyz.secozzi.aniyomilocalmanager.presentation.PreviewContent
 import xyz.secozzi.aniyomilocalmanager.ui.theme.DisabledAlpha
@@ -31,11 +32,13 @@ import xyz.secozzi.aniyomilocalmanager.ui.theme.spacing
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun GenerateBottomBar(
+fun FloatingBottomBar(
     label: String,
     enabled: Boolean = true,
+    primaryIcon: ImageVector = Icons.Filled.Download,
+    secondaryIcon: ImageVector = Icons.Default.ContentCopy,
     onGenerate: () -> Unit,
-    onCopy: () -> Unit,
+    onSecondary: () -> Unit,
 ) {
     Row(
         horizontalArrangement = Arrangement.Center,
@@ -52,7 +55,7 @@ fun GenerateBottomBar(
             ),
         ) {
             Icon(
-                imageVector = Icons.Filled.Download,
+                imageVector = primaryIcon,
                 contentDescription = null,
             )
             Spacer(Modifier.width(MaterialTheme.spacing.smaller))
@@ -65,7 +68,7 @@ fun GenerateBottomBar(
         Spacer(Modifier.width(MaterialTheme.spacing.extraSmall))
 
         IconButton(
-            onClick = onCopy,
+            onClick = onSecondary,
             enabled = enabled,
             shape = FloatingActionButtonDefaults.shape,
             colors = IconButtonDefaults.iconButtonColors().copy(
@@ -81,7 +84,7 @@ fun GenerateBottomBar(
             modifier = Modifier.size(MaterialTheme.spacing.extraLarge),
         ) {
             Icon(
-                imageVector = Icons.Default.ContentCopy,
+                imageVector = secondaryIcon,
                 contentDescription = null,
             )
         }
@@ -92,11 +95,11 @@ fun GenerateBottomBar(
 @PreviewLightDark
 private fun GenerateBottomBarPreview() {
     PreviewContent {
-        GenerateBottomBar(
+        FloatingBottomBar(
             label = "Generate details.json",
             enabled = false,
             onGenerate = { },
-            onCopy = { },
+            onSecondary = { },
         )
     }
 }

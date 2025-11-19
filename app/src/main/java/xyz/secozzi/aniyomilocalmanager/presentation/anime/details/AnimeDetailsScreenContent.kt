@@ -26,7 +26,7 @@ import xyz.secozzi.aniyomilocalmanager.domain.entry.model.Status
 import xyz.secozzi.aniyomilocalmanager.domain.search.service.SearchIds
 import xyz.secozzi.aniyomilocalmanager.presentation.PreviewContent
 import xyz.secozzi.aniyomilocalmanager.presentation.components.ErrorContent
-import xyz.secozzi.aniyomilocalmanager.presentation.components.GenerateBottomBar
+import xyz.secozzi.aniyomilocalmanager.presentation.components.FloatingBottomBar
 import xyz.secozzi.aniyomilocalmanager.presentation.components.TopLoadingIndicator
 import xyz.secozzi.aniyomilocalmanager.presentation.components.details.DetailsScreenContent
 import xyz.secozzi.aniyomilocalmanager.presentation.components.details.SearchIcon
@@ -95,10 +95,10 @@ fun AnimeDetailsScreenContent(
             )
         },
         bottomBar = {
-            GenerateBottomBar(
+            FloatingBottomBar(
                 label = stringResource(R.string.details_generate_details),
                 onGenerate = onDownload,
-                onCopy = onCopy,
+                onSecondary = onCopy,
             )
         },
     ) { contentPadding ->

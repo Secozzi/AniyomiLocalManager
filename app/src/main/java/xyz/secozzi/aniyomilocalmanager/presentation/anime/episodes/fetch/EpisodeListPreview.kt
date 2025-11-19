@@ -236,7 +236,7 @@ private fun EpisodePreviewPreview() {
     PreviewContent {
         val episodes = persistentListOf(
             EpisodeDetails(
-                episodeNumber = 1,
+                episodeNumber = 1f,
                 name = "Ep. 1 - What? Moon over the Ruined Castle?",
                 dateUpload = "2024-01-08",
                 fillermark = false,
@@ -247,7 +247,7 @@ Source: crunchyroll""",
                 previewUrl = null,
             ),
             EpisodeDetails(
-                episodeNumber = 2,
+                episodeNumber = 2f,
                 name = "Ep. 2 - The Heroes Are a Couple of Beauties",
                 dateUpload = "2024-01-15",
                 fillermark = false,
@@ -260,7 +260,7 @@ Source: Crunchyroll""",
         )
         val credit = persistentListOf(
             EpisodeDetails(
-                episodeNumber = 1,
+                episodeNumber = 1f,
                 name = "Utopia (1-8, 10-12)",
                 dateUpload = "2024-01-08",
                 fillermark = false,
@@ -269,7 +269,7 @@ Source: Crunchyroll""",
                 previewUrl = null,
             ),
             EpisodeDetails(
-                episodeNumber = 1,
+                episodeNumber = 1f,
                 name = "Reversal (13-25)",
                 dateUpload = "2024-04-01",
                 fillermark = false,

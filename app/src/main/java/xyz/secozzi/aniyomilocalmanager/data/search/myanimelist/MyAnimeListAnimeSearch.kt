@@ -123,7 +123,7 @@ class MyAnimeListAnimeSearch(
             episodes.addAll(
                 data.data.map { ep ->
                     EpisodeDetails(
-                        episodeNumber = ep.malId,
+                        episodeNumber = ep.malId.toFloat(),
                         name = when (myAnimeListPreferences.prefLang.get()) {
                             LangPrefEnum.Native -> ep.titleJapanese ?: ep.titleRomanji ?: ep.title
                             LangPrefEnum.Romaji -> ep.titleRomanji ?: ep.title

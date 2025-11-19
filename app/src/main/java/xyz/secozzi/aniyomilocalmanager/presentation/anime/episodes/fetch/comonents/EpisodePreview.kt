@@ -61,7 +61,7 @@ fun EpisodePreview(
 
                 Text(
                     text = buildList(3) {
-                        if (episodeDetails.episodeNumber != 0) {
+                        if (episodeDetails.episodeNumber != 0f) {
                             add(stringResource(R.string.episode_episode, episodeDetails.episodeNumber))
                         }
 
@@ -90,7 +90,7 @@ private fun EpisodePreviewPreview() {
             itemSize = 2,
             index = 0,
             episodeDetails = EpisodeDetails(
-                episodeNumber = 1,
+                episodeNumber = 1f,
                 name = "Ep. 1 - What? Moon over the Ruined Castle?",
                 dateUpload = "2024-01-08",
                 fillermark = false,

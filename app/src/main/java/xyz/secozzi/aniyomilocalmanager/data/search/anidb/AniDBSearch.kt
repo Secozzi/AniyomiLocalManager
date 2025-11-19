@@ -124,9 +124,9 @@ class AniDBSearch(
                 episodes.map { ep ->
                     EpisodeDetails(
                         episodeNumber = if (type == EpisodeType.Regular) {
-                            ep.epno.value.toInt()
+                            ep.epno.value.toFloat()
                         } else {
-                            ep.epno.value.drop(1).toInt()
+                            ep.epno.value.drop(1).toFloat()
                         },
                         name = getEpisodeFromTemplate(ep, aniDBPreferences.nameFormat.get(), type),
                         dateUpload = ep.airdate?.value?.plus("T00:00:00"),

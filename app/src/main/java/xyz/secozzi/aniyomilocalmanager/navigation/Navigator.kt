@@ -15,6 +15,8 @@ import xyz.secozzi.aniyomilocalmanager.ui.anime.details.AnimeDetailsRoute
 import xyz.secozzi.aniyomilocalmanager.ui.anime.details.AnimeDetailsScreen
 import xyz.secozzi.aniyomilocalmanager.ui.anime.entry.AnimeEntryRoute
 import xyz.secozzi.aniyomilocalmanager.ui.anime.entry.AnimeEntryScreen
+import xyz.secozzi.aniyomilocalmanager.ui.anime.episode.edit.AnimeEditEpisodesRoute
+import xyz.secozzi.aniyomilocalmanager.ui.anime.episode.edit.AnimeEditEpisodesScreen
 import xyz.secozzi.aniyomilocalmanager.ui.anime.episode.fetch.AnimeFetchEpisodesRoute
 import xyz.secozzi.aniyomilocalmanager.ui.anime.episode.fetch.AnimeFetchEpisodesScreen
 import xyz.secozzi.aniyomilocalmanager.ui.home.HomeRoute
@@ -82,6 +84,9 @@ fun Navigator() {
                 }
                 entry<AnimeFetchEpisodesRoute> { route ->
                     AnimeFetchEpisodesScreen(route.path)
+                }
+                entry<AnimeEditEpisodesRoute> { route ->
+                    AnimeEditEpisodesScreen(route.path)
                 }
 
                 // Manga

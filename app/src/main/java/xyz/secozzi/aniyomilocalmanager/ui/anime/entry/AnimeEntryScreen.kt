@@ -13,6 +13,7 @@ import xyz.secozzi.aniyomilocalmanager.domain.search.service.SearchIds
 import xyz.secozzi.aniyomilocalmanager.presentation.anime.entry.AnimeEntryScreenContent
 import xyz.secozzi.aniyomilocalmanager.ui.anime.cover.AnimeCoverRoute
 import xyz.secozzi.aniyomilocalmanager.ui.anime.details.AnimeDetailsRoute
+import xyz.secozzi.aniyomilocalmanager.ui.anime.episode.edit.AnimeEditEpisodesRoute
 import xyz.secozzi.aniyomilocalmanager.ui.anime.episode.fetch.AnimeFetchEpisodesRoute
 import xyz.secozzi.aniyomilocalmanager.ui.search.SearchRoute
 import xyz.secozzi.aniyomilocalmanager.ui.utils.LocalBackStack
@@ -47,7 +48,7 @@ fun AnimeEntryScreen(path: String) {
         onEditCover = { backStack.add(AnimeCoverRoute(path)) },
         onEditDetails = { backStack.add(AnimeDetailsRoute(path)) },
         onFetchEpisodes = { backStack.add(AnimeFetchEpisodesRoute(path)) },
-        onEditEpisodes = { },
+        onEditEpisodes = { backStack.add(AnimeEditEpisodesRoute(path)) },
         onClickAnilist = { backStack.add(SearchRoute(name, SearchIds.AnilistAnime)) },
         onClickAnidb = { backStack.add(SearchRoute(name, SearchIds.AniDB)) },
         onClickMal = { backStack.add(SearchRoute(name, SearchIds.MalAnime)) },

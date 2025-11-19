@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class EpisodeDetails(
     @SerialName("episode_number")
-    val episodeNumber: Int,
+    val episodeNumber: Float,
     val name: String? = null,
     @SerialName("date_upload")
     val dateUpload: String? = null,
