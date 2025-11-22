@@ -198,4 +198,11 @@
     <string name="pref_mangadex_title">Mangadex</string>
     <string name="pref_display_label">Display</string>
     <string name="pref_grid_size">Grid size</string>
+
+    <!-- Crash -->
+    <string name="crash_screen_title">Oops</string>
+    <string name="crash_screen_subtitle">Looks like %s experienced an unexpected error.</string>
+    <string name="crash_screen_logs_title">Crash logs:</string>
+    <string name="crash_screen_logcat_title">Logcat:</string>
+    <string name="crash_screen_share">Share crash logs</string>
 </resources>

@@ -15,9 +15,18 @@ import xyz.secozzi.aniyomilocalmanager.di.SearchModule
 import xyz.secozzi.aniyomilocalmanager.di.SerializationModule
 import xyz.secozzi.aniyomilocalmanager.di.StorageManagerModule
 import xyz.secozzi.aniyomilocalmanager.di.ViewModelsModule
+import xyz.secozzi.aniyomilocalmanager.ui.crash.CrashActivity
+import xyz.secozzi.aniyomilocalmanager.ui.crash.GlobalExceptionHandler
 
 @OptIn(KoinExperimentalAPI::class)
 class App : Application(), KoinStartup {
+    override fun onCreate() {
+        super.onCreate()
+        Thread.setDefaultUncaughtExceptionHandler(
+            GlobalExceptionHandler(applicationContext, CrashActivity::class.java),
+        )
+    }
+
     override fun onKoinStartup(): KoinConfiguration {
         return koinConfiguration {
             androidLogger()

@@ -58,7 +58,7 @@ class AnimeScreenViewModel(
 
     init {
         viewModelScope.launch {
-            delay(5.seconds)
+            delay(3.seconds)
             isLoaded = true
         }
 

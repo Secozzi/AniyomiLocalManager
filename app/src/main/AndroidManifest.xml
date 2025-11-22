@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
 
-        <!-- <activity android:name=".presentation.crash.CrashActivity" /> -->
+        <activity android:name=".ui.crash.CrashActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
