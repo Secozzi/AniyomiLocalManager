@@ -27,12 +27,12 @@ import xyz.secozzi.aniyomilocalmanager.database.domain.AnimeTrackerRepository
 import xyz.secozzi.aniyomilocalmanager.database.entities.AnimeTrackerEntity
 import xyz.secozzi.aniyomilocalmanager.domain.entry.anime.model.EpisodeDetails
 import xyz.secozzi.aniyomilocalmanager.domain.entry.anime.model.EpisodeType
-import xyz.secozzi.aniyomilocalmanager.domain.search.models.SearchResultItem
 import xyz.secozzi.aniyomilocalmanager.domain.search.service.SearchIds
 import xyz.secozzi.aniyomilocalmanager.domain.search.service.TrackerIds
 import xyz.secozzi.aniyomilocalmanager.domain.storage.EPISODES_JSON
 import xyz.secozzi.aniyomilocalmanager.domain.storage.EPISODE_FILE_TYPES
 import xyz.secozzi.aniyomilocalmanager.domain.storage.StorageManager
+import xyz.secozzi.aniyomilocalmanager.ui.search.SearchResult
 import xyz.secozzi.aniyomilocalmanager.utils.StateViewModel
 import xyz.secozzi.aniyomilocalmanager.utils.asResultFlow
 import xyz.secozzi.aniyomilocalmanager.utils.withMinimumDuration
@@ -115,14 +115,14 @@ class AnimeFetchEpisodesScreenViewModel(
         }
     }
 
-    fun updateIds(result: SearchResultItem) {
+    fun updateIds(result: SearchResult) {
         viewModelScope.launch {
             trackerRepository.upsert(
                 AnimeTrackerEntity(
                     path = path,
-                    anilist = result.trackerIds[TrackerIds.Anilist],
-                    mal = result.trackerIds[TrackerIds.Mal],
-                    anidb = result.trackerIds[TrackerIds.Anidb],
+                    anilist = result[TrackerIds.Anilist],
+                    mal = result[TrackerIds.Mal],
+                    anidb = result[TrackerIds.Anidb],
                 ),
             )
         }

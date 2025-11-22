@@ -46,7 +46,7 @@
     <string name="episode_type_trailer">Trailer</string>
     <string name="episode_type_parody">Parody</string>
     <string name="episode_type_other">Other</string>
-    <string name="episode_episode">Episode %f</string>
+    <string name="episode_episode">Episode %s</string>
     <string name="episode_start_small">Start cannot go below %d</string>
     <string name="episode_end_small">End cannot go below %d</string>
     <string name="episode_start_big">Start cannot go above %d</string>

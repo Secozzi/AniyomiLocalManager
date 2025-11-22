@@ -15,9 +15,9 @@ import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 import xyz.secozzi.aniyomilocalmanager.R
-import xyz.secozzi.aniyomilocalmanager.domain.search.models.SearchResultItem
 import xyz.secozzi.aniyomilocalmanager.domain.search.service.SearchIds
 import xyz.secozzi.aniyomilocalmanager.presentation.anime.episodes.fetch.AnimeFetchEpisodesScreenContent
+import xyz.secozzi.aniyomilocalmanager.ui.search.SearchResult
 import xyz.secozzi.aniyomilocalmanager.ui.search.SearchRoute
 import xyz.secozzi.aniyomilocalmanager.ui.utils.LocalBackStack
 import xyz.secozzi.aniyomilocalmanager.utils.CollectAsEffect
@@ -38,10 +38,10 @@ fun AnimeFetchEpisodesScreen(path: String) {
         parametersOf(path)
     }
 
-    val result: SearchResultItem? = resultStore.getResultState<SearchResultItem>()
+    val result: SearchResult? = resultStore.getResultState<SearchResult>()
     LaunchedEffect(result) {
         if (result == null) return@LaunchedEffect
-        resultStore.removeResult<SearchResultItem>()
+        resultStore.removeResult<SearchResult>()
         viewModel.updateIds(result)
     }
 

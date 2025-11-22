@@ -8,12 +8,12 @@ import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
-import xyz.secozzi.aniyomilocalmanager.domain.search.models.SearchResultItem
 import xyz.secozzi.aniyomilocalmanager.domain.search.service.SearchIds
 import xyz.secozzi.aniyomilocalmanager.presentation.manga.entry.MangaEntryScreenContent
 import xyz.secozzi.aniyomilocalmanager.ui.manga.chapters.MangaChaptersRoute
 import xyz.secozzi.aniyomilocalmanager.ui.manga.cover.MangaCoverRoute
 import xyz.secozzi.aniyomilocalmanager.ui.manga.details.MangaDetailsRoute
+import xyz.secozzi.aniyomilocalmanager.ui.search.SearchResult
 import xyz.secozzi.aniyomilocalmanager.ui.search.SearchRoute
 import xyz.secozzi.aniyomilocalmanager.ui.utils.LocalBackStack
 import xyz.secozzi.aniyomilocalmanager.utils.LocalResultStore
@@ -30,10 +30,10 @@ fun MangaEntryScreen(path: String) {
         parametersOf(path)
     }
 
-    val result: SearchResultItem? = resultStore.getResultState<SearchResultItem>()
+    val result: SearchResult? = resultStore.getResultState<SearchResult>()
     LaunchedEffect(result) {
         if (result == null) return@LaunchedEffect
-        resultStore.removeResult<SearchResultItem>()
+        resultStore.removeResult<SearchResult>()
         viewModel.updateIds(result)
     }
 

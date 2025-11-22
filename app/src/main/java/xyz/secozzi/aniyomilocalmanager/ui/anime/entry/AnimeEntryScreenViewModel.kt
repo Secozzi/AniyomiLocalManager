@@ -1,6 +1,7 @@
 package xyz.secozzi.aniyomilocalmanager.ui.anime.entry
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.anggrayudi.storage.file.children
@@ -14,11 +15,11 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import xyz.secozzi.aniyomilocalmanager.database.domain.AnimeTrackerRepository
 import xyz.secozzi.aniyomilocalmanager.database.entities.AnimeTrackerEntity
-import xyz.secozzi.aniyomilocalmanager.domain.search.models.SearchResultItem
 import xyz.secozzi.aniyomilocalmanager.domain.search.service.TrackerIds
 import xyz.secozzi.aniyomilocalmanager.domain.storage.DETAILS_JSON
 import xyz.secozzi.aniyomilocalmanager.domain.storage.EPISODES_JSON
 import xyz.secozzi.aniyomilocalmanager.domain.storage.StorageManager
+import xyz.secozzi.aniyomilocalmanager.ui.search.SearchResult
 import xyz.secozzi.aniyomilocalmanager.utils.asResultFlow
 import kotlin.time.Duration.Companion.seconds
 
@@ -35,6 +36,25 @@ class AnimeEntryScreenViewModel(
             initialValue = "",
         )
 
+    val detailsState = flow { emit(path) }
+        .asResultFlow(
+            idleResult = null,
+            loadingResult = null,
+            getErrorResult = { null },
+            dispatcher = Dispatchers.IO,
+        ) { path ->
+            val dir = storageManager.getFromPath(path)!!
+            val names = dir.children
+                .filterNot { it.fullName.startsWith(".") }
+                .map { it.fullName }
+
+            DetailsInfo(
+                hasCover = names.any { it.startsWith("cover", true) },
+                hasDetails = names.any { it == DETAILS_JSON },
+                hasEpisodes = names.any { it == EPISODES_JSON },
+            )
+        }
+
     val state = trackerRepository.getTrackData(path)
         .distinctUntilChanged()
         .asResultFlow(
@@ -45,31 +65,30 @@ class AnimeEntryScreenViewModel(
         ) { data ->
             val entity = data ?: AnimeTrackerEntity(path)
 
-            val dir = storageManager.getFromPath(path)!!
-            val names = dir.children
-                .filterNot { it.fullName.startsWith(".") }
-                .map { it.fullName }
-
             State.Success(
-                hasCover = names.any { it.startsWith("cover", true) },
-                hasDetails = names.any { it == DETAILS_JSON },
-                hasEpisodes = names.any { it == EPISODES_JSON },
                 data = entity,
             )
         }
 
-    fun updateIds(result: SearchResultItem) {
+    fun updateIds(result: SearchResult) {
         viewModelScope.launch {
             trackerRepository.upsert(
                 AnimeTrackerEntity(
                     path = path,
-                    anilist = result.trackerIds[TrackerIds.Anilist],
-                    mal = result.trackerIds[TrackerIds.Mal],
-                    anidb = result.trackerIds[TrackerIds.Anidb],
+                    anilist = result[TrackerIds.Anilist],
+                    mal = result[TrackerIds.Mal],
+                    anidb = result[TrackerIds.Anidb],
                 ),
             )
         }
     }
+
+    @Stable
+    data class DetailsInfo(
+        val hasCover: Boolean,
+        val hasDetails: Boolean,
+        val hasEpisodes: Boolean,
+    )
 
     @Immutable
     sealed interface State {
@@ -81,9 +100,6 @@ class AnimeEntryScreenViewModel(
 
         @Immutable
         data class Success(
-            val hasCover: Boolean,
-            val hasDetails: Boolean,
-            val hasEpisodes: Boolean,
             val data: AnimeTrackerEntity,
         ) : State
     }

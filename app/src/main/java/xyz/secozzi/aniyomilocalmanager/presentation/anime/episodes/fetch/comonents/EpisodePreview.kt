@@ -17,6 +17,7 @@ import xyz.secozzi.aniyomilocalmanager.R
 import xyz.secozzi.aniyomilocalmanager.domain.entry.anime.model.EpisodeDetails
 import xyz.secozzi.aniyomilocalmanager.presentation.PreviewContent
 import xyz.secozzi.aniyomilocalmanager.presentation.components.ExpressiveListItem
+import xyz.secozzi.aniyomilocalmanager.presentation.utils.toDisplayString
 import xyz.secozzi.aniyomilocalmanager.ui.theme.DisabledAlpha
 import xyz.secozzi.aniyomilocalmanager.ui.theme.spacing
 
@@ -62,7 +63,12 @@ fun EpisodePreview(
                 Text(
                     text = buildList(3) {
                         if (episodeDetails.episodeNumber != 0f) {
-                            add(stringResource(R.string.episode_episode, episodeDetails.episodeNumber))
+                            add(
+                                stringResource(
+                                    R.string.episode_episode,
+                                    episodeDetails.episodeNumber.toDisplayString(),
+                                ),
+                            )
                         }
 
                         if (episodeDetails.dateUpload != null) {

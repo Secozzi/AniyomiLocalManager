@@ -13,12 +13,12 @@ import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
 import xyz.secozzi.aniyomilocalmanager.R
-import xyz.secozzi.aniyomilocalmanager.domain.search.models.SearchResultItem
 import xyz.secozzi.aniyomilocalmanager.domain.search.service.SearchIds
 import xyz.secozzi.aniyomilocalmanager.preferences.CoverPreferences
 import xyz.secozzi.aniyomilocalmanager.preferences.preference.collectAsStateWithLifecycle
 import xyz.secozzi.aniyomilocalmanager.presentation.anime.cover.AnimeCoverScreenContent
 import xyz.secozzi.aniyomilocalmanager.ui.preferences.CoverPreferencesRoute
+import xyz.secozzi.aniyomilocalmanager.ui.search.SearchResult
 import xyz.secozzi.aniyomilocalmanager.ui.search.SearchRoute
 import xyz.secozzi.aniyomilocalmanager.ui.utils.LocalBackStack
 import xyz.secozzi.aniyomilocalmanager.utils.CollectAsEffect
@@ -46,10 +46,10 @@ fun AnimeCoverScreen(path: String) {
     val isDownloadingCover by viewModel.isDownloadingCover.collectAsStateWithLifecycle()
     val selectedCover by viewModel.selectedCover.collectAsStateWithLifecycle()
 
-    val result: SearchResultItem? = resultStore.getResultState<SearchResultItem>()
+    val result: SearchResult? = resultStore.getResultState<SearchResult>()
     LaunchedEffect(result) {
         if (result == null) return@LaunchedEffect
-        resultStore.removeResult<SearchResultItem>()
+        resultStore.removeResult<SearchResult>()
         viewModel.updateIds(result)
     }
 

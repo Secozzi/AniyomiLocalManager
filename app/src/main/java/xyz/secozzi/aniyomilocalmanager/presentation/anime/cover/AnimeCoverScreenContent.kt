@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import xyz.secozzi.aniyomilocalmanager.R
 import xyz.secozzi.aniyomilocalmanager.domain.cover.model.CoverData
-import xyz.secozzi.aniyomilocalmanager.domain.search.models.SearchResultItem
 import xyz.secozzi.aniyomilocalmanager.presentation.components.ErrorContent
 import xyz.secozzi.aniyomilocalmanager.presentation.components.InfoContent
 import xyz.secozzi.aniyomilocalmanager.presentation.components.LoadingContent
@@ -25,6 +24,7 @@ import xyz.secozzi.aniyomilocalmanager.presentation.cover.CoverScreenContent
 import xyz.secozzi.aniyomilocalmanager.presentation.cover.DownloadBottomBar
 import xyz.secozzi.aniyomilocalmanager.presentation.cover.DownloadingBottomBar
 import xyz.secozzi.aniyomilocalmanager.ui.anime.cover.AnimeCoverScreenViewModel
+import xyz.secozzi.aniyomilocalmanager.ui.search.SearchResult
 
 @Composable
 fun AnimeCoverScreenContent(
@@ -32,7 +32,7 @@ fun AnimeCoverScreenContent(
     selectedCover: CoverData?,
     isDownloadingCover: Boolean,
     gridSize: Int,
-    result: SearchResultItem?,
+    result: SearchResult?,
     onBack: () -> Unit,
     onClickSearch: () -> Unit,
     onClickSettings: () -> Unit,

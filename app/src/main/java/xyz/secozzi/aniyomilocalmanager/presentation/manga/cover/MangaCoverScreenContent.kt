@@ -20,7 +20,6 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import kotlinx.collections.immutable.persistentListOf
 import xyz.secozzi.aniyomilocalmanager.R
 import xyz.secozzi.aniyomilocalmanager.domain.cover.model.CoverData
-import xyz.secozzi.aniyomilocalmanager.domain.search.models.SearchResultItem
 import xyz.secozzi.aniyomilocalmanager.presentation.PreviewContent
 import xyz.secozzi.aniyomilocalmanager.presentation.components.ErrorContent
 import xyz.secozzi.aniyomilocalmanager.presentation.components.InfoContent
@@ -29,6 +28,7 @@ import xyz.secozzi.aniyomilocalmanager.presentation.cover.CoverScreenContent
 import xyz.secozzi.aniyomilocalmanager.presentation.cover.DownloadBottomBar
 import xyz.secozzi.aniyomilocalmanager.presentation.cover.DownloadingBottomBar
 import xyz.secozzi.aniyomilocalmanager.ui.manga.cover.MangaCoverScreenViewModel
+import xyz.secozzi.aniyomilocalmanager.ui.search.SearchResult
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -37,7 +37,7 @@ fun MangaCoverScreenContent(
     selectedCover: CoverData?,
     isDownloadingCover: Boolean,
     gridSize: Int,
-    result: SearchResultItem?,
+    result: SearchResult?,
     onBack: () -> Unit,
     onClickSearch: () -> Unit,
     onClickSettings: () -> Unit,

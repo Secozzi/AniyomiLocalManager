@@ -87,7 +87,7 @@ fun MangaEntryScreenContent(
                                     detailsState == null -> {
                                         CircularProgressIndicator(
                                             strokeWidth = 3.dp,
-                                            modifier = Modifier.size(MaterialTheme.spacing.medium),
+                                            modifier = Modifier.padding(horizontal = 2.dp).size(20.dp),
                                         )
                                     }
                                     detailsState.hasCover -> {
@@ -112,7 +112,7 @@ fun MangaEntryScreenContent(
                                     detailsState == null -> {
                                         CircularProgressIndicator(
                                             strokeWidth = 3.dp,
-                                            modifier = Modifier.size(MaterialTheme.spacing.medium),
+                                            modifier = Modifier.padding(horizontal = 2.dp).size(20.dp),
                                         )
                                     }
                                     detailsState.hasComicInfo -> {

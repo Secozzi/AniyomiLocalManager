@@ -27,10 +27,10 @@ import xyz.secozzi.aniyomilocalmanager.database.domain.AnimeTrackerRepository
 import xyz.secozzi.aniyomilocalmanager.database.entities.AnimeTrackerEntity
 import xyz.secozzi.aniyomilocalmanager.domain.cover.model.CoverData
 import xyz.secozzi.aniyomilocalmanager.domain.cover.repository.CoverRepository
-import xyz.secozzi.aniyomilocalmanager.domain.search.models.SearchResultItem
 import xyz.secozzi.aniyomilocalmanager.domain.search.service.TrackerIds
 import xyz.secozzi.aniyomilocalmanager.domain.storage.StorageManager
 import xyz.secozzi.aniyomilocalmanager.preferences.CoverPreferences
+import xyz.secozzi.aniyomilocalmanager.ui.search.SearchResult
 import xyz.secozzi.aniyomilocalmanager.utils.asResultFlow
 
 class AnimeCoverScreenViewModel(
@@ -51,14 +51,14 @@ class AnimeCoverScreenViewModel(
             storageManager.getFromPath(path)!!.fullName
         }
 
-    fun updateIds(result: SearchResultItem) {
+    fun updateIds(result: SearchResult) {
         viewModelScope.launch {
             trackerRepository.upsert(
                 AnimeTrackerEntity(
                     path = path,
-                    anilist = result.trackerIds[TrackerIds.Anilist],
-                    mal = result.trackerIds[TrackerIds.Mal],
-                    anidb = result.trackerIds[TrackerIds.Anidb],
+                    anilist = result[TrackerIds.Anilist],
+                    mal = result[TrackerIds.Mal],
+                    anidb = result[TrackerIds.Anidb],
                 ),
             )
         }

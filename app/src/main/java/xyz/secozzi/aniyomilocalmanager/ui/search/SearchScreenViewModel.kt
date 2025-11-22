@@ -4,7 +4,9 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -21,6 +23,9 @@ class SearchScreenViewModel(
     private val _selected = MutableStateFlow<SearchResultItem?>(null)
     val selected = _selected.asStateFlow()
 
+    private val _uiEvent = MutableSharedFlow<UiEvent>()
+    val uiEvent = _uiEvent.asSharedFlow()
+
     fun updateSelected(selected: SearchResultItem) {
         _selected.update { s ->
             if (s == selected) null else selected
@@ -29,6 +34,13 @@ class SearchScreenViewModel(
 
     fun search(query: String) {
         viewModelScope.launch(Dispatchers.IO) {
+            if (query.startsWith("id:")) {
+                query.drop(3).toLongOrNull()?.let {
+                    _uiEvent.emit(UiEvent.SearchId(it))
+                    return@launch
+                }
+            }
+
             mutableState.update { _ -> State.Loading }
 
             try {
@@ -39,6 +51,12 @@ class SearchScreenViewModel(
                 mutableState.update { _ -> State.Error(e) }
             }
         }
+    }
+
+    @Immutable
+    sealed interface UiEvent {
+        @Immutable
+        data class SearchId(val id: Long) : UiEvent
     }
 
     @Immutable

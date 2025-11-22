@@ -40,6 +40,7 @@ import xyz.secozzi.aniyomilocalmanager.presentation.anime.episodes.fetch.comonen
 import xyz.secozzi.aniyomilocalmanager.presentation.anime.episodes.fetch.comonents.OutlinedNumericChooser
 import xyz.secozzi.aniyomilocalmanager.presentation.components.DropdownItem
 import xyz.secozzi.aniyomilocalmanager.presentation.components.SimpleDropdown
+import xyz.secozzi.aniyomilocalmanager.presentation.utils.toDisplayString
 import xyz.secozzi.aniyomilocalmanager.ui.theme.spacing
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -168,7 +169,7 @@ fun EpisodeFetchDetails(
                             itemSize = if (endEpisode == null) 1 else 2,
                             index = 0,
                             episodeDetails = startEpisode.copy(episodeNumber = startEpisode.episodeNumber + offset),
-                            extraData = "(${startEpisode.episodeNumber})",
+                            extraData = "(${startEpisode.episodeNumber.toDisplayString()})",
                         )
                     }
                 }
@@ -183,7 +184,7 @@ fun EpisodeFetchDetails(
                             itemSize = 2,
                             index = 1,
                             episodeDetails = endEpisode.copy(episodeNumber = endEpisode.episodeNumber + offset),
-                            extraData = "(${endEpisode.episodeNumber})",
+                            extraData = "(${endEpisode.episodeNumber.toDisplayString()})",
                         )
                     }
                 }

@@ -18,10 +18,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
+import xyz.secozzi.aniyomilocalmanager.presentation.utils.toDisplayString
 import xyz.secozzi.aniyomilocalmanager.ui.theme.DisabledAlpha
 import xyz.secozzi.aniyomilocalmanager.ui.theme.spacing
-import kotlin.math.ceil
-import kotlin.math.floor
 
 @Composable
 fun EditEntryHeader(
@@ -68,13 +67,5 @@ fun EditEntryHeader(
         } else {
             Icon(Icons.Default.KeyboardArrowDown, null)
         }
-    }
-}
-
-private fun Float.toDisplayString(): String {
-    return if (ceil(this) == floor(this)) {
-        this.toInt().toString()
-    } else {
-        this.toString()
     }
 }

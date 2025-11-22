@@ -5,12 +5,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ViewList
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -35,6 +37,7 @@ import xyz.secozzi.aniyomilocalmanager.ui.theme.spacing
 @Composable
 fun AnimeEntryScreenContent(
     state: AnimeEntryScreenViewModel.State,
+    detailsState: AnimeEntryScreenViewModel.DetailsInfo?,
     name: String,
     onBack: () -> Unit,
     onEditCover: () -> Unit,
@@ -80,7 +83,20 @@ fun AnimeEntryScreenContent(
                             index = 0,
                             headlineContent = { Text(text = stringResource(R.string.edit_cover)) },
                             leadingContent = {
-                                Icon(if (state.hasCover) Icons.Default.Check else Icons.Default.Clear, null)
+                                when {
+                                    detailsState == null -> {
+                                        CircularProgressIndicator(
+                                            strokeWidth = 3.dp,
+                                            modifier = Modifier.padding(horizontal = 2.dp).size(20.dp),
+                                        )
+                                    }
+                                    detailsState.hasCover -> {
+                                        Icon(Icons.Default.Check, null)
+                                    }
+                                    !detailsState.hasCover -> {
+                                        Icon(Icons.Default.Clear, null)
+                                    }
+                                }
                             },
                             onClick = onEditCover,
                         )
@@ -92,7 +108,20 @@ fun AnimeEntryScreenContent(
                             index = 1,
                             headlineContent = { Text(text = stringResource(R.string.anime_edit_details)) },
                             leadingContent = {
-                                Icon(if (state.hasDetails) Icons.Default.Check else Icons.Default.Clear, null)
+                                when {
+                                    detailsState == null -> {
+                                        CircularProgressIndicator(
+                                            strokeWidth = 3.dp,
+                                            modifier = Modifier.padding(horizontal = 2.dp).size(20.dp),
+                                        )
+                                    }
+                                    detailsState.hasDetails -> {
+                                        Icon(Icons.Default.Check, null)
+                                    }
+                                    !detailsState.hasDetails -> {
+                                        Icon(Icons.Default.Clear, null)
+                                    }
+                                }
                             },
                             onClick = onEditDetails,
                         )
@@ -118,7 +147,20 @@ fun AnimeEntryScreenContent(
                             index = 1,
                             headlineContent = { Text(text = stringResource(R.string.anime_edit_episodes)) },
                             leadingContent = {
-                                Icon(if (state.hasDetails) Icons.Default.Check else Icons.Default.Clear, null)
+                                when {
+                                    detailsState == null -> {
+                                        CircularProgressIndicator(
+                                            strokeWidth = 3.dp,
+                                            modifier = Modifier.padding(horizontal = 2.dp).size(20.dp),
+                                        )
+                                    }
+                                    detailsState.hasEpisodes -> {
+                                        Icon(Icons.Default.Check, null)
+                                    }
+                                    !detailsState.hasEpisodes -> {
+                                        Icon(Icons.Default.Clear, null)
+                                    }
+                                }
                             },
                             onClick = onEditEpisodes,
                         )
@@ -189,14 +231,16 @@ private fun AnimeEntryScreenContentPreview() {
     PreviewContent {
         AnimeEntryScreenContent(
             state = AnimeEntryScreenViewModel.State.Success(
-                hasCover = false,
-                hasDetails = true,
-                hasEpisodes = true,
                 data = AnimeTrackerEntity(
                     path = "",
                     anilist = 1234L,
                     mal = 54321L,
                 ),
+            ),
+            detailsState = AnimeEntryScreenViewModel.DetailsInfo(
+                hasCover = false,
+                hasDetails = true,
+                hasEpisodes = true,
             ),
             name = "Boku no Hero Academia",
             onBack = {},

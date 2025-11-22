@@ -44,6 +44,7 @@ class MyAnimeListSearch(
                     }
                 }
                 .map { it.title }
+                .reversed()
 
             SearchResultItem(
                 titles = titles,
@@ -99,6 +100,7 @@ class MyAnimeListSearch(
                 }
             }
             .map { it.title }
+            .reversed()
 
         return EntryDetails(
             title = titles.first(),
