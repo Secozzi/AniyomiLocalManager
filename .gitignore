@@ -42,8 +42,5 @@ local.properties
 hs_err_pid*
 replay_pid*
 
-# Android Room schemas
-/app/schemas/
-
 # IDE
 /.idea
