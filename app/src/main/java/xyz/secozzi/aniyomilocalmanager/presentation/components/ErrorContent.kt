@@ -49,13 +49,13 @@ fun ErrorContent(
 @Composable
 private fun ErrorContentPreview() {
     PreviewContent {
-        try {
-            1 / 0
-        } catch (e: Exception) {
-            ErrorContent(
-                e,
-                modifier = Modifier.height(500.dp),
-            )
-        }
+        // try {
+        //     1 / 0
+        // } catch (e: Exception) {
+        //     ErrorContent(
+        //         e,
+        //         modifier = Modifier.height(500.dp),
+        //     )
+        // }
     }
 }
