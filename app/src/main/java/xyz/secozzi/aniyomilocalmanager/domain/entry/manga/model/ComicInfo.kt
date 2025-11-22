@@ -4,6 +4,7 @@ import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 import nl.adaptivity.xmlutil.serialization.XmlValue
+import nl.adaptivity.xmlutil.util.CompactFragment
 import xyz.secozzi.aniyomilocalmanager.domain.entry.model.Status
 
 // https://anansi-project.github.io/docs/comicinfo/schemas/v2.0
@@ -11,12 +12,21 @@ import xyz.secozzi.aniyomilocalmanager.domain.entry.model.Status
 @Serializable
 @XmlSerialName("ComicInfo", "", "")
 data class ComicInfo(
+    // For chapters
+    val title: Title?,
+    val number: Number?,
+    val translator: Translator?,
+
+    // For manga
     val series: Series?,
     val summary: Summary?,
     val writer: Writer?,
     val penciller: Penciller?,
     val genre: Genre?,
     val publishingStatus: PublishingStatusTachiyomi?,
+
+    @XmlValue
+    val unknownChildren: List<CompactFragment> = emptyList(),
 ) {
     @XmlElement(false)
     @XmlSerialName("xmlns:xsd", "", "")
@@ -25,6 +35,18 @@ data class ComicInfo(
     @XmlElement(false)
     @XmlSerialName("xmlns:xsi", "", "")
     val xmlSchemaInstance: String = "http://www.w3.org/2001/XMLSchema-instance"
+
+    @Serializable
+    @XmlSerialName("Title", "", "")
+    data class Title(@XmlValue(true) val value: String = "")
+
+    @Serializable
+    @XmlSerialName("Number", "", "")
+    data class Number(@XmlValue(true) val value: String = "")
+
+    @Serializable
+    @XmlSerialName("Translator", "", "")
+    data class Translator(@XmlValue(true) val value: String = "")
 
     @Serializable
     @XmlSerialName("Series", "", "")

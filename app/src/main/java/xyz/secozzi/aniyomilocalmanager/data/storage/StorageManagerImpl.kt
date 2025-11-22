@@ -2,6 +2,7 @@ package xyz.secozzi.aniyomilocalmanager.data.storage
 
 import android.content.Context
 import android.net.Uri
+import android.os.ParcelFileDescriptor
 import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
 import com.anggrayudi.storage.file.DocumentFileCompat
@@ -46,5 +47,9 @@ class StorageManagerImpl(private val context: Context) : StorageManager {
 
     override fun getInputStream(file: DocumentFile): InputStream? {
         return file.openInputStream(context)
+    }
+
+    override fun getFileDescriptor(file: DocumentFile, mode: String): ParcelFileDescriptor? {
+        return context.contentResolver.openFileDescriptor(file.uri, mode)
     }
 }

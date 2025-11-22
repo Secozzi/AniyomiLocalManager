@@ -5,12 +5,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.outlined.BookOnline
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -35,10 +38,12 @@ import xyz.secozzi.aniyomilocalmanager.ui.theme.spacing
 @Composable
 fun MangaEntryScreenContent(
     state: MangaEntryScreenViewModel.State,
+    detailsState: MangaEntryScreenViewModel.DetailsInfo?,
     name: String,
     onBack: () -> Unit,
     onEditCover: () -> Unit,
     onEditComicInfo: () -> Unit,
+    onEditChapters: () -> Unit,
     onClickMangaBaka: () -> Unit,
     onClickAnilist: () -> Unit,
     onClickMal: () -> Unit,
@@ -74,11 +79,24 @@ fun MangaEntryScreenContent(
                     // Items
                     item {
                         ExpressiveListItem(
-                            itemSize = 2,
+                            itemSize = 3,
                             index = 0,
                             headlineContent = { Text(text = stringResource(R.string.edit_cover)) },
                             leadingContent = {
-                                Icon(if (state.hasCover) Icons.Default.Check else Icons.Default.Clear, null)
+                                when {
+                                    detailsState == null -> {
+                                        CircularProgressIndicator(
+                                            strokeWidth = 3.dp,
+                                            modifier = Modifier.size(MaterialTheme.spacing.medium),
+                                        )
+                                    }
+                                    detailsState.hasCover -> {
+                                        Icon(Icons.Default.Check, null)
+                                    }
+                                    !detailsState.hasCover -> {
+                                        Icon(Icons.Default.Clear, null)
+                                    }
+                                }
                             },
                             onClick = onEditCover,
                         )
@@ -86,13 +104,36 @@ fun MangaEntryScreenContent(
 
                     item {
                         ExpressiveListItem(
-                            itemSize = 2,
+                            itemSize = 3,
                             index = 1,
                             headlineContent = { Text(text = stringResource(R.string.manga_edit_comicinfo)) },
                             leadingContent = {
-                                Icon(if (state.hasComicInfo) Icons.Default.Check else Icons.Default.Clear, null)
+                                when {
+                                    detailsState == null -> {
+                                        CircularProgressIndicator(
+                                            strokeWidth = 3.dp,
+                                            modifier = Modifier.size(MaterialTheme.spacing.medium),
+                                        )
+                                    }
+                                    detailsState.hasComicInfo -> {
+                                        Icon(Icons.Default.Check, null)
+                                    }
+                                    !detailsState.hasComicInfo -> {
+                                        Icon(Icons.Default.Clear, null)
+                                    }
+                                }
                             },
                             onClick = onEditComicInfo,
+                        )
+                    }
+
+                    item {
+                        ExpressiveListItem(
+                            itemSize = 3,
+                            index = 2,
+                            headlineContent = { Text(text = stringResource(R.string.manga_edit_chapter_comicinfo)) },
+                            leadingContent = { Icon(Icons.AutoMirrored.Filled.List, null) },
+                            onClick = onEditChapters,
                         )
                     }
 
@@ -155,24 +196,24 @@ fun MangaEntryScreenContent(
     }
 }
 
-@PreviewLightDark
 @Composable
+@PreviewLightDark
 private fun MangaEntryScreenContentPreview() {
     PreviewContent {
         MangaEntryScreenContent(
             state = MangaEntryScreenViewModel.State.Success(
-                hasCover = false,
-                hasComicInfo = true,
                 data = MangaTrackerEntity(
                     path = "",
                     anilist = 1234L,
                     mal = 54321L,
                 ),
             ),
+            detailsState = null,
             name = "Boku no Hero Academia",
             onBack = {},
             onEditCover = {},
             onEditComicInfo = {},
+            onEditChapters = {},
             onClickMangaBaka = {},
             onClickAnilist = {},
             onClickMal = {},

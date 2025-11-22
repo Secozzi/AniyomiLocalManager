@@ -102,6 +102,7 @@ dependencies {
     implementation(libs.simple.storage)
     implementation(libs.kache)
     implementation(libs.fuzzywuzzy)
+    implementation(libs.libarchive)
     implementation(libs.bundles.compose.navigation3)
     implementation(libs.bundles.serialization)
     implementation(libs.bundles.koin)

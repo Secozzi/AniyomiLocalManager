@@ -22,9 +22,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.ErrorOutline
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
@@ -39,10 +36,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.ImmutableList
@@ -54,14 +49,12 @@ import xyz.secozzi.aniyomilocalmanager.presentation.anime.episodes.edit.componen
 import xyz.secozzi.aniyomilocalmanager.presentation.components.ErrorContent
 import xyz.secozzi.aniyomilocalmanager.presentation.components.ExpressiveListItem
 import xyz.secozzi.aniyomilocalmanager.presentation.components.FloatingBottomBar
+import xyz.secozzi.aniyomilocalmanager.presentation.components.edit.EditEntryHeader
 import xyz.secozzi.aniyomilocalmanager.presentation.settings.SettingsSwitch
 import xyz.secozzi.aniyomilocalmanager.presentation.utils.plus
 import xyz.secozzi.aniyomilocalmanager.ui.anime.episode.edit.AnimeEditEpisodeScreenViewModel
 import xyz.secozzi.aniyomilocalmanager.ui.anime.episode.edit.AnimeEditEpisodeScreenViewModel.ValidEntry
-import xyz.secozzi.aniyomilocalmanager.ui.theme.DisabledAlpha
 import xyz.secozzi.aniyomilocalmanager.ui.theme.spacing
-import kotlin.math.ceil
-import kotlin.math.floor
 
 @Composable
 fun AnimeEditEpisodesScreenContent(
@@ -180,42 +173,14 @@ private fun SuccessContent(
                         indication = ripple(),
                     ),
                 headlineContent = {
-                    Row(
-                        verticalAlignment = Alignment.Top,
-                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smaller),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .combinedClickable(
-                                onClick = { onExpandedStateChange(i) },
-                                interactionSource = interactionSource,
-                                indication = null,
-                            ),
-                    ) {
-                        if (valid?.isValid() == false) {
-                            Icon(
-                                imageVector = Icons.Default.ErrorOutline,
-                                contentDescription = null,
-                            )
-                        }
-
-                        Text(
-                            text = "(${ep.episodeNumber.toDisplayString()})",
-                            modifier = Modifier.alpha(DisabledAlpha),
-                        )
-
-                        Text(
-                            text = ep.name ?: "",
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.weight(1f),
-                        )
-
-                        if (expanded) {
-                            Icon(Icons.Default.KeyboardArrowUp, null)
-                        } else {
-                            Icon(Icons.Default.KeyboardArrowDown, null)
-                        }
-                    }
+                    EditEntryHeader(
+                        isInvalid = valid?.isValid() == false,
+                        number = ep.episodeNumber,
+                        name = ep.name ?: "",
+                        expanded = expanded,
+                        onClick = { onExpandedStateChange(i) },
+                        interactionSource = interactionSource,
+                    )
                 },
                 supportingContent = {
                     if (expanded) {
@@ -303,14 +268,6 @@ private fun SuccessContent(
                 },
             )
         }
-    }
-}
-
-private fun Float.toDisplayString(): String {
-    return if (ceil(this) == floor(this)) {
-        this.toInt().toString()
-    } else {
-        this.toString()
     }
 }
 

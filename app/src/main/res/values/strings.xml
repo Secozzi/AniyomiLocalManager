@@ -99,6 +99,12 @@
 
     <!-- Manga entry -->
     <string name="manga_edit_comicinfo">Edit ComicInfo.xml</string>
+    <string name="manga_edit_chapter_comicinfo">Edit Chapter ComicInfo.xml</string>
+
+    <!-- Manga chapter -->
+    <string name="chapter_edit_chapter_number">Chapter number</string>
+    <string name="chapter_edit_save_success">Successfully saved ComicInfo.xml</string>
+    <string name="chapter_edit_save_failure">Failed to save ComicInfo.xml</string>
 
     <!-- Cover screen -->
     <string name="cover_loading_image_placeholder">Loading …</string>

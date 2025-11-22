@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.withContext
+import kotlin.coroutines.CoroutineContext
 import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -28,12 +29,15 @@ fun <R, T> Flow<T>.asResultFlow(
     idleResult: R,
     loadingResult: R,
     getErrorResult: (Throwable) -> R,
+    context: CoroutineContext = Dispatchers.Unconfined,
     fetchData: suspend (T) -> R,
 ): StateFlow<R> = this.flatMapLatest { data ->
     flow {
         emit(loadingResult)
         try {
-            val result = fetchData(data)
+            val result = withContext(context) {
+                fetchData(data)
+            }
             emit(result)
         } catch (e: Exception) {
             if (e is CancellationException) throw e

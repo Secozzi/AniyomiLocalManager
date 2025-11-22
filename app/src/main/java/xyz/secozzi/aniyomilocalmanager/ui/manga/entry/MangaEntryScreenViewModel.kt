@@ -1,11 +1,14 @@
 package xyz.secozzi.aniyomilocalmanager.ui.manga.entry
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.anggrayudi.storage.file.children
 import com.anggrayudi.storage.file.fullName
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import xyz.secozzi.aniyomilocalmanager.database.domain.MangaTrackerRepository
 import xyz.secozzi.aniyomilocalmanager.database.entities.MangaTrackerEntity
@@ -20,23 +23,35 @@ class MangaEntryScreenViewModel(
     private val storageManager: StorageManager,
 ) : ViewModel() {
 
+    val detailsState = flow { emit(path) }
+        .asResultFlow(
+            idleResult = null,
+            loadingResult = null,
+            getErrorResult = { null },
+            context = Dispatchers.IO,
+        ) { path ->
+            val dir = storageManager.getFromPath(path)!!
+            val names = dir.children
+                .filterNot { it.fullName.startsWith(".") }
+                .map { it.fullName }
+
+            DetailsInfo(
+                hasCover = names.any { it.contains("cover") },
+                hasComicInfo = names.any { it.equals("comicinfo.xml", true) },
+            )
+        }
+
     val state = trackerRepository.getTrackData(path)
         .distinctUntilChanged()
         .asResultFlow(
             idleResult = State.Idle,
             loadingResult = State.Idle,
             getErrorResult = { State.Error(it) },
+            context = Dispatchers.IO,
         ) { data ->
             val entity = data ?: MangaTrackerEntity(path)
 
-            val dir = storageManager.getFromPath(path)!!
-            val names = dir.children
-                .filterNot { it.fullName.startsWith(".") }
-                .map { it.fullName }
-
             State.Success(
-                hasCover = names.any { it.contains("cover") },
-                hasComicInfo = names.any { it.equals("comicinfo.xml", true) },
                 data = entity,
             )
         }
@@ -54,6 +69,12 @@ class MangaEntryScreenViewModel(
         }
     }
 
+    @Stable
+    data class DetailsInfo(
+        val hasCover: Boolean,
+        val hasComicInfo: Boolean,
+    )
+
     @Immutable
     sealed interface State {
         @Immutable
@@ -64,8 +85,6 @@ class MangaEntryScreenViewModel(
 
         @Immutable
         data class Success(
-            val hasCover: Boolean,
-            val hasComicInfo: Boolean,
             val data: MangaTrackerEntity,
         ) : State
     }

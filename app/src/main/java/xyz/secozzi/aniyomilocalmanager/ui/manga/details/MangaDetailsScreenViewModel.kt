@@ -159,6 +159,9 @@ class MangaDetailsScreenViewModel(
         val details = (state.value as? State.Success)?.details ?: return null
 
         val comicInfo = ComicInfo(
+            title = null,
+            number = null,
+            translator = null,
             series = ComicInfo.Series(details.title),
             summary = details.description.takeIf { it.isNotBlank() }?.let {
                 ComicInfo.Summary(it)
