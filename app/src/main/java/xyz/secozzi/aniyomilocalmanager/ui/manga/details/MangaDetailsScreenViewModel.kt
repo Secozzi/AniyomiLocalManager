@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.collections.immutable.toPersistentMap
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,9 +24,11 @@ import xyz.secozzi.aniyomilocalmanager.domain.entry.manga.model.ComicInfoPublish
 import xyz.secozzi.aniyomilocalmanager.domain.entry.model.EntryDetails
 import xyz.secozzi.aniyomilocalmanager.domain.entry.model.Status
 import xyz.secozzi.aniyomilocalmanager.domain.search.service.SearchIds
+import xyz.secozzi.aniyomilocalmanager.domain.storage.COMIC_INFO_FILE
 import xyz.secozzi.aniyomilocalmanager.domain.storage.StorageManager
 import xyz.secozzi.aniyomilocalmanager.utils.StateViewModel
 import xyz.secozzi.aniyomilocalmanager.utils.withMinimumDuration
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
 class MangaDetailsScreenViewModel(
@@ -36,8 +39,11 @@ class MangaDetailsScreenViewModel(
     private val xml: XML,
 ) : StateViewModel<MangaDetailsScreenViewModel.State>(State.Idle) {
 
+    private val _comicInfo = MutableStateFlow<ComicInfo>(ComicInfo.EMPTY)
+    val comicInfo = _comicInfo.asStateFlow()
+
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             trackerRepository.getTrackData(path).collectLatest { data ->
                 val searchIds = buildMap(3) {
                     if (data?.mangabaka != null) {
@@ -63,11 +69,12 @@ class MangaDetailsScreenViewModel(
     }
 
     private fun getDetailsFromComicinfo(path: String): EntryDetails {
-        return storageManager.getFromPath(path)?.findFile("ComicInfo.xml")?.let {
+        return storageManager.getFromPath(path)?.findFile(COMIC_INFO_FILE)?.let {
             try {
                 val data = storageManager.getInputStream(it)!!.reader().use { r ->
                     xml.decodeFromString<ComicInfo>(r.readText())
                 }
+                _comicInfo.update { _ -> data }
 
                 EntryDetails(
                     title = data.series?.value.orEmpty(),
@@ -105,8 +112,15 @@ class MangaDetailsScreenViewModel(
                 getDetailsFromComicinfo(path)
             } else {
                 val id = successState.searchIds[selected]!!
-                withMinimumDuration(1.5.seconds) {
-                    searchManager.getSearchRepository(selected).getFromId(id)
+                try {
+                    withMinimumDuration(1.5.seconds, 150.milliseconds) {
+                        searchManager.getSearchRepository(selected).getFromId(id)
+                    }
+                } catch (e: Exception) {
+                    if (e is CancellationException) throw e
+                    mutableState.update { _ -> State.Error(e) }
+                    _isLoading.update { _ -> false }
+                    return@launch
                 }
             }
 
@@ -157,11 +171,7 @@ class MangaDetailsScreenViewModel(
 
     fun generateXmlString(): String? {
         val details = (state.value as? State.Success)?.details ?: return null
-
-        val comicInfo = ComicInfo(
-            title = null,
-            number = null,
-            translator = null,
+        val comicInfo = comicInfo.value.copy(
             series = ComicInfo.Series(details.title),
             summary = details.description.takeIf { it.isNotBlank() }?.let {
                 ComicInfo.Summary(it)
@@ -186,8 +196,8 @@ class MangaDetailsScreenViewModel(
     private fun performDownload(): Boolean {
         val data = generateXmlString() ?: return false
         val dir = storageManager.getFromPath(path) ?: return false
-        val comicInfo = dir.findFile("ComicInfo.xml")
-            ?: dir.createFile("application/xml", "ComicInfo.xml")
+        val comicInfo = dir.findFile(COMIC_INFO_FILE)
+            ?: dir.createFile("application/xml", COMIC_INFO_FILE)
             ?: return false
 
         storageManager.getOutputStream(comicInfo, "wt").use { output ->

@@ -47,7 +47,7 @@ val KtorModule = module {
             }
 
             install(RateLimitPlugin) {
-                addLimit("api.jikan.moe", 3, 1.seconds)
+                addLimit("api.jikan.moe", 1, 1.seconds)
                 addLimit("graphql.anilist.co", 90, 1.minutes)
             }
         }

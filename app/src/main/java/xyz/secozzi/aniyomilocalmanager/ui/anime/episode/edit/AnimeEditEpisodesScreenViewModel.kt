@@ -8,18 +8,18 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import xyz.secozzi.aniyomilocalmanager.domain.entry.anime.model.EpisodeDetails
+import xyz.secozzi.aniyomilocalmanager.domain.storage.EPISODES_JSON
 import xyz.secozzi.aniyomilocalmanager.domain.storage.StorageManager
 import xyz.secozzi.aniyomilocalmanager.utils.StateViewModel
 import xyz.secozzi.aniyomilocalmanager.utils.copyAt
@@ -28,11 +28,11 @@ import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 
 @OptIn(ExperimentalSerializationApi::class)
-class AnimeEditEpisodeScreenViewModel(
+class AnimeEditEpisodesScreenViewModel(
     private val path: String,
     private val storageManager: StorageManager,
     private val json: Json,
-) : StateViewModel<AnimeEditEpisodeScreenViewModel.State>(State.Idle) {
+) : StateViewModel<AnimeEditEpisodesScreenViewModel.State>(State.Idle) {
 
     private val _name = MutableStateFlow("")
     val name = _name.asStateFlow()
@@ -46,125 +46,114 @@ class AnimeEditEpisodeScreenViewModel(
     private val _dialog = MutableStateFlow<Dialog?>(null)
     val dialog = _dialog.asStateFlow()
 
-    init {
-        viewModelScope.launch {
-            flow { emit(path) }.collectLatest { path ->
-                _name.update { _ -> storageManager.getFromPath(path)!!.fullName }
-
-                val state = try {
-                    val dir = storageManager.getFromPath(path)!!
-                    val episodesFile = dir.findFile("episodes.json")
-                    val episodes = episodesFile?.let { ep ->
-                        storageManager.getInputStream(ep)?.use {
-                            json.decodeFromStream<List<EpisodeDetails>>(it)
-                        }
-                    } ?: emptyList()
-
-                    _validIndexes.update {
-                        List(episodes.size) {
-                            ValidEntry(isDuplicate = false, isValidDate = true)
-                        }.toPersistentList()
-                    }
-
-                    State.Success(
-                        data = episodes,
-                    )
-                } catch (e: Exception) {
-                    if (e is CancellationException) throw e
-                    State.Error(e)
-                }
-                mutableState.update { _ -> state }
-            }
-        }
-    }
-
-    fun onEditTitle(index: Int, value: String) {
-        val successState = state.value as? State.Success ?: return
-        val episodes = successState.data.copyAt(index) { it.copy(name = value) }
-        mutableState.update { _ ->
-            State.Success(episodes)
-        }
-    }
-
-    fun onEditNumber(index: Int, value: String) {
-        val successState = state.value as? State.Success ?: return
-        val episodes = successState.data.copyAt(index) { it.copy(episodeNumber = value.toFloat()) }
-
-        val duplicates = episodes.map { it.episodeNumber }
-            .withIndex()
-            .groupBy { it.value }
-            .filter { it.value.size > 1 }
-            .flatMap { it.value.map { t -> t.index } }
-
-        _validIndexes.update { v ->
-            v.mapIndexed { i, entry ->
-                entry.copy(isDuplicate = i in duplicates)
-            }.toPersistentList()
-        }
-
-        mutableState.update { _ ->
-            State.Success(episodes)
-        }
-    }
-
-    fun onEditDescription(index: Int, value: String) {
-        val successState = state.value as? State.Success ?: return
-        val episodes = successState.data.copyAt(index) { it.copy(summary = value) }
-        mutableState.update { _ ->
-            State.Success(episodes)
-        }
-    }
-
-    fun onEditFiller(index: Int, value: Boolean) {
-        val successState = state.value as? State.Success ?: return
-        val episodes = successState.data.copyAt(index) { it.copy(fillermark = value) }
-        mutableState.update { _ ->
-            State.Success(episodes)
-        }
-    }
-
-    fun onEditPreviewUrl(index: Int, value: String) {
-        val successState = state.value as? State.Success ?: return
-        val episodes = successState.data.copyAt(index) { it.copy(previewUrl = value) }
-        mutableState.update { _ ->
-            State.Success(episodes)
-        }
-    }
-
-    fun onEditScanlator(index: Int, value: String) {
-        val successState = state.value as? State.Success ?: return
-        val episodes = successState.data.copyAt(index) { it.copy(scanlator = value) }
-        mutableState.update { _ ->
-            State.Success(episodes)
-        }
-    }
-
-    fun onEditDate(index: Int, value: String) {
-        val successState = state.value as? State.Success ?: return
-        val episodes = successState.data.copyAt(index) { it.copy(dateUpload = value) }
-
-        try {
-            if (value != NO_DATE) {
-                LocalDateTime.parse(value, DATE_FORMAT)
-            }
-            _validIndexes.update { v ->
-                v.copyAt(index) { it.copy(isValidDate = true) }.toPersistentList()
-            }
-        } catch (_: DateTimeParseException) {
-            _validIndexes.update { v ->
-                v.copyAt(index) { it.copy(isValidDate = false) }.toPersistentList()
-            }
-        }
-
-        mutableState.update { _ ->
-            State.Success(episodes)
-        }
-    }
-
     @OptIn(ExperimentalSerializationApi::class)
     private val prettyJson = Json {
         prettyPrint = true
         prettyPrintIndent = "    "
+    }
+
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            val dir = storageManager.getFromPath(path)!!
+
+            _name.update { _ -> dir.fullName }
+
+            val state = try {
+                val episodesFile = dir.findFile(EPISODES_JSON)
+                val episodes = episodesFile?.let { ep ->
+                    storageManager.getInputStream(ep)?.use {
+                        json.decodeFromStream<List<EpisodeDetails>>(it)
+                    }
+                } ?: emptyList()
+
+                _validIndexes.update {
+                    List(episodes.size) {
+                        ValidEntry(isDuplicate = false, isValidDate = true)
+                    }.toPersistentList()
+                }
+
+                State.Success(
+                    data = episodes,
+                )
+            } catch (e: Exception) {
+                if (e is CancellationException) throw e
+                State.Error(e)
+            }
+            mutableState.update { _ -> state }
+        }
+    }
+
+    fun onEditTitle(index: Int, value: String) {
+        updateEpisode(index) { it.copy(name = value) }
+    }
+
+    fun onEditNumber(index: Int, value: String) {
+        updateEpisode(
+            index = index,
+            validate = { episodes ->
+                val duplicates = episodes.map { it.episodeNumber }
+                    .withIndex()
+                    .groupBy { it.value }
+                    .filter { it.value.size > 1 }
+                    .flatMap { it.value.map { t -> t.index } }
+
+                _validIndexes.update { v ->
+                    v.mapIndexed { i, entry ->
+                        entry.copy(isDuplicate = i in duplicates)
+                    }.toPersistentList()
+                }
+            },
+            func = { it.copy(episodeNumber = value.toFloat()) },
+        )
+    }
+
+    fun onEditDescription(index: Int, value: String) {
+        updateEpisode(index) { it.copy(summary = value) }
+    }
+
+    fun onEditFiller(index: Int, value: Boolean) {
+        updateEpisode(index) { it.copy(fillermark = value) }
+    }
+
+    fun onEditPreviewUrl(index: Int, value: String) {
+        updateEpisode(index) { it.copy(previewUrl = value) }
+    }
+
+    fun onEditScanlator(index: Int, value: String) {
+        updateEpisode(index) { it.copy(scanlator = value) }
+    }
+
+    fun onEditDate(index: Int, value: String) {
+        updateEpisode(
+            index = index,
+            validate = { _ ->
+                try {
+                    if (value != NO_DATE) {
+                        LocalDateTime.parse(value, DATE_FORMAT)
+                    }
+                    _validIndexes.update { v ->
+                        v.copyAt(index) { it.copy(isValidDate = true) }.toPersistentList()
+                    }
+                } catch (_: DateTimeParseException) {
+                    _validIndexes.update { v ->
+                        v.copyAt(index) { it.copy(isValidDate = false) }.toPersistentList()
+                    }
+                }
+            },
+            func = { it.copy(dateUpload = value) },
+        )
+    }
+
+    private fun updateEpisode(
+        index: Int,
+        validate: (List<EpisodeDetails>) -> Unit = { },
+        func: (EpisodeDetails) -> EpisodeDetails,
+    ) {
+        val successState = state.value as? State.Success ?: return
+        val episodes = successState.data.copyAt(index) { func(it) }
+
+        validate(episodes)
+        mutableState.update { _ -> State.Success(episodes) }
     }
 
     private fun performSave(): Boolean {
@@ -182,8 +171,8 @@ class AnimeEditEpisodeScreenViewModel(
         val data = prettyJson.encodeToString(episodes)
 
         val dir = storageManager.getFromPath(path) ?: return false
-        val details = dir.findFile("episodes.json")
-            ?: dir.createFile("application/json", "episodes.json")
+        val details = dir.findFile(EPISODES_JSON)
+            ?: dir.createFile("application/json", EPISODES_JSON)
             ?: return false
 
         storageManager.getOutputStream(details, "wt").use { output ->
@@ -194,7 +183,7 @@ class AnimeEditEpisodeScreenViewModel(
     }
 
     fun save() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val result = performSave()
             _uiEvent.emit(UiEvent.Downloaded(result))
         }
@@ -203,7 +192,7 @@ class AnimeEditEpisodeScreenViewModel(
     fun onAdd() {
         val successState = state.value as? State.Success ?: return
         val episodes = successState.data
-        val newEpisodeNumber = episodes.maxOf { it.episodeNumber } + 1
+        val newEpisodeNumber = (episodes.maxOfOrNull { it.episodeNumber } ?: 0f) + 1f
         val newEpisode = EpisodeDetails(
             episodeNumber = newEpisodeNumber,
             name = "",

@@ -15,6 +15,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.WhileSubscribed
@@ -27,6 +28,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import xyz.secozzi.aniyomilocalmanager.domain.home.AnimeListEntry
+import xyz.secozzi.aniyomilocalmanager.domain.storage.DETAILS_JSON
+import xyz.secozzi.aniyomilocalmanager.domain.storage.EPISODES_JSON
 import xyz.secozzi.aniyomilocalmanager.domain.storage.EPISODE_FILE_TYPES
 import xyz.secozzi.aniyomilocalmanager.domain.storage.StorageManager
 import xyz.secozzi.aniyomilocalmanager.preferences.DataPreferences
@@ -54,6 +57,11 @@ class AnimeScreenViewModel(
     val isLoading = _isLoading.asStateFlow()
 
     init {
+        viewModelScope.launch {
+            delay(5.seconds)
+            isLoaded = true
+        }
+
         viewModelScope.launch {
             storageLocationFlow.collectLatest {
                 relativePaths.update { _ -> listOf(storageManager.getFile(it)!!.baseName) }
@@ -114,9 +122,9 @@ class AnimeScreenViewModel(
                                 .atZone(ZoneId.systemDefault())
                                 .format(DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm:ss")),
                             size = children.size,
-                            hasCover = names.any { it.contains("cover") },
-                            hasDetails = names.any { it == "details.json" },
-                            hasEpisodes = names.any { it == "episodes.json" },
+                            hasCover = names.any { it.startsWith("cover", true) },
+                            hasDetails = names.any { it == DETAILS_JSON },
+                            hasEpisodes = names.any { it == EPISODES_JSON },
                         )
                     }
 

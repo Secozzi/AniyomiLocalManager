@@ -97,7 +97,7 @@ fun SearchScreenContent(
             }
             is SearchScreenViewModel.State.Error -> {
                 ErrorContent(
-                    throwable = state.exception,
+                    throwable = state.throwable,
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(paddingValues),

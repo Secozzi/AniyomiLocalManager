@@ -9,6 +9,11 @@ data class ResultDto(
 )
 
 @Serializable
+data class SingleResultDto(
+    val data: SearchResultDto,
+)
+
+@Serializable
 data class SearchResultDto(
     val id: Long,
     val title: String,
@@ -29,8 +34,13 @@ data class SearchResultDto(
 
 @Serializable
 data class CoverDto(
-    val raw: String? = null,
-)
+    val raw: RawCoverDto,
+) {
+    @Serializable
+    data class RawCoverDto(
+        val url: String? = null,
+    )
+}
 
 @Serializable
 data class SourceDto(

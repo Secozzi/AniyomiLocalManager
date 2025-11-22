@@ -17,11 +17,8 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import nl.adaptivity.xmlutil.newReader
 import nl.adaptivity.xmlutil.serialization.XML
 import nl.adaptivity.xmlutil.xmlStreaming
@@ -57,46 +54,42 @@ class MangaChaptersScreenViewModel(
     val uiEvent = _uiEvent.asSharedFlow()
 
     init {
-        viewModelScope.launch {
-            flow { emit(path) }.collectLatest { path ->
-                val dir = storageManager.getFromPath(path)!!
+        viewModelScope.launch(Dispatchers.IO) {
+            val dir = storageManager.getFromPath(path)!!
 
-                _name.update { _ -> dir.fullName }
-                val state = try {
-                    val chapters = withContext(Dispatchers.IO) {
-                        dir.children.mapNotNull { c ->
-                            if ((c.isFile && c.extension !in ARCHIVE_FILE_TYPES) || c.fullName.startsWith(".")) {
-                                return@mapNotNull null
-                            }
-                            val parsed = parseComicInfo(c)
-
-                            Entry(
-                                data = parsed ?: generateComicInfo(c.baseName),
-                                path = storageManager.getPath(c),
-                                isDirectory = c.isDirectory,
-                                isNewComicInfo = parsed == null,
-                            )
-                        }
+            _name.update { _ -> dir.fullName }
+            val state = try {
+                val chapters = dir.children.mapNotNull { c ->
+                    if ((c.isFile && c.extension !in ARCHIVE_FILE_TYPES) || c.fullName.startsWith(".")) {
+                        return@mapNotNull null
                     }
-                        .sortedBy { it.data.number?.value?.toFloatOrNull() ?: 1f }
+                    val parsed = parseComicInfo(c)
 
-                    _unsaved.update { _ ->
-                        chapters.withIndex()
-                            .filter { it.value.isNewComicInfo }
-                            .map { it.index }
-                            .toPersistentSet()
-                    }
-
-                    State.Success(
-                        data = chapters,
+                    Entry(
+                        data = parsed ?: generateComicInfo(c.baseName),
+                        path = storageManager.getPath(c),
+                        isDirectory = c.isDirectory,
+                        isNewComicInfo = parsed == null,
                     )
-                } catch (e: Exception) {
-                    if (e is CancellationException) throw e
-                    State.Error(e)
+                }
+                    .sortedBy { it.data.number?.value?.toFloatOrNull() ?: 1f }
+
+                _unsaved.update { _ ->
+                    chapters.withIndex()
+                        .filter { it.value.isNewComicInfo }
+                        .map { it.index }
+                        .toPersistentSet()
                 }
 
-                mutableState.update { _ -> state }
+                State.Success(
+                    data = chapters,
+                )
+            } catch (e: Exception) {
+                if (e is CancellationException) throw e
+                State.Error(e)
             }
+
+            mutableState.update { _ -> state }
         }
     }
 

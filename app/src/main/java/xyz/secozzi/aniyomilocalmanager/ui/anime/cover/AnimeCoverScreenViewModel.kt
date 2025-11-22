@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -40,6 +41,16 @@ class AnimeCoverScreenViewModel(
     private val storageManager: StorageManager,
     private val client: HttpClient,
 ) : ViewModel() {
+    val name = flow { emit(path) }
+        .asResultFlow(
+            idleResult = "",
+            loadingResult = "",
+            getErrorResult = { "" },
+            dispatcher = Dispatchers.IO,
+        ) { path ->
+            storageManager.getFromPath(path)!!.fullName
+        }
+
     fun updateIds(result: SearchResultItem) {
         viewModelScope.launch {
             trackerRepository.upsert(
@@ -77,15 +88,13 @@ class AnimeCoverScreenViewModel(
             idleResult = State.Idle,
             loadingResult = State.Loading,
             getErrorResult = { State.Error(it) },
+            dispatcher = Dispatchers.IO,
         ) { (data, prefs) ->
             if (data?.anilist == null && data?.mal == null) {
                 State.NoID
             } else {
                 _selectedCover.update { _ -> null }
-
-                val covers = withContext(Dispatchers.IO) {
-                    coverRepository.getAnimeCovers(data, prefs.first, prefs.second, prefs.third)
-                }
+                val covers = coverRepository.getAnimeCovers(data, prefs.first, prefs.second, prefs.third)
 
                 State.Success(
                     data = covers.toPersistentList(),

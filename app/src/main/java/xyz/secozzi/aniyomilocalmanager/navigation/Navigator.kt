@@ -41,6 +41,8 @@ import xyz.secozzi.aniyomilocalmanager.ui.preferences.DataPreferencesRoute
 import xyz.secozzi.aniyomilocalmanager.ui.preferences.DataPreferencesScreen
 import xyz.secozzi.aniyomilocalmanager.ui.preferences.MangaBakaPreferencesRoute
 import xyz.secozzi.aniyomilocalmanager.ui.preferences.MangaBakaPreferencesScreen
+import xyz.secozzi.aniyomilocalmanager.ui.preferences.MyAnimeListPreferencesRoute
+import xyz.secozzi.aniyomilocalmanager.ui.preferences.MyAnimeListPreferencesScreen
 import xyz.secozzi.aniyomilocalmanager.ui.preferences.PreferencesRoute
 import xyz.secozzi.aniyomilocalmanager.ui.preferences.PreferencesScreen
 import xyz.secozzi.aniyomilocalmanager.ui.search.SearchRoute
@@ -128,6 +130,9 @@ fun Navigator() {
                 }
                 entry<AniDBPreferencesRoute> {
                     AniDBPreferencesScreen()
+                }
+                entry<MyAnimeListPreferencesRoute> {
+                    MyAnimeListPreferencesScreen()
                 }
                 entry<CoverPreferencesRoute> {
                     CoverPreferencesScreen()

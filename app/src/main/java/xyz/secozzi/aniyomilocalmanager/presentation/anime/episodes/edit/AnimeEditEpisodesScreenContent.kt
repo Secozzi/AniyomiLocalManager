@@ -34,6 +34,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -52,18 +53,16 @@ import xyz.secozzi.aniyomilocalmanager.presentation.components.FloatingBottomBar
 import xyz.secozzi.aniyomilocalmanager.presentation.components.edit.EditEntryHeader
 import xyz.secozzi.aniyomilocalmanager.presentation.settings.SettingsSwitch
 import xyz.secozzi.aniyomilocalmanager.presentation.utils.plus
-import xyz.secozzi.aniyomilocalmanager.ui.anime.episode.edit.AnimeEditEpisodeScreenViewModel
-import xyz.secozzi.aniyomilocalmanager.ui.anime.episode.edit.AnimeEditEpisodeScreenViewModel.ValidEntry
+import xyz.secozzi.aniyomilocalmanager.ui.anime.episode.edit.AnimeEditEpisodesScreenViewModel
+import xyz.secozzi.aniyomilocalmanager.ui.anime.episode.edit.AnimeEditEpisodesScreenViewModel.ValidEntry
 import xyz.secozzi.aniyomilocalmanager.ui.theme.spacing
 
 @Composable
 fun AnimeEditEpisodesScreenContent(
-    state: AnimeEditEpisodeScreenViewModel.State,
+    state: AnimeEditEpisodesScreenViewModel.State,
     name: String,
     lazyListState: LazyListState,
     validIndexes: ImmutableList<ValidEntry>,
-    expandedState: ImmutableList<Boolean>,
-    onExpandedStateChange: (Int) -> Unit,
     onEditNumber: (Int, String) -> Unit,
     onEditTitle: (Int, String) -> Unit,
     onEditFiller: (Int, Boolean) -> Unit,
@@ -101,8 +100,8 @@ fun AnimeEditEpisodesScreenContent(
         },
     ) { contentPadding ->
         when (state) {
-            AnimeEditEpisodeScreenViewModel.State.Idle -> { }
-            is AnimeEditEpisodeScreenViewModel.State.Error -> {
+            AnimeEditEpisodesScreenViewModel.State.Idle -> { }
+            is AnimeEditEpisodesScreenViewModel.State.Error -> {
                 ErrorContent(
                     throwable = state.throwable,
                     modifier = Modifier
@@ -110,13 +109,11 @@ fun AnimeEditEpisodesScreenContent(
                         .padding(contentPadding),
                 )
             }
-            is AnimeEditEpisodeScreenViewModel.State.Success -> {
+            is AnimeEditEpisodesScreenViewModel.State.Success -> {
                 SuccessContent(
                     state = state,
                     lazyListState = lazyListState,
                     contentPadding = contentPadding,
-                    expandedState = expandedState,
-                    onExpandedStateChange = onExpandedStateChange,
                     validIndexes = validIndexes,
                     onEditNumber = onEditNumber,
                     onEditTitle = onEditTitle,
@@ -135,11 +132,9 @@ fun AnimeEditEpisodesScreenContent(
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun SuccessContent(
-    state: AnimeEditEpisodeScreenViewModel.State.Success,
+    state: AnimeEditEpisodesScreenViewModel.State.Success,
     lazyListState: LazyListState,
     contentPadding: PaddingValues,
-    expandedState: ImmutableList<Boolean>,
-    onExpandedStateChange: (Int) -> Unit,
     validIndexes: ImmutableList<ValidEntry>,
     onEditNumber: (Int, String) -> Unit,
     onEditTitle: (Int, String) -> Unit,
@@ -150,6 +145,10 @@ private fun SuccessContent(
     onEditDate: (Int, String) -> Unit,
     onDelete: (Int) -> Unit,
 ) {
+    val expandedState = remember(state.data.size) {
+        List(state.data.size) { false }.toMutableStateList()
+    }
+
     LazyColumn(
         state = lazyListState,
         verticalArrangement = Arrangement.spacedBy(2.dp),
@@ -178,7 +177,7 @@ private fun SuccessContent(
                         number = ep.episodeNumber,
                         name = ep.name ?: "",
                         expanded = expanded,
-                        onClick = { onExpandedStateChange(i) },
+                        onClick = { expandedState[i] = !expanded },
                         interactionSource = interactionSource,
                     )
                 },
@@ -276,7 +275,7 @@ private fun SuccessContent(
 private fun AnimeEditEpisodesScreenContentPreview() {
     PreviewContent {
         AnimeEditEpisodesScreenContent(
-            state = AnimeEditEpisodeScreenViewModel.State.Success(
+            state = AnimeEditEpisodesScreenViewModel.State.Success(
                 persistentListOf(
                     EpisodeDetails(
                         episodeNumber = 1f,
@@ -314,8 +313,6 @@ Source: Crunchyroll""",
                     isValidDate = true,
                 ),
             ),
-            expandedState = persistentListOf(false, true),
-            onExpandedStateChange = { },
             onEditNumber = { _, _ -> },
             onEditTitle = { _, _ -> },
             onEditFiller = { _, _ -> },

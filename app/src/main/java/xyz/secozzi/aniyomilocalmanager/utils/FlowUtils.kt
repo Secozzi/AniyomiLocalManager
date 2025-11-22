@@ -29,13 +29,13 @@ fun <R, T> Flow<T>.asResultFlow(
     idleResult: R,
     loadingResult: R,
     getErrorResult: (Throwable) -> R,
-    context: CoroutineContext = Dispatchers.Unconfined,
+    dispatcher: CoroutineContext = Dispatchers.Unconfined,
     fetchData: suspend (T) -> R,
 ): StateFlow<R> = this.flatMapLatest { data ->
     flow {
         emit(loadingResult)
         try {
-            val result = withContext(context) {
+            val result = withContext(dispatcher) {
                 fetchData(data)
             }
             emit(result)

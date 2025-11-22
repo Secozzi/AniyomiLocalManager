@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.collections.immutable.toPersistentMap
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,6 +27,7 @@ import xyz.secozzi.aniyomilocalmanager.domain.entry.anime.model.AnimeDetails
 import xyz.secozzi.aniyomilocalmanager.domain.entry.model.EntryDetails
 import xyz.secozzi.aniyomilocalmanager.domain.entry.model.Status
 import xyz.secozzi.aniyomilocalmanager.domain.search.service.SearchIds
+import xyz.secozzi.aniyomilocalmanager.domain.storage.DETAILS_JSON
 import xyz.secozzi.aniyomilocalmanager.domain.storage.StorageManager
 import xyz.secozzi.aniyomilocalmanager.utils.StateViewModel
 import xyz.secozzi.aniyomilocalmanager.utils.withMinimumDuration
@@ -42,7 +44,7 @@ class AnimeDetailsScreenViewModel(
 ) : StateViewModel<AnimeDetailsScreenViewModel.State>(State.Idle) {
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             trackerRepository.getTrackData(path).collectLatest { data ->
                 val searchIds = buildMap(3) {
                     if (data?.anilist != null) {
@@ -68,7 +70,7 @@ class AnimeDetailsScreenViewModel(
     }
 
     private fun getDetailsFromDetails(path: String): EntryDetails {
-        return storageManager.getFromPath(path)?.findFile("details.json")?.let {
+        return storageManager.getFromPath(path)?.findFile(DETAILS_JSON)?.let {
             try {
                 val data = storageManager.getInputStream(it)!!.use { s ->
                     json.decodeFromStream<AnimeDetails>(s)
@@ -85,7 +87,7 @@ class AnimeDetailsScreenViewModel(
                         s.id == data.status
                     } ?: Status.Unknown,
                 )
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 EntryDetails.Empty
             }
         } ?: EntryDetails.Empty
@@ -111,8 +113,15 @@ class AnimeDetailsScreenViewModel(
                 getDetailsFromDetails(path)
             } else {
                 val id = successState.searchIds[selected]!!
-                withMinimumDuration(1.5.seconds, 150.milliseconds) {
-                    searchManager.getSearchRepository(selected).getFromId(id)
+                try {
+                    withMinimumDuration(1.5.seconds, 150.milliseconds) {
+                        searchManager.getSearchRepository(selected).getFromId(id)
+                    }
+                } catch (e: Exception) {
+                    if (e is CancellationException) throw e
+                    mutableState.update { _ -> State.Error(e) }
+                    _isLoading.update { _ -> false }
+                    return@launch
                 }
             }
 
@@ -186,8 +195,8 @@ class AnimeDetailsScreenViewModel(
     private fun performDownload(): Boolean {
         val data = generateJsonString() ?: return false
         val dir = storageManager.getFromPath(path) ?: return false
-        val details = dir.findFile("details.json")
-            ?: dir.createFile("application/json", "details.json")
+        val details = dir.findFile(DETAILS_JSON)
+            ?: dir.createFile("application/json", DETAILS_JSON)
             ?: return false
 
         storageManager.getOutputStream(details, "wt").use { output ->
@@ -207,7 +216,7 @@ class AnimeDetailsScreenViewModel(
     }
 
     fun generateDetails() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val result = performDownload()
             _uiEvent.emit(UiEvent.Downloaded(result))
         }

@@ -4,13 +4,10 @@ import android.widget.Toast
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavKey
-import kotlinx.collections.immutable.toPersistentList
 import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -30,7 +27,7 @@ fun AnimeEditEpisodesScreen(path: String) {
     val resources = LocalResources.current
     val listState = rememberLazyListState()
 
-    val viewModel = koinViewModel<AnimeEditEpisodeScreenViewModel> {
+    val viewModel = koinViewModel<AnimeEditEpisodesScreenViewModel> {
         parametersOf(path)
     }
 
@@ -39,17 +36,12 @@ fun AnimeEditEpisodesScreen(path: String) {
     val validIndexes by viewModel.validIndexes.collectAsStateWithLifecycle()
     val dialog by viewModel.dialog.collectAsStateWithLifecycle()
 
-    val successState = state as? AnimeEditEpisodeScreenViewModel.State.Success
-    val expandedState = remember(successState?.data?.size) {
-        (successState?.data?.map { false } ?: emptyList()).toMutableStateList()
-    }
-
     CollectAsEffect(viewModel.uiEvent) {
         when (it) {
-            is AnimeEditEpisodeScreenViewModel.UiEvent.ScrollTo -> {
+            is AnimeEditEpisodesScreenViewModel.UiEvent.ScrollTo -> {
                 listState.animateScrollToItem(it.index)
             }
-            is AnimeEditEpisodeScreenViewModel.UiEvent.Downloaded -> {
+            is AnimeEditEpisodesScreenViewModel.UiEvent.Downloaded -> {
                 val message = if (it.success) {
                     resources.getString(R.string.episode_save_details_success)
                 } else {
@@ -66,8 +58,6 @@ fun AnimeEditEpisodesScreen(path: String) {
         name = name,
         lazyListState = listState,
         validIndexes = validIndexes,
-        expandedState = expandedState.toPersistentList(),
-        onExpandedStateChange = { expandedState[it] = !expandedState[it] },
         onEditNumber = viewModel::onEditNumber,
         onEditTitle = viewModel::onEditTitle,
         onEditFiller = viewModel::onEditFiller,
@@ -82,10 +72,10 @@ fun AnimeEditEpisodesScreen(path: String) {
     )
 
     when (dialog) {
-        is AnimeEditEpisodeScreenViewModel.Dialog.ConfirmDelete -> {
+        is AnimeEditEpisodesScreenViewModel.Dialog.ConfirmDelete -> {
             ConfirmDialog(
                 onConfirm = {
-                    viewModel.onDelete((dialog as AnimeEditEpisodeScreenViewModel.Dialog.ConfirmDelete).index)
+                    viewModel.onDelete((dialog as AnimeEditEpisodesScreenViewModel.Dialog.ConfirmDelete).index)
                     viewModel.dismissDialog()
                 },
                 onDismiss = { viewModel.dismissDialog() },

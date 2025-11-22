@@ -50,7 +50,7 @@ class SearchScreenViewModel(
         data object Loading : State
 
         @Immutable
-        data class Error(val exception: Throwable) : State
+        data class Error(val throwable: Throwable) : State
 
         @Immutable
         data class Success(

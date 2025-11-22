@@ -32,7 +32,7 @@ import kotlinx.serialization.Serializable
 import org.koin.compose.koinInject
 import xyz.secozzi.aniyomilocalmanager.R
 import xyz.secozzi.aniyomilocalmanager.domain.preferences.LangPrefEnum
-import xyz.secozzi.aniyomilocalmanager.preferences.AniDBPreferences
+import xyz.secozzi.aniyomilocalmanager.preferences.MyAnimeListPreferences
 import xyz.secozzi.aniyomilocalmanager.preferences.preference.collectAsState
 import xyz.secozzi.aniyomilocalmanager.presentation.PreviewContent
 import xyz.secozzi.aniyomilocalmanager.presentation.settings.ButtonGroup
@@ -43,37 +43,37 @@ import xyz.secozzi.aniyomilocalmanager.ui.theme.spacing
 import xyz.secozzi.aniyomilocalmanager.ui.utils.LocalBackStack
 
 @Serializable
-data object AniDBPreferencesRoute : NavKey
+data object MyAnimeListPreferencesRoute : NavKey
 
 @Composable
-fun AniDBPreferencesScreen() {
+fun MyAnimeListPreferencesScreen() {
     val backStack = LocalBackStack.current
-    val preferences = koinInject<AniDBPreferences>()
+    val preferences = koinInject<MyAnimeListPreferences>()
 
     val prefLang by preferences.prefLang.collectAsState()
     val nameFormat by preferences.nameFormat.collectAsState()
     val scanlatorFormat by preferences.scanlatorFormat.collectAsState()
     val summaryFormat by preferences.summaryFormat.collectAsState()
 
-    var dialog by remember { mutableStateOf<AniDBDialog?>(null) }
+    var dialog by remember { mutableStateOf<MyAnimeListDialog?>(null) }
 
-    AniDBPreferencesScreenContent(
+    MyAnimeListPreferencesScreenContent(
         onBack = { backStack.removeLastOrNull() },
         prefLang = prefLang,
         onPrefLangClicked = preferences.prefLang::set,
         nameFormat = nameFormat,
-        onNameFormatClicked = { dialog = AniDBDialog.NameFormat },
+        onNameFormatClicked = { dialog = MyAnimeListDialog.NameFormat },
         scanlatorFormat = scanlatorFormat,
-        onScanlatorFormatClicked = { dialog = AniDBDialog.ScanlatorFormat },
+        onScanlatorFormatClicked = { dialog = MyAnimeListDialog.ScanlatorFormat },
         summaryFormat = summaryFormat,
-        onSummaryFormatClicked = { dialog = AniDBDialog.SummaryFormat },
+        onSummaryFormatClicked = { dialog = MyAnimeListDialog.SummaryFormat },
     )
 
     when (dialog) {
-        AniDBDialog.NameFormat -> {
+        MyAnimeListDialog.NameFormat -> {
             TextFieldDialog(
                 title = stringResource(R.string.pref_name_format),
-                summary = stringResource(R.string.pref_anidb_replacements),
+                summary = stringResource(R.string.pref_mal_replacements),
                 textValue = nameFormat,
                 onConfirm = {
                     preferences.nameFormat.set(it)
@@ -82,10 +82,10 @@ fun AniDBPreferencesScreen() {
                 onDismiss = { dialog = null },
             )
         }
-        AniDBDialog.ScanlatorFormat -> {
+        MyAnimeListDialog.ScanlatorFormat -> {
             TextFieldDialog(
                 title = stringResource(R.string.pref_scanlator_format),
-                summary = stringResource(R.string.pref_anidb_replacements),
+                summary = stringResource(R.string.pref_mal_replacements),
                 textValue = scanlatorFormat,
                 onConfirm = {
                     preferences.scanlatorFormat.set(it)
@@ -94,10 +94,10 @@ fun AniDBPreferencesScreen() {
                 onDismiss = { dialog = null },
             )
         }
-        AniDBDialog.SummaryFormat -> {
+        MyAnimeListDialog.SummaryFormat -> {
             TextFieldDialog(
                 title = stringResource(R.string.pref_summary_format),
-                summary = stringResource(R.string.pref_anidb_replacements),
+                summary = stringResource(R.string.pref_mal_replacements),
                 textValue = summaryFormat,
                 onConfirm = {
                     preferences.summaryFormat.set(it)
@@ -110,15 +110,15 @@ fun AniDBPreferencesScreen() {
     }
 }
 
-private sealed interface AniDBDialog {
-    data object NameFormat : AniDBDialog
-    data object ScanlatorFormat : AniDBDialog
-    data object SummaryFormat : AniDBDialog
+private sealed interface MyAnimeListDialog {
+    data object NameFormat : MyAnimeListDialog
+    data object ScanlatorFormat : MyAnimeListDialog
+    data object SummaryFormat : MyAnimeListDialog
 }
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-private fun AniDBPreferencesScreenContent(
+private fun MyAnimeListPreferencesScreenContent(
     onBack: () -> Unit,
     prefLang: LangPrefEnum,
     onPrefLangClicked: (LangPrefEnum) -> Unit,
@@ -132,7 +132,7 @@ private fun AniDBPreferencesScreenContent(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = stringResource(R.string.pref_anidb_title)) },
+                title = { Text(text = stringResource(R.string.pref_mal_title)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Outlined.ArrowBack, null)
@@ -146,10 +146,10 @@ private fun AniDBPreferencesScreenContent(
             contentPadding = contentPadding,
             modifier = Modifier.padding(horizontal = 16.dp),
         ) {
-            // Anime
+            // Details
             item {
                 Text(
-                    text = stringResource(R.string.label_anime),
+                    text = stringResource(R.string.details_title),
                     style = MaterialTheme.typography.titleMediumEmphasized,
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.padding(vertical = MaterialTheme.spacing.smaller),
@@ -224,9 +224,9 @@ private fun AniDBPreferencesScreenContent(
 
 @Composable
 @PreviewLightDark
-private fun AniDBPreferencesScreenContentPreview() {
+private fun MyAnimeListPreferencesScreenContentPreview() {
     PreviewContent {
-        AniDBPreferencesScreenContent(
+        MyAnimeListPreferencesScreenContent(
             onBack = { },
             prefLang = LangPrefEnum.English,
             onPrefLangClicked = { },
@@ -234,7 +234,7 @@ private fun AniDBPreferencesScreenContentPreview() {
             onNameFormatClicked = { },
             scanlatorFormat = "",
             onScanlatorFormatClicked = { },
-            summaryFormat = "%sum",
+            summaryFormat = "",
             onSummaryFormatClicked = { },
         )
     }

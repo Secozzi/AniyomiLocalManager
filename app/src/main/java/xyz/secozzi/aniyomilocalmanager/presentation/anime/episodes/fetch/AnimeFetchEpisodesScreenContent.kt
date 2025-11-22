@@ -151,7 +151,7 @@ fun AnimeFetchEpisodesScreenContent(
             AnimeFetchEpisodesScreenViewModel.State.Idle -> { }
             is AnimeFetchEpisodesScreenViewModel.State.Error -> {
                 ErrorContent(
-                    throwable = state.exception,
+                    throwable = state.throwable,
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(contentPadding),

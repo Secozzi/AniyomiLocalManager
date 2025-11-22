@@ -15,4 +15,5 @@ data class MyAnimeListEpisode(
     val aired: String? = null,
     val score: Float? = null,
     val filler: Boolean,
+    val recap: Boolean,
 )

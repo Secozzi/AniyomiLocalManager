@@ -3,17 +3,13 @@ package xyz.secozzi.aniyomilocalmanager.ui.manga.entry
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavKey
-import com.anggrayudi.storage.file.fullName
 import kotlinx.serialization.Serializable
-import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 import xyz.secozzi.aniyomilocalmanager.domain.search.models.SearchResultItem
 import xyz.secozzi.aniyomilocalmanager.domain.search.service.SearchIds
-import xyz.secozzi.aniyomilocalmanager.domain.storage.StorageManager
 import xyz.secozzi.aniyomilocalmanager.presentation.manga.entry.MangaEntryScreenContent
 import xyz.secozzi.aniyomilocalmanager.ui.manga.chapters.MangaChaptersRoute
 import xyz.secozzi.aniyomilocalmanager.ui.manga.cover.MangaCoverRoute
@@ -30,9 +26,6 @@ fun MangaEntryScreen(path: String) {
     val backStack = LocalBackStack.current
     val resultStore = LocalResultStore.current
 
-    val storageManager = koinInject<StorageManager>()
-    val name = remember { storageManager.getFromPath(path)!!.fullName }
-
     val viewModel = koinViewModel<MangaEntryScreenViewModel> {
         parametersOf(path)
     }
@@ -46,6 +39,7 @@ fun MangaEntryScreen(path: String) {
 
     val state by viewModel.state.collectAsStateWithLifecycle()
     val detailsState by viewModel.detailsState.collectAsStateWithLifecycle()
+    val name by viewModel.name.collectAsStateWithLifecycle()
 
     MangaEntryScreenContent(
         state = state,
@@ -57,6 +51,6 @@ fun MangaEntryScreen(path: String) {
         onEditChapters = { backStack.add(MangaChaptersRoute(path)) },
         onClickMangaBaka = { backStack.add(SearchRoute(name, SearchIds.MangaBaka)) },
         onClickAnilist = { backStack.add(SearchRoute(name, SearchIds.AnilistManga)) },
-        onClickMal = { },
+        onClickMal = { backStack.add(SearchRoute(name, SearchIds.MalManga)) },
     )
 }

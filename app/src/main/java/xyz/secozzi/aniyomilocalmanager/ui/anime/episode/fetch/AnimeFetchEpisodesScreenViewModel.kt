@@ -9,6 +9,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toPersistentMap
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,6 +30,7 @@ import xyz.secozzi.aniyomilocalmanager.domain.entry.anime.model.EpisodeType
 import xyz.secozzi.aniyomilocalmanager.domain.search.models.SearchResultItem
 import xyz.secozzi.aniyomilocalmanager.domain.search.service.SearchIds
 import xyz.secozzi.aniyomilocalmanager.domain.search.service.TrackerIds
+import xyz.secozzi.aniyomilocalmanager.domain.storage.EPISODES_JSON
 import xyz.secozzi.aniyomilocalmanager.domain.storage.EPISODE_FILE_TYPES
 import xyz.secozzi.aniyomilocalmanager.domain.storage.StorageManager
 import xyz.secozzi.aniyomilocalmanager.utils.StateViewModel
@@ -52,12 +54,19 @@ class AnimeFetchEpisodesScreenViewModel(
             idleResult = null,
             loadingResult = null,
             getErrorResult = { 0 },
+            dispatcher = Dispatchers.IO,
         ) {
             val dir = storageManager.getFromPath(it)
             dir?.children?.count { e ->
                 e.extension in EPISODE_FILE_TYPES
             } ?: 0
         }
+
+    @OptIn(ExperimentalSerializationApi::class)
+    private val prettyJson = Json {
+        prettyPrint = true
+        prettyPrintIndent = "    "
+    }
 
     init {
         viewModelScope.launch {
@@ -165,8 +174,15 @@ class AnimeFetchEpisodesScreenViewModel(
         _isLoading.update { _ -> true }
 
         viewModelScope.launch(Dispatchers.IO) {
-            val episodes = withMinimumDuration(1.5.seconds, 150.milliseconds) {
-                searchManager.getEpisodeRepository(selected).getEpisodesFromId(id)
+            val episodes = try {
+                withMinimumDuration(1.5.seconds, 150.milliseconds) {
+                    searchManager.getEpisodeRepository(selected).getEpisodesFromId(id)
+                }
+            } catch (e: Exception) {
+                if (e is CancellationException) throw e
+                _isLoading.update { _ -> false }
+                mutableState.update { _ -> State.Error(e) }
+                return@launch
             }
 
             episodes.entries.firstOrNull()?.let { (type, ep) ->
@@ -190,12 +206,6 @@ class AnimeFetchEpisodesScreenViewModel(
         }
     }
 
-    @OptIn(ExperimentalSerializationApi::class)
-    private val prettyJson = Json {
-        prettyPrint = true
-        prettyPrintIndent = "    "
-    }
-
     fun generateJsonString(): String? {
         val episodeList = episodes.value.entries.firstOrNull { (type, _) ->
             type == selectedType.value
@@ -213,8 +223,8 @@ class AnimeFetchEpisodesScreenViewModel(
     private fun performDownload(): Boolean {
         val data = generateJsonString() ?: return false
         val dir = storageManager.getFromPath(path) ?: return false
-        val details = dir.findFile("episodes.json")
-            ?: dir.createFile("application/json", "episodes.json")
+        val details = dir.findFile(EPISODES_JSON)
+            ?: dir.createFile("application/json", EPISODES_JSON)
             ?: return false
 
         storageManager.getOutputStream(details, "wt").use { output ->
@@ -255,7 +265,7 @@ class AnimeFetchEpisodesScreenViewModel(
         data object Idle : State
 
         @Immutable
-        data class Error(val exception: Throwable) : State
+        data class Error(val throwable: Throwable) : State
 
         @Immutable
         data object NoID : State

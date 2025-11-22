@@ -164,9 +164,9 @@
 
     <!-- Preferences - AniDB -->
     <string name="pref_anidb_summary">details.json, episodes.json</string>
-    <string name="pref_anidb_name_format">Episode name format</string>
-    <string name="pref_anidb_scanlator_format">Scanlator format</string>
-    <string name="pref_anidb_summary_format">Summary format</string>
+    <string name="pref_name_format">Episode name format</string>
+    <string name="pref_scanlator_format">Scanlator format</string>
+    <string name="pref_summary_format">Summary format</string>
     <string name="pref_anidb_replacements">Possible replacements:\n
 \n
 %eng - English title\n
@@ -179,8 +179,18 @@
 %sum - Summary\n
 %type - Episode type</string>
 
-    <!-- Preferences - MAL -->
-    <string name="pref_mal_summary">details.json, episodes.json</string>
+    <!-- Preferences - MyAnimeList -->
+    <string name="pref_mal_summary">Entry details, episodes.json</string>
+    <string name="pref_mal_replacements">Possible replacements:\n
+\n
+%eng - English title\n
+%rom - Romaji title\n
+%nat - Native title\n
+%ep - Episode number\n
+%air - Airing date\n
+%sco - Score\n
+%fil - Filler\n
+%rec - Recap</string>
 
     <!-- Preferences - Cover -->
     <string name="pref_cover_summary">Cover providers</string>

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.anggrayudi.storage.file.children
 import com.anggrayudi.storage.file.fullName
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.WhileSubscribed
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -15,6 +16,8 @@ import xyz.secozzi.aniyomilocalmanager.database.domain.AnimeTrackerRepository
 import xyz.secozzi.aniyomilocalmanager.database.entities.AnimeTrackerEntity
 import xyz.secozzi.aniyomilocalmanager.domain.search.models.SearchResultItem
 import xyz.secozzi.aniyomilocalmanager.domain.search.service.TrackerIds
+import xyz.secozzi.aniyomilocalmanager.domain.storage.DETAILS_JSON
+import xyz.secozzi.aniyomilocalmanager.domain.storage.EPISODES_JSON
 import xyz.secozzi.aniyomilocalmanager.domain.storage.StorageManager
 import xyz.secozzi.aniyomilocalmanager.utils.asResultFlow
 import kotlin.time.Duration.Companion.seconds
@@ -38,6 +41,7 @@ class AnimeEntryScreenViewModel(
             idleResult = State.Idle,
             loadingResult = State.Idle,
             getErrorResult = { State.Error(it) },
+            dispatcher = Dispatchers.IO,
         ) { data ->
             val entity = data ?: AnimeTrackerEntity(path)
 
@@ -47,9 +51,9 @@ class AnimeEntryScreenViewModel(
                 .map { it.fullName }
 
             State.Success(
-                hasCover = names.any { it.contains("cover") },
-                hasDetails = names.any { it == "details.json" },
-                hasEpisodes = names.any { it == "episodes.json" },
+                hasCover = names.any { it.startsWith("cover", true) },
+                hasDetails = names.any { it == DETAILS_JSON },
+                hasEpisodes = names.any { it == EPISODES_JSON },
                 data = entity,
             )
         }

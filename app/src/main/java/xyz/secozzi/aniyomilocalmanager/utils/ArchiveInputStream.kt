@@ -80,7 +80,7 @@ internal class ArchiveInputStream(buffer: Long, size: Long) : InputStream() {
             mTimeNsec = ArchiveEntry.mtimeNsec(entry),
             perm = ArchiveEntry.perm(entry),
             size = ArchiveEntry.size(entry).takeIf { ArchiveEntry.sizeIsSet(entry) },
-            fileType = ArchiveEntry.filetype(entry)
+            fileType = ArchiveEntry.filetype(entry),
         )
     }
 }

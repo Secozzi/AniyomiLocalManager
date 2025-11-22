@@ -14,6 +14,7 @@ import xyz.secozzi.aniyomilocalmanager.database.domain.MangaTrackerRepository
 import xyz.secozzi.aniyomilocalmanager.database.entities.MangaTrackerEntity
 import xyz.secozzi.aniyomilocalmanager.domain.search.models.SearchResultItem
 import xyz.secozzi.aniyomilocalmanager.domain.search.service.TrackerIds
+import xyz.secozzi.aniyomilocalmanager.domain.storage.COMIC_INFO_FILE
 import xyz.secozzi.aniyomilocalmanager.domain.storage.StorageManager
 import xyz.secozzi.aniyomilocalmanager.utils.asResultFlow
 
@@ -23,12 +24,22 @@ class MangaEntryScreenViewModel(
     private val storageManager: StorageManager,
 ) : ViewModel() {
 
+    val name = flow { emit(path) }
+        .asResultFlow(
+            idleResult = "",
+            loadingResult = "",
+            getErrorResult = { "" },
+            dispatcher = Dispatchers.IO,
+        ) { path ->
+            storageManager.getFromPath(path)!!.fullName
+        }
+
     val detailsState = flow { emit(path) }
         .asResultFlow(
             idleResult = null,
             loadingResult = null,
             getErrorResult = { null },
-            context = Dispatchers.IO,
+            dispatcher = Dispatchers.IO,
         ) { path ->
             val dir = storageManager.getFromPath(path)!!
             val names = dir.children
@@ -36,8 +47,8 @@ class MangaEntryScreenViewModel(
                 .map { it.fullName }
 
             DetailsInfo(
-                hasCover = names.any { it.contains("cover") },
-                hasComicInfo = names.any { it.equals("comicinfo.xml", true) },
+                hasCover = names.any { it.startsWith("cover", true) },
+                hasComicInfo = names.any { it.equals(COMIC_INFO_FILE, true) },
             )
         }
 
@@ -47,7 +58,7 @@ class MangaEntryScreenViewModel(
             idleResult = State.Idle,
             loadingResult = State.Idle,
             getErrorResult = { State.Error(it) },
-            context = Dispatchers.IO,
+            dispatcher = Dispatchers.IO,
         ) { data ->
             val entity = data ?: MangaTrackerEntity(path)
 

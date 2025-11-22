@@ -13,3 +13,14 @@ enum class SearchIds(@param:StringRes val stringRes: Int) {
     MalAnime(R.string.pref_mal_title),
     MalManga(R.string.pref_mal_title),
 }
+
+fun SearchIds.toTrackerId(): TrackerIds {
+    return when (this) {
+        SearchIds.AniDB -> TrackerIds.Anidb
+        SearchIds.MangaBaka -> TrackerIds.MangaBaka
+        SearchIds.AnilistAnime -> TrackerIds.Anilist
+        SearchIds.AnilistManga -> TrackerIds.Anilist
+        SearchIds.MalAnime -> TrackerIds.Mal
+        SearchIds.MalManga -> TrackerIds.Mal
+    }
+}

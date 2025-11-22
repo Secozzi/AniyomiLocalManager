@@ -72,6 +72,20 @@ data class ComicInfo(
     @Serializable
     @XmlSerialName("PublishingStatusTachiyomi", "http://www.w3.org/2001/XMLSchema", "ty")
     data class PublishingStatusTachiyomi(@XmlValue(true) val value: String = "")
+
+    companion object {
+        val EMPTY = ComicInfo(
+            title = null,
+            number = null,
+            translator = null,
+            series = null,
+            summary = null,
+            writer = null,
+            penciller = null,
+            genre = null,
+            publishingStatus = null,
+        )
+    }
 }
 
 enum class ComicInfoPublishingStatus(

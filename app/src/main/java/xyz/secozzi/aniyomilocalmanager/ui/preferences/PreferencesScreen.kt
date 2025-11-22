@@ -88,7 +88,7 @@ fun PreferencesScreen() {
             title = R.string.pref_mal_title,
             subtitle = R.string.pref_mal_summary,
             icon = ImageVector.vectorResource(R.drawable.mal_icon),
-            onClick = { },
+            onClick = { backstack.add(MyAnimeListPreferencesRoute) },
         ),
         PreferenceItem(
             title = R.string.pref_cover_title,
