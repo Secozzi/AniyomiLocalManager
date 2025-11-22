@@ -4,19 +4,28 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2025-01-07T11:02:44.190988300Z">
+        <DropdownSelection timestamp="2025-10-31T11:25:29.005425618Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="Default" identifier="serial=192.168.0.180:38141;connection=03793581" />
+              <DeviceId pluginId="PhysicalDevice" identifier="serial=29b18eef" />
             </handle>
           </Target>
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="SimpleDropdownPreview">
+      <SelectionState runConfigName="Light - CoverListItemPreview">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="PreviewExpandableList">
+      <SelectionState runConfigName="Dark - EditableDropdownMenuPreview">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="Dark - AnimeFetchEpisodesScreenContentPreview">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="Dark - DateTextFieldPreview">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="Dark - CrashScreenContentPreview">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

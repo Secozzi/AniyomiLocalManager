@@ -7,14 +7,11 @@ import nl.adaptivity.xmlutil.serialization.XML
 import org.koin.dsl.module
 
 val SerializationModule = module {
-    single {
-        Json {
-            ignoreUnknownKeys = true
-            explicitNulls = false
-        }
+    single<Json> {
+        Json { ignoreUnknownKeys = true }
     }
 
-    single {
+    single<XML> {
         XML {
             defaultPolicy {
                 ignoreUnknownChildren()

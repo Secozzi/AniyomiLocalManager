@@ -6,17 +6,18 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 import xyz.secozzi.aniyomilocalmanager.database.ALMDatabase
-import xyz.secozzi.aniyomilocalmanager.database.Migrations
-import xyz.secozzi.aniyomilocalmanager.database.repository.TrackerIdRepositoryImpl
-import xyz.secozzi.aniyomilocalmanager.domain.trackerid.TrackerIdRepository
+import xyz.secozzi.aniyomilocalmanager.database.data.AnimeTrackerRepositoryImpl
+import xyz.secozzi.aniyomilocalmanager.database.data.MangaTrackerRepositoryImpl
+import xyz.secozzi.aniyomilocalmanager.database.domain.AnimeTrackerRepository
+import xyz.secozzi.aniyomilocalmanager.database.domain.MangaTrackerRepository
 
 val DatabaseModule = module {
     single<ALMDatabase> {
         Room
             .databaseBuilder(androidContext(), ALMDatabase::class.java, "ALM.db")
-            .addMigrations(migrations = Migrations)
             .build()
     }
 
-    singleOf(::TrackerIdRepositoryImpl).bind(TrackerIdRepository::class)
+    singleOf(::AnimeTrackerRepositoryImpl).bind(AnimeTrackerRepository::class)
+    singleOf(::MangaTrackerRepositoryImpl).bind(MangaTrackerRepository::class)
 }

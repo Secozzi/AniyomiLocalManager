@@ -1,43 +1,50 @@
 package xyz.secozzi.aniyomilocalmanager
 
 import android.os.Bundle
+import android.view.View
+import android.view.ViewTreeObserver
 import androidx.activity.ComponentActivity
-import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
-import cafe.adriel.voyager.navigator.Navigator
-import cafe.adriel.voyager.transitions.SlideTransition
-import org.koin.android.ext.android.inject
-import xyz.secozzi.aniyomilocalmanager.preferences.AppearancePreferences
-import xyz.secozzi.aniyomilocalmanager.preferences.preference.collectAsState
-import xyz.secozzi.aniyomilocalmanager.ui.home.HomeScreen
+import androidx.compose.material3.Surface
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import xyz.secozzi.aniyomilocalmanager.navigation.Navigator
+import xyz.secozzi.aniyomilocalmanager.ui.home.anime.AnimeScreenViewModel
+import xyz.secozzi.aniyomilocalmanager.ui.home.manga.MangaScreenViewModel
 import xyz.secozzi.aniyomilocalmanager.ui.theme.AniyomiLocalManagerTheme
-import xyz.secozzi.aniyomilocalmanager.ui.theme.DarkMode
 
 class MainActivity : ComponentActivity() {
-    private val appearancePreferences by inject<AppearancePreferences>()
+    private val mangaScreenViewModel by viewModel<MangaScreenViewModel>()
+    private val animeScreenViewModel by viewModel<AnimeScreenViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        delaySplashScreen()
+
         setContent {
-            val dark by appearancePreferences.darkMode.collectAsState()
-            val isSystemInDarkTheme = isSystemInDarkTheme()
-            enableEdgeToEdge(
-                SystemBarStyle.auto(
-                    lightScrim = Color.White.toArgb(),
-                    darkScrim = Color.White.toArgb(),
-                ) { dark == DarkMode.Dark || (dark == DarkMode.System && isSystemInDarkTheme) },
-            )
+            enableEdgeToEdge()
 
             AniyomiLocalManagerTheme {
-                Navigator(screen = HomeScreen) {
-                    SlideTransition(navigator = it)
+                Surface {
+                    Navigator()
                 }
             }
         }
+    }
+
+    private fun delaySplashScreen() {
+        val content: View = findViewById(android.R.id.content)
+        content.viewTreeObserver.addOnPreDrawListener(
+            object : ViewTreeObserver.OnPreDrawListener {
+                override fun onPreDraw(): Boolean {
+                    return if (animeScreenViewModel.isLoaded || mangaScreenViewModel.isLoaded) {
+                        content.viewTreeObserver.removeOnPreDrawListener(this)
+                        true
+                    } else {
+                        false
+                    }
+                }
+            },
+        )
     }
 }

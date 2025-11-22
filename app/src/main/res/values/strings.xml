@@ -1,101 +1,150 @@
 <resources>
     <string name="app_name">Aniyomi Local Manager</string>
 
-    // Generic
+    <!-- Generic strings -->
     <string name="generic_cancel">Cancel</string>
     <string name="generic_confirm">Confirm</string>
+    <string name="generic_select">Select</string>
+    <string name="generic_search">Search</string>
+    <string name="no_id_set">No ID set</string>
+    <string name="generic_id">ID: %d</string>
+    <string name="label_cover">Cover</string>
+    <string name="label_episodes">Episodes</string>
 
-    // Home screen / file picker
-    <string name="anime_tab">Anime</string>
-    <string name="manga_tab">Manga</string>
-    <string name="select_local_directory">Select local directory</string>
-    <string name="select_localanime_directory">Select localanime directory</string>
-    <string name="missing_directory">%s directory is missing</string>
-    <string name="select_action">Select</string>
+    <!-- Home screen -->
+    <string name="label_manga">Manga</string>
+    <string name="label_anime">Anime</string>
+    <string name="no_location_set_anime">No location set! Select localanime directory</string>
+    <string name="no_location_set_manga">No location set! Select local directory</string>
     <string name="select_invalid_location">Invalid location</string>
 
-    // Entry screen
-    <string name="entry_item_status">Status: </string>
-    <string name="entry_item_present">Present</string>
-    <string name="entry_item_missing">Missing</string>
-    <string name="entry_item_tracker_anilist">AniList ID</string>
-    <string name="entry_item_tracker_anidb">AniDB ID</string>
-    <string name="entry_item_tracker_id">ID: </string>
-    <string name="entry_item_tracker_na">N/A</string>
-    <string name="entry_create_cover">Create cover</string>
-    <string name="entry_create_details">Create details.json</string>
-    <string name="entry_create_comicinfo">Create ComicInfo.xml</string>
-    <string name="entry_create_episodes">Create episodes.json</string>
+    <!-- Other -->
+    <string name="on_error">Something went wrong</string>
 
-    // Details
-    <string name="entry_details_title">Details</string>
-    <string name="entry_details_generate">Generate details.json</string>
-    <string name="entry_generate_details_success">Successfully created details.json</string>
-    <string name="entry_generate_details_failure">Failed to create details.json</string>
-    <string name="entry_comicinfo_title">ComicInfo</string>
-    <string name="entry_comicinfo_generate">Generate ComicInfo.xml</string>
-    <string name="entry_generate_comicinfo_success">Successfully created ComicInfo.xml</string>
-    <string name="entry_generate_comicinfo_failure">Failed to create ComicInfo.xml</string>
+    <!-- Common entry -->
+    <string name="title_unavailable">Title N/A</string>
+    <string name="status_unknown">Unknown</string>
+    <string name="status_ongoing">Ongoing</string>
+    <string name="status_completed">Completed</string>
+    <string name="status_licensed">Licensed</string>
+    <string name="status_publishing_finished">Publishing finished</string>
+    <string name="status_cancelled">Cancelled</string>
+    <string name="status_on_hiatus">On hiatus</string>
 
-    <string name="entry_title_label">Title</string>
-    <string name="entry_author_label">Author</string>
-    <string name="entry_artist_label">Artist</string>
-    <string name="entry_studio_label">Animation studio</string>
-    <string name="entry_fansub_label">Fansub</string>
-    <string name="entry_description_label">Description</string>
-    <string name="entry_genre_label">Genre</string>
-    <string name="entry_status_label">Status</string>
-    <string name="entry_genre_supporting_text">Use a comma (, ) to separate the genres.</string>
+    <!-- Anime entry -->
+    <string name="edit_cover">Edit cover</string>
+    <string name="anime_edit_details">Edit details.json</string>
+    <string name="anime_fetch_episodes">Fetch episodes.json</string>
+    <string name="anime_edit_episodes">Edit episodes.json</string>
+    <string name="entry_no_id_set">No ID set, please search for an entry</string>
 
-    // Cover screen
-    <string name="cover_screen_title">Covers</string>
-    <string name="cover_not_searched">Please search for an AniList item</string>
-    <string name="cover_download_cover">Download cover</string>
-    <string name="cover_search_action">Search</string>
-    <string name="cover_download_cover_success">Successfully downloaded cover</string>
-    <string name="cover_download_cover_failure">Failed to download cover</string>
-    <string name="cover_loading_image_placeholder">Loading …</string>
-
-    // Episode
-    <string name="episode_title">Episodes</string>
-    <string name="episode_not_searched">Please search for an AniDB item</string>
-    <string name="episode_offset_label">Offset</string>
-    <string name="episode_start_label">Start</string>
-    <string name="episode_end_label">End</string>
-    <string name="episode_video_count">Video count</string>
-    <string name="episode_generate_json">Generate episodes.json</string>
+    <!-- Anime fetch episodes -->
+    <string name="anime_fetch_title">Fetch episodes</string>
+    <string name="episode_type_regular">Regular episode</string>
+    <string name="episode_type_special">Special</string>
+    <string name="episode_type_credit">Credit</string>
+    <string name="episode_type_trailer">Trailer</string>
+    <string name="episode_type_parody">Parody</string>
+    <string name="episode_type_other">Other</string>
+    <string name="episode_episode">Episode %s</string>
     <string name="episode_start_small">Start cannot go below %d</string>
     <string name="episode_end_small">End cannot go below %d</string>
     <string name="episode_start_big">Start cannot go above %d</string>
     <string name="episode_end_big">End cannot go above %d</string>
     <string name="episode_start_above_error">Start cannot go above end</string>
     <string name="episode_end_below_error">End cannot go below start</string>
-    <string name="episode_episode">Episode %d</string>
+    <string name="episode_type_label">Type</string>
+    <string name="episode_offset_label">Offset</string>
+    <string name="episode_start_label">Start</string>
+    <string name="episode_end_label">End</string>
+    <string name="episode_video_count">Video count</string>
+    <string name="episode_generate_details">Generate episodes.json</string>
     <string name="episode_generate_details_success">Successfully created episodes.json</string>
     <string name="episode_generate_details_failure">Failed to create episodes.json</string>
-    <string name="episode_list_preview">Preview episode list</string>
-    <string name="episode_list_preview_title">Episode list</string>
 
-    // Preferences
+    <!-- Anime edit episodes -->
+    <string name="episode_edit_save_details">Save episodes.json</string>
+    <string name="episode_edit_title">Title</string>
+    <string name="episode_edit_episode_number">Episode number</string>
+    <string name="episode_edit_invalid_episode_number">Entry with episode number already exists</string>
+    <string name="episode_edit_invalid_episode_number_format">Episode number must be a decimal number</string>
+    <string name="episode_edit_filler">Filler</string>
+    <string name="episode_edit_description">Description</string>
+    <string name="episode_edit_scanlator">Scanlator</string>
+    <string name="episode_edit_preview_url">Preview url</string>
+    <string name="episode_edit_date">Date upload</string>
+    <string name="episode_edit_invalid_date">Invalid date</string>
+    <string name="episode_save_details_success">Successfully saved episodes.json</string>
+    <string name="episode_save_details_failure">Failed to save episodes.json</string>
+
+    <!-- Details -->
+    <string name="details_title">Details</string>
+    <string name="details_json_name">details.json</string>
+    <string name="details_comicinfo_name">ComicInfo.xml</string>
+    <string name="details_generate_details">Generate details.json</string>
+    <string name="details_generate_details_success">Successfully created details.json</string>
+    <string name="details_generate_details_failure">Failed to create details.json</string>
+    <string name="details_generate_comicinfo">Generate ComicInfo.xml</string>
+    <string name="details_generate_comicinfo_success">Successfully created ComicInfo.xml</string>
+    <string name="details_generate_comicinfo_failure">Failed to create ComicInfo.xml</string>
+    <string name="details_edit_title">Title</string>
+    <string name="details_edit_author">Author</string>
+    <string name="details_edit_artist">Artist</string>
+    <string name="details_edit_studio">Animation studios</string>
+    <string name="details_edit_fansub">Fansub</string>
+    <string name="details_edit_description">Description</string>
+    <string name="details_edit_genre">Genre</string>
+    <string name="details_edit_genre_summary">Use a comma (, ) to separate the genres.</string>
+    <string name="details_edit_status">Status</string>
+
+    <!-- Manga entry -->
+    <string name="manga_edit_comicinfo">Edit ComicInfo.xml</string>
+    <string name="manga_edit_chapter_comicinfo">Edit Chapter ComicInfo.xml</string>
+
+    <!-- Manga chapter -->
+    <string name="chapter_edit_chapter_number">Chapter number</string>
+    <string name="chapter_edit_save_success">Successfully saved ComicInfo.xml</string>
+    <string name="chapter_edit_save_failure">Failed to save ComicInfo.xml</string>
+
+    <!-- Cover screen -->
+    <string name="cover_loading_image_placeholder">Loading …</string>
+    <string name="cover_downloading_cover">Downloading</string>
+    <string name="cover_download_cover">Download cover</string>
+    <string name="cover_download_cover_success">Successfully downloaded cover</string>
+    <string name="cover_download_cover_failure">Failed to download cover</string>
+    <string name="cover_volume_label">Volume %s</string>
+
+    <!-- Search -->
+    <string name="search_started">Started</string>
+    <string name="search_status">Status</string>
+
+    <!-- Preferences -->
     <string name="pref_settings_title">Settings</string>
-    <string name="pref_data_title">Data</string>
     <string name="pref_appearance_title">Appearance</string>
+    <string name="pref_data_title">Data</string>
+    <string name="pref_mangabaka_title">MangaBaka</string>
     <string name="pref_anilist_title">AniList</string>
     <string name="pref_anidb_title">AniDB</string>
+    <string name="pref_mal_title">MyAnimeList</string>
     <string name="pref_cover_title">Covers</string>
+    <string name="pref_english">English</string>
+    <string name="pref_romaji">Romaji</string>
+    <string name="pref_native">Native</string>
+    <string name="pref_title_lang">Preferred title language</string>
 
+    <!-- Preferences - Appearance -->
     <string name="pref_appearance_summary">Theme, tabs</string>
-    <string name="pref_appearance_category_theme">Theme</string>
+    <string name="pref_appearance_theme">Theme</string>
     <string name="pref_appearance_darkmode_system">System</string>
     <string name="pref_appearance_darkmode_light">Light</string>
     <string name="pref_appearance_darkmode_dark">Dark</string>
     <string name="pref_appearance_material_you_title">Material You</string>
     <string name="pref_appearance_material_you_summary">Enable Material You dynamic colors.</string>
     <string name="pref_appearance_material_you_summary_disabled">Only available for Android 12 and newer.</string>
-    <string name="pref_appearance_category_display">Display</string>
     <string name="pref_appearance_display_anime">Enable anime tab</string>
     <string name="pref_appearance_display_manga">Enable Manga tab</string>
 
+    <!-- Preferences - Data -->
     <string name="pref_data_summary">Database, storage locations</string>
     <string name="pref_data_tracker_ids">Clear tracker IDs</string>
     <string name="pref_data_tracker_dialog_title">Are you sure?</string>
@@ -106,31 +155,54 @@
     <string name="pref_data_localmanga">Clear local manga location</string>
     <string name="pref_data_localmanga_cleared">Local manga location cleared</string>
 
+    <!-- Preferences - MangaBaka -->
+    <string name="pref_mangabaka_summary">ComicInfo.xml</string>
+
+    <!-- Preferences - AniList -->
     <string name="pref_anilist_summary">details.json, ComicInfo.xml</string>
-    <string name="pref_anilist_pref_title">Preferred title language</string>
-    <string name="pref_anilist_studio">Studio count</string>
+    <string name="pref_studio_count">Studio count</string>
 
-    <string name="pref_anidb_summary">episodes.json related settings</string>
-    <string name="pref_anidb_episode">Episode name format</string>
-    <string name="pref_anidb_scanlator">Scanlator field format</string>
+    <!-- Preferences - AniDB -->
+    <string name="pref_anidb_summary">details.json, episodes.json</string>
+    <string name="pref_name_format">Episode name format</string>
+    <string name="pref_scanlator_format">Scanlator format</string>
+    <string name="pref_summary_format">Summary format</string>
+    <string name="pref_anidb_replacements">Possible replacements:\n
+\n
+%eng - English title\n
+%rom - Romaji title\n
+%nat - Native title\n
+%ep - Episode number\n
+%dur - Duration (m)\n
+%air - Airing date\n
+%rat - Rating\n
+%sum - Summary\n
+%type - Episode type</string>
 
-    <string name="pref_cover_summary">Selected cover providers</string>
-    <string name="pref_cover_anime">Anime</string>
-    <string name="pref_cover_manga">Manga</string>
-    <string name="pref_cover_anilist">AniList</string>
-    <string name="pref_cover_mal">MyAnimeList</string>
-    <string name="pref_cover_fanart">Fanart</string>
-    <string name="pref_cover_md">MangaDex</string>
-    <string name="pref_cover_display">Display</string>
-    <string name="pref_cover_columns">Grid size</string>
-    <string name="pref_cover_columns_per_row">%d per row</string>
+    <!-- Preferences - MyAnimeList -->
+    <string name="pref_mal_summary">Entry details, episodes.json</string>
+    <string name="pref_mal_replacements">Possible replacements:\n
+\n
+%eng - English title\n
+%rom - Romaji title\n
+%nat - Native title\n
+%ep - Episode number\n
+%air - Airing date\n
+%sco - Score\n
+%fil - Filler\n
+%rec - Recap</string>
 
-    <string name="pref_replacements">Possible replacements:</string>
+    <!-- Preferences - Cover -->
+    <string name="pref_cover_summary">Cover providers</string>
+    <string name="pref_fanart_title">Fanart.tv</string>
+    <string name="pref_mangadex_title">Mangadex</string>
+    <string name="pref_display_label">Display</string>
+    <string name="pref_grid_size">Grid size</string>
 
-    // Crash screen
+    <!-- Crash -->
     <string name="crash_screen_title">Oops</string>
     <string name="crash_screen_subtitle">Looks like %s experienced an unexpected error.</string>
     <string name="crash_screen_logs_title">Crash logs:</string>
+    <string name="crash_screen_logcat_title">Logcat:</string>
     <string name="crash_screen_share">Share crash logs</string>
-    <string name="crash_screen_restart">Restart the app</string>
 </resources>
