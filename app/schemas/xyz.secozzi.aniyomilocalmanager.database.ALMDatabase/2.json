@@ -1,0 +1,79 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "9f86ffd14263a66d903a1c664255f523",
+    "entities": [
+      {
+        "tableName": "AnimeTrackerEntity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`path` TEXT NOT NULL, `anilist` INTEGER, `anidb` INTEGER, `mal` INTEGER, PRIMARY KEY(`path`))",
+        "fields": [
+          {
+            "fieldPath": "path",
+            "columnName": "path",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "anilist",
+            "columnName": "anilist",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "anidb",
+            "columnName": "anidb",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "mal",
+            "columnName": "mal",
+            "affinity": "INTEGER"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "path"
+          ]
+        }
+      },
+      {
+        "tableName": "MangaTrackerEntity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`path` TEXT NOT NULL, `mangabaka` INTEGER, `anilist` INTEGER, `mal` INTEGER, PRIMARY KEY(`path`))",
+        "fields": [
+          {
+            "fieldPath": "path",
+            "columnName": "path",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mangabaka",
+            "columnName": "mangabaka",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "anilist",
+            "columnName": "anilist",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "mal",
+            "columnName": "mal",
+            "affinity": "INTEGER"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "path"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9f86ffd14263a66d903a1c664255f523')"
+    ]
+  }
+}
