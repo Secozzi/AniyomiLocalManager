@@ -17,6 +17,7 @@
     <string name="no_location_set_anime">No location set! Select localanime directory</string>
     <string name="no_location_set_manga">No location set! Select local directory</string>
     <string name="select_invalid_location">Invalid location</string>
+    <string name="item_size_na">N/A</string>
 
     <!-- Other -->
     <string name="on_error">Something went wrong</string>
@@ -141,6 +142,7 @@
     <string name="pref_appearance_material_you_title">Material You</string>
     <string name="pref_appearance_material_you_summary">Enable Material You dynamic colors.</string>
     <string name="pref_appearance_material_you_summary_disabled">Only available for Android 12 and newer.</string>
+    <string name="pref_appearance_show_info">Show info on home screen</string>
     <string name="pref_appearance_display_anime">Enable anime tab</string>
     <string name="pref_appearance_display_manga">Enable Manga tab</string>
 

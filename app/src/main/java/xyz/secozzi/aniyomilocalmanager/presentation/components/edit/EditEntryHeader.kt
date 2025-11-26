@@ -1,5 +1,6 @@
 package xyz.secozzi.aniyomilocalmanager.presentation.components.edit
 
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -17,7 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.style.TextOverflow
 import xyz.secozzi.aniyomilocalmanager.presentation.utils.toDisplayString
 import xyz.secozzi.aniyomilocalmanager.ui.theme.DisabledAlpha
 import xyz.secozzi.aniyomilocalmanager.ui.theme.spacing
@@ -58,8 +58,7 @@ fun EditEntryHeader(
         Text(
             text = name,
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.weight(1f).basicMarquee(),
         )
 
         if (expanded) {

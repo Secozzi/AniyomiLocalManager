@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ChromeReaderMode
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Brush
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.PlayCircleOutline
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
@@ -49,6 +50,7 @@ fun AppearancePreferencesScreen() {
 
     val darkMode by preferences.darkMode.collectAsState()
     val isMaterialYou by preferences.materialYou.collectAsState()
+    val showInfo by preferences.showInfo.collectAsState()
     val isAnimeEnabled by preferences.animeIsEnabled.collectAsState()
     val isMangaEnabled by preferences.mangaIsEnabled.collectAsState()
 
@@ -58,6 +60,8 @@ fun AppearancePreferencesScreen() {
         onDarkModeClicked = preferences.darkMode::set,
         isMaterialYou = isMaterialYou,
         onMaterialYouClicked = preferences.materialYou::set,
+        showInfo = showInfo,
+        onShowInfoClicked = preferences.showInfo::set,
         isAnimeEnabled = isAnimeEnabled,
         onAnimeEnabledClicked = preferences.animeIsEnabled::set,
         isMangaEnabled = isMangaEnabled,
@@ -73,6 +77,8 @@ private fun AppearancePreferencesScreenContent(
     onDarkModeClicked: (DarkMode) -> Unit,
     isMaterialYou: Boolean,
     onMaterialYouClicked: (Boolean) -> Unit,
+    showInfo: Boolean,
+    onShowInfoClicked: (Boolean) -> Unit,
     isAnimeEnabled: Boolean,
     onAnimeEnabledClicked: (Boolean) -> Unit,
     isMangaEnabled: Boolean,
@@ -150,10 +156,24 @@ private fun AppearancePreferencesScreenContent(
             // Display
             item {
                 SettingsListItem(
+                    title = stringResource(R.string.pref_appearance_show_info),
+                    icon = Icons.Outlined.Info,
+                    itemSize = 3,
+                    index = 0,
+                    trailingContent = {
+                        SettingsSwitch(
+                            checked = showInfo,
+                            onClick = onShowInfoClicked,
+                        )
+                    },
+                )
+            }
+            item {
+                SettingsListItem(
                     title = stringResource(R.string.pref_appearance_display_anime),
                     icon = Icons.Outlined.PlayCircleOutline,
-                    itemSize = 2,
-                    index = 0,
+                    itemSize = 3,
+                    index = 1,
                     trailingContent = {
                         SettingsSwitch(
                             checked = isAnimeEnabled,
@@ -167,8 +187,8 @@ private fun AppearancePreferencesScreenContent(
                 SettingsListItem(
                     title = stringResource(R.string.pref_appearance_display_manga),
                     icon = Icons.AutoMirrored.Filled.ChromeReaderMode,
-                    itemSize = 2,
-                    index = 1,
+                    itemSize = 3,
+                    index = 2,
                     trailingContent = {
                         SettingsSwitch(
                             checked = isMangaEnabled,
@@ -192,6 +212,8 @@ fun AppearancePreferencesScreenPreview() {
             onDarkModeClicked = {},
             isMaterialYou = true,
             onMaterialYouClicked = {},
+            showInfo = true,
+            onShowInfoClicked = {},
             isAnimeEnabled = true,
             onAnimeEnabledClicked = {},
             isMangaEnabled = true,

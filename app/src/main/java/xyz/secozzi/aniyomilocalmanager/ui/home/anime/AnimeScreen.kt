@@ -57,7 +57,7 @@ fun AnimeScreen(
     }
 
     val successState = state as? AnimeScreenViewModel.State.Success
-    BackHandler(successState?.relative?.isNotEmpty() == true) {
+    BackHandler((successState?.relative?.size ?: 1) > 1) {
         viewModel.onNavigateTo(successState!!.relative.size - 2)
     }
 

@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalResources
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -54,10 +55,17 @@ fun MangaListEntry(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
             ) {
-                Text(
-                    text = resources.getQuantityString(R.plurals.entry_item_count, entry.size, entry.size),
-                    style = MaterialTheme.typography.labelSmall,
-                )
+                if (entry.size == null) {
+                    Text(
+                        text = stringResource(R.string.item_size_na),
+                        style = MaterialTheme.typography.labelSmall,
+                    )
+                } else {
+                    Text(
+                        text = resources.getQuantityString(R.plurals.entry_item_count, entry.size, entry.size),
+                        style = MaterialTheme.typography.labelSmall,
+                    )
+                }
 
                 if (entry.hasCover) {
                     Icon(

@@ -22,4 +22,22 @@ interface StorageManager {
     fun getInputStream(file: DocumentFile): InputStream?
 
     fun getFileDescriptor(file: DocumentFile, mode: String): ParcelFileDescriptor?
+
+    fun getAnimeEntryInformation(dir: DocumentFile, showInfo: Boolean): AnimeDirInfo
+
+    fun getMangaEntryInformation(dir: DocumentFile): MangaDirInfo
 }
+
+data class AnimeDirInfo(
+    val isSeason: Boolean,
+    val hasCover: Boolean,
+    val hasDetails: Boolean,
+    val hasEpisodes: Boolean,
+    val size: Int?,
+)
+
+data class MangaDirInfo(
+    val hasCover: Boolean,
+    val hasComicInfo: Boolean,
+    val size: Int,
+)
