@@ -16,14 +16,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.WhileSubscribed
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import xyz.secozzi.aniyomilocalmanager.domain.home.MangaListEntry
-import xyz.secozzi.aniyomilocalmanager.domain.storage.COMIC_INFO_FILE
 import xyz.secozzi.aniyomilocalmanager.domain.storage.StorageManager
+import xyz.secozzi.aniyomilocalmanager.preferences.AppearancePreferences
 import xyz.secozzi.aniyomilocalmanager.preferences.DataPreferences
 import xyz.secozzi.aniyomilocalmanager.utils.FilesComparator
 import java.time.Instant
@@ -33,6 +34,7 @@ import kotlin.time.Duration.Companion.seconds
 
 class MangaScreenViewModel(
     savedStateHandle: SavedStateHandle,
+    private val appearancePreferences: AppearancePreferences,
     private val dataPreferences: DataPreferences,
     private val storageManager: StorageManager,
     private val filesComparator: FilesComparator,
@@ -57,8 +59,11 @@ class MangaScreenViewModel(
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val state = dataPreferences.mangaStorageLocation.stateIn(viewModelScope)
-        .mapLatest { location ->
+    val state = combine(
+        dataPreferences.mangaStorageLocation.stateIn(viewModelScope),
+        appearancePreferences.showInfo.stateIn(viewModelScope),
+    ) { a, b -> a to b }
+        .mapLatest { (location, showInfo) ->
             if (location.isEmpty()) {
                 isLoaded = true
                 return@mapLatest State.Unset
@@ -73,8 +78,11 @@ class MangaScreenViewModel(
                     .filter { it.isDirectory }
                     .sortedWith(filesComparator)
                     .map { dir ->
-                        val children = dir.children.filterNot { it.fullName.startsWith(".") }
-                        val names = children.map { it.fullName }
+                        val mangaDirInfo = if (showInfo) {
+                            storageManager.getMangaEntryInformation(dir)
+                        } else {
+                            null
+                        }
 
                         MangaListEntry(
                             path = storageManager.getPath(dir),
@@ -82,9 +90,9 @@ class MangaScreenViewModel(
                             lastModified = Instant.ofEpochMilli(dir.lastModified())
                                 .atZone(ZoneId.systemDefault())
                                 .format(DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm:ss")),
-                            size = children.size,
-                            hasCover = names.any { it.startsWith("cover", true) },
-                            hasComicInfo = names.any { it.equals(COMIC_INFO_FILE, true) },
+                            size = mangaDirInfo?.size,
+                            hasCover = mangaDirInfo?.hasCover ?: false,
+                            hasComicInfo = mangaDirInfo?.hasComicInfo ?: false,
                         )
                     }
 

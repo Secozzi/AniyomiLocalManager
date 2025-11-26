@@ -9,6 +9,7 @@ class AppearancePreferences(preferenceStore: PreferenceStore) {
     val darkMode = preferenceStore.getEnum("dark_mode", DarkMode.System)
     val materialYou = preferenceStore.getBoolean("material_you", Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
 
+    val showInfo = preferenceStore.getBoolean("show_info", false)
     val animeIsEnabled = preferenceStore.getBoolean("anime_enabled", true)
     val mangaIsEnabled = preferenceStore.getBoolean("manga_enabled", true)
 }

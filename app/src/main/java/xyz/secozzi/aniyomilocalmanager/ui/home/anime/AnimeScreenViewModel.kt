@@ -9,7 +9,6 @@ import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
 import androidx.lifecycle.viewmodel.compose.saveable
 import com.anggrayudi.storage.file.baseName
 import com.anggrayudi.storage.file.children
-import com.anggrayudi.storage.file.extension
 import com.anggrayudi.storage.file.fullName
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
@@ -28,10 +27,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import xyz.secozzi.aniyomilocalmanager.domain.home.AnimeListEntry
-import xyz.secozzi.aniyomilocalmanager.domain.storage.DETAILS_JSON
-import xyz.secozzi.aniyomilocalmanager.domain.storage.EPISODES_JSON
-import xyz.secozzi.aniyomilocalmanager.domain.storage.EPISODE_FILE_TYPES
 import xyz.secozzi.aniyomilocalmanager.domain.storage.StorageManager
+import xyz.secozzi.aniyomilocalmanager.preferences.AppearancePreferences
 import xyz.secozzi.aniyomilocalmanager.preferences.DataPreferences
 import xyz.secozzi.aniyomilocalmanager.utils.FilesComparator
 import java.time.Instant
@@ -41,6 +38,7 @@ import kotlin.time.Duration.Companion.seconds
 
 class AnimeScreenViewModel(
     savedStateHandle: SavedStateHandle,
+    private val appearancePreferences: AppearancePreferences,
     private val dataPreferences: DataPreferences,
     private val storageManager: StorageManager,
     private val filesComparator: FilesComparator,
@@ -50,6 +48,7 @@ class AnimeScreenViewModel(
         mutableStateOf(false)
     }
 
+    val showInfoFlow = appearancePreferences.showInfo.stateIn(viewModelScope)
     val storageLocationFlow = dataPreferences.animeStorageLocation.stateIn(viewModelScope)
     private val relativePaths = MutableStateFlow<List<String>>(emptyList())
 
@@ -88,8 +87,8 @@ class AnimeScreenViewModel(
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val state = combine(storageLocationFlow, relativePaths) { a, b -> a to b }
-        .mapLatest { (location, relative) ->
+    val state = combine(storageLocationFlow, showInfoFlow, relativePaths) { a, b, c -> Triple(a, b, c) }
+        .mapLatest { (location, showInfo, relative) ->
             if (location.isEmpty()) {
                 isLoaded = true
                 return@mapLatest State.Unset
@@ -105,26 +104,19 @@ class AnimeScreenViewModel(
                     .filter { it.isDirectory }
                     .sortedWith(filesComparator)
                     .map { dir ->
-                        val children = dir.children.filterNot { it.fullName.startsWith(".") }
-                        val isSeason = when {
-                            children.any { it.extension in EPISODE_FILE_TYPES } -> false
-                            children.any { it.isDirectory } -> true
-                            else -> false
-                        }
-
-                        val names = children.map { it.fullName }
+                        val animeInfo = storageManager.getAnimeEntryInformation(dir, showInfo)
 
                         AnimeListEntry(
-                            isSeason = isSeason,
+                            isSeason = animeInfo.isSeason,
                             path = storageManager.getPath(dir),
                             name = dir.fullName,
                             lastModified = Instant.ofEpochMilli(dir.lastModified())
                                 .atZone(ZoneId.systemDefault())
                                 .format(DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm:ss")),
-                            size = children.size,
-                            hasCover = names.any { it.startsWith("cover", true) },
-                            hasDetails = names.any { it == DETAILS_JSON },
-                            hasEpisodes = names.any { it == EPISODES_JSON },
+                            size = animeInfo.size,
+                            hasCover = animeInfo.hasCover,
+                            hasDetails = animeInfo.hasDetails,
+                            hasEpisodes = animeInfo.hasEpisodes,
                         )
                     }
 
