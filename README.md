@@ -1,3 +1,5 @@
+# ⚠️ This project has moved to https://gitlab.com/Secozzi/aniyomi-local-manager
+
 # Aniyomi/Mihon local manager
 
 An app to create metadata for Aniyomi/Mihon local source.
